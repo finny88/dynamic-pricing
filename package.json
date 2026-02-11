@@ -1,0 +1,26 @@
+{
+  "name": "dynamic-pricing",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "husky": "9.1.7",
+    "lerna": "8.2.4",
+    "lint-staged": "16.2.7"
+  },
+  "scripts": {
+    "dev": "lerna run dev",
+    "build": "lerna run build",
+    "typecheck": "lerna run typecheck",
+    "lint": "lerna run lint",
+    "postinstall": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,tsx,ts}": [
+      "yarn run lint -- --fix"
+    ]
+  }
+}

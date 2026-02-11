@@ -1,0 +1,23 @@
+node_modules
+build
+artifacts
+
+.idea
+.vscode
+
+.cache
+.env
+
+# Yarn berry
+
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+yarn-debug.log*
+yarn-error.log*
+
+.nx/cache
+.nx/workspace-data
