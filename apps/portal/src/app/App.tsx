@@ -8,7 +8,7 @@ import {
 	Button,
 	MantineProvider
 } from '@mantine/core'
-import { theme } from './theme.ts'
+import { theme } from '@shared/theme'
 
 const App = () => {
 	const [count, setCount] = useState(0)
