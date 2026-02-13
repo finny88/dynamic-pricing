@@ -1,0 +1,16 @@
+.legendBox {
+  width: 16px;
+  height: 16px;
+}
+
+.legendBoxAvailable {
+  background-color: var(--mantine-color-green-6);
+}
+
+.legendBoxReserved {
+  background-color: var(--mantine-color-yellow-5);
+}
+
+.legendBoxSold {
+  background-color: var(--mantine-color-gray-5);
+}
