@@ -1,0 +1,90 @@
+.yAxis {
+  margin-right: 12px;
+}
+
+.yAxisSpacer {
+  height: 28px;
+}
+
+.yAxisLabel {
+  height: 28px;
+  display: flex;
+  align-items: center;
+
+  position: sticky;
+  left: 0;
+  background-color: var(--mantine-color-body); /* or any solid background that matches your design */
+  z-index: 1; /* ensure it stays above the grid cells */
+
+  margin-right: -16px;
+}
+
+.gridContainer {
+  overflow-x: auto;
+}
+
+.grid {
+  display: grid;
+  row-gap: 6px;
+  column-gap: 32px;
+  width: max-content;
+}
+
+.topXAxisLabel {
+  grid-row: 1;
+  text-align: center;
+}
+
+.unitContainer {
+  min-height: 28px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 28px;
+  gap: 12px;
+}
+
+.unitButton {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--mantine-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: white;
+  user-select: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.unitButton:hover {
+  transform: scale(1.05);
+  box-shadow: var(--mantine-shadow-sm);
+  outline: 2px solid red;
+  outline-offset: 2px;
+}
+
+.unitButton.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.unitButton.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.tooltipRoomsBox {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--mantine-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: white;
+  flex-shrink: 0;
+}
