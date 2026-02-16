@@ -4,12 +4,12 @@ import {
 	MantineProvider
 } from '@mantine/core'
 import { theme } from '@shared/theme'
-import { TabsLayout } from '@widgets/TabsLayout'
+import { BuildingViewer } from '@widgets/BuildingViewer'
 
 const App = () => {
 	return (
 		<MantineProvider theme={theme}>
-			<TabsLayout units={units} />
+			<BuildingViewer units={units} />
 		</MantineProvider>
 	)
 }
