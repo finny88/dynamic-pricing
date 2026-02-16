@@ -1,5 +1,7 @@
 import type { Unit } from '@entities/unit'
 
+export type { Unit }
+
 /**
  * Unit status types based on actualStatus field
  */

@@ -62,7 +62,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 						{floors.map((floor, floorIndex) => (
 							<FloorLabel
 								key={floor}
-								floor={floor}
+								floor={floor.toString()}
 								floorIndex={floorIndex}
 							/>
 						))}
@@ -71,7 +71,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 						{sections.map((section, sectionIndex) => (
 							<SectionLabel
 								key={`top-${section}`}
-								section={section}
+								section={section.toString()}
 								sectionIndex={sectionIndex}
 								position={'top'}
 								totalFloors={floors.length}
@@ -98,7 +98,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 						{sections.map((section, sectionIndex) => (
 							<SectionLabel
 								key={`bottom-${section}`}
-								section={section}
+								section={section.toString()}
 								sectionIndex={sectionIndex}
 								position={'bottom'}
 								totalFloors={floors.length}
