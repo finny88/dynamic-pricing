@@ -1,7 +1,16 @@
 .unitContainer {
-  min-height: 28px;
   display: grid;
   grid-auto-flow: column;
+}
+
+.unitContainerCompact {
+  min-height: 28px;
   grid-auto-columns: 28px;
   gap: 12px;
+}
+
+.unitContainerDetailed {
+  min-height: 80px;
+  grid-auto-columns: 170px;
+  gap: 8px;
 }

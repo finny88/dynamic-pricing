@@ -3,6 +3,18 @@ import type { UnitStatus, FilterOptions } from './types'
 import { DEFAULT_COLOR_SCHEMES } from './constants'
 
 /**
+ * Format price string for display
+ */
+export const formatPrice = (price: string): string => {
+	const cleanPrice = price.replace(/,/g, '')
+	const num = parseFloat(cleanPrice)
+	if (isNaN(num)) {
+		return price
+	}
+	return Math.round(num).toLocaleString('ru-RU').replace(/,/g, ' ')
+}
+
+/**
  * Utility function to determine unit status from unit data
  */
 export const getUnitStatus = (unit: Unit): UnitStatus => {

@@ -2,15 +2,19 @@ import type { FC } from 'react'
 import { useMemo, useState } from 'react'
 import { Box, Stack } from '@mantine/core'
 import { ARIA_LABELS } from './constants'
-import type { FloorSectionGridProps, FilterOptions } from './types'
+import type { FloorSectionGridProps, FilterOptions, GridVariant } from './types'
 import { computeGridData, computeAvailableFloors, computeAvailableSections } from './utils'
 import { GridFilters, StatusLegend, FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
 import classes from './FloorSectionGrid.module.css'
 
-const CELL_SIZE = 28
+const VARIANT_CONFIG: Record<GridVariant, { cellMinWidth: number }> = {
+	compact: { cellMinWidth: 28 },
+	detailed: { cellMinWidth: 180 },
+}
 
 export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 	units,
+	variant = 'compact',
 }) => {
 	const [activeFilters, setActiveFilters] = useState<FilterOptions>({})
 
@@ -30,7 +34,9 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 		computeAvailableSections(units),
 	[units])
 
-	const gridTemplateColumns = `auto repeat(${sections.length}, minmax(${CELL_SIZE}px, auto))`
+	const { cellMinWidth } = VARIANT_CONFIG[variant]
+	const gridTemplateColumns = `auto repeat(${sections.length}, minmax(${cellMinWidth}px, auto))`
+	const gridClassName = `${classes.grid} ${variant === 'detailed' ? classes.gridDetailed : classes.gridCompact}`
 
 	return (
 		<Stack gap={'lg'}>
@@ -52,7 +58,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 				<Box
 					role={'grid'}
 					aria-label={ARIA_LABELS.GRID}
-					className={classes.grid}
+					className={gridClassName}
 					style={{
 						gridTemplateColumns,
 					}}
@@ -63,6 +69,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 							key={floor}
 							floor={floor.toString()}
 							floorIndex={floorIndex}
+							variant={variant}
 						/>
 					))}
 
@@ -89,6 +96,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 									floorIndex={floorIndex}
 									sectionIndex={sectionIndex}
 									activeFilters={activeFilters}
+									variant={variant}
 								/>
 							)
 						}))}

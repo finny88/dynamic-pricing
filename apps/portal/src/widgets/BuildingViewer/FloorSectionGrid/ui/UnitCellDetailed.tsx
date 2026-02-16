@@ -1,28 +1,21 @@
 import type { FC } from 'react'
 import { UnstyledButton, Text, Stack, Group } from '@mantine/core'
-import type { Unit } from '@entities/unit'
-import classes from './UnitCellPlus.module.css'
+import type { Unit } from '../types'
+import { formatPrice } from '../utils'
+import classes from './UnitCellDetailed.module.css'
 
-interface UnitCellPlusProps {
+interface UnitCellDetailedProps {
 	unit: Unit
 	colors: {
 		background: string
 		text: string
 		hoverBackground: string
 	}
+	status: string
 	disabled: boolean
 }
 
-const formatPrice = (price: string): string => {
-	const cleanPrice = price.replace(/,/g, '')
-	const num = parseFloat(cleanPrice)
-	if (isNaN(num)) {
-		return price
-	}
-	return Math.round(num).toLocaleString('ru-RU').replace(/,/g, ' ')
-}
-
-export const UnitCellPlus: FC<UnitCellPlusProps> = ({ unit, colors, disabled }) => {
+export const UnitCellDetailed: FC<UnitCellDetailedProps> = ({ unit, colors, disabled }) => {
 	return (
 		<UnstyledButton
 			className={`${classes.unitButton} ${disabled ? classes.disabled : ''}`}

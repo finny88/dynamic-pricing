@@ -3,6 +3,13 @@ import type { Unit } from '@entities/unit'
 export type { Unit }
 
 /**
+ * Grid display variant
+ * - 'compact': small 28px cells with tooltip on hover (formerly FloorSectionGrid)
+ * - 'detailed': larger cards showing price/area inline (formerly FloorSectionGridPlus)
+ */
+export type GridVariant = 'compact' | 'detailed'
+
+/**
  * Unit status types based on actualStatus field
  */
 export type UnitStatus = 'available' | 'reserved' | 'sold' | 'unknown'
@@ -42,4 +49,5 @@ export interface FilterOptions {
  */
 export interface FloorSectionGridProps {
 	units: Unit[]
+	variant?: GridVariant
 }
