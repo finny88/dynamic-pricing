@@ -4,12 +4,12 @@ import {
 	MantineProvider
 } from '@mantine/core'
 import { theme } from '@shared/theme'
-import { FloorSectionGrid } from '@widgets/FloorSectionGrid'
+import { TabsLayout } from '@widgets/TabsLayout'
 
 const App = () => {
 	return (
 		<MantineProvider theme={theme}>
-			<FloorSectionGrid units={units} />
+			<TabsLayout units={units} />
 		</MantineProvider>
 	)
 }

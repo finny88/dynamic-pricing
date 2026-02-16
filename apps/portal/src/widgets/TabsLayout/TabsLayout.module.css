@@ -1,0 +1,12 @@
+.tabs {
+	/* Tabs container styling */
+}
+
+.tabsList {
+	margin-bottom: var(--mantine-spacing-md);
+}
+
+.tabPanel {
+	/* Remove default padding since FloorSectionGrid has its own Container */
+	padding: 0;
+}
