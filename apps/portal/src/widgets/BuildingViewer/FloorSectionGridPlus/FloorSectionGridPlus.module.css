@@ -1,0 +1,10 @@
+.gridContainer {
+  overflow-x: auto;
+}
+
+.grid {
+  display: grid;
+  row-gap: 8px;
+  column-gap: 32px;
+  width: max-content;
+}

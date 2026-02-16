@@ -1,0 +1,58 @@
+.unitButton {
+  width: 100%;
+  min-height: 80px;
+  border-radius: var(--mantine-radius-md);
+  padding: 8px;
+  user-select: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  text-align: left;
+  position: relative;
+  border: 1px solid transparent;
+}
+
+.unitButton:hover:not(.disabled) {
+  background-color: white !important;
+  transform: scale(1.02);
+  box-shadow: var(--mantine-shadow-md);
+}
+
+/* Make all text inside turn black on hover */
+.unitButton:hover:not(.disabled) * {
+  color: black !important;
+}
+
+/* Keep the roomsBox with original background color on hover */
+.unitButton:hover:not(.disabled) .roomsBox {
+  background-color: inherit;
+  color: white !important;
+}
+
+.unitButton.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.unitButton.disabled:hover {
+  background-color: inherit !important;
+  border-color: transparent !important;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+}
+
+.roomsBox {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--mantine-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+}

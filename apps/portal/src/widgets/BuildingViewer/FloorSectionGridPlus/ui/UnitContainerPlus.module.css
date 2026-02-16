@@ -1,0 +1,7 @@
+.unitContainer {
+  min-height: 80px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 170px;
+  gap: 8px;
+}
