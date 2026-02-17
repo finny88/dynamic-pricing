@@ -124,6 +124,25 @@ export const applyPricePerSqmRubFilter = (
 }
 
 /**
+ * Helper function to apply total area filter
+ */
+export const applyTotalAreaSqmFilter = (
+	units: Unit[],
+	min?: number,
+	max?: number
+): Unit[] => {
+	if (!units || (min === undefined && max === undefined)) { return units || [] }
+
+	return units.filter(unit => {
+		const area = parseFloat((unit.totalAreaSqm || '').replace(/,/g, ''))
+		if (isNaN(area)) { return true }
+		if (min !== undefined && area < min) { return false }
+		if (max !== undefined && area > max) { return false }
+		return true
+	})
+}
+
+/**
  * Helper function to compute grid matrix and related data
  */
 export const computeGridData = (units: Unit[], allUnits: Unit[]) => {
@@ -229,6 +248,9 @@ export const isUnitDisabled = (unit: Unit, activeFilters: FilterOptions): boolea
 	)[0]) { return true }
 	if (!applyPricePerSqmRubFilter(
 		[unit], activeFilters.pricePerSqmRubMin, activeFilters.pricePerSqmRubMax
+	)[0]) { return true }
+	if (!applyTotalAreaSqmFilter(
+		[unit], activeFilters.totalAreaSqmMin, activeFilters.totalAreaSqmMax
 	)[0]) { return true }
 
 	return false

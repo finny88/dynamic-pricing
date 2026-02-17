@@ -46,6 +46,8 @@ export interface FilterOptions {
 	priceRubMax?: number
 	pricePerSqmRubMin?: number
 	pricePerSqmRubMax?: number
+	totalAreaSqmMin?: number
+	totalAreaSqmMax?: number
 }
 
 /**
