@@ -46,8 +46,10 @@ export const Filters: FC<FiltersProps> = ({
 		(appliedFilters.sections?.length ?? 0) > 0,
 		(appliedFilters.statuses?.length ?? 0) > 0,
 		(appliedFilters.roomsCount?.length ?? 0) > 0,
-		appliedFilters.priceRubMin !== undefined || appliedFilters.priceRubMax !== undefined,
-		appliedFilters.pricePerSqmRubMin !== undefined || appliedFilters.pricePerSqmRubMax !== undefined
+		[
+			appliedFilters.priceRubMin, appliedFilters.priceRubMax,
+			appliedFilters.pricePerSqmRubMin, appliedFilters.pricePerSqmRubMax
+		].some(v => v !== undefined)
 	].some(Boolean)
 
 	return (
@@ -77,18 +79,18 @@ export const Filters: FC<FiltersProps> = ({
 					onApply={(v) => commitFilter({ roomsCount: v })}
 				/>
 				<PriceFilter
+					id={'price-total'}
+					label={'Price (₽)'}
 					appliedMin={appliedFilters.priceRubMin}
 					appliedMax={appliedFilters.priceRubMax}
-					appliedSqmMin={appliedFilters.pricePerSqmRubMin}
-					appliedSqmMax={appliedFilters.pricePerSqmRubMax}
-					onApply={(
-						min, max, sqmMin, sqmMax
-					) => commitFilter({
-						priceRubMin: min,
-						priceRubMax: max,
-						pricePerSqmRubMin: sqmMin,
-						pricePerSqmRubMax: sqmMax
-					})}
+					onApply={(min, max) => commitFilter({ priceRubMin: min, priceRubMax: max })}
+				/>
+				<PriceFilter
+					id={'price-sqm'}
+					label={'Price/m² (₽)'}
+					appliedMin={appliedFilters.pricePerSqmRubMin}
+					appliedMax={appliedFilters.pricePerSqmRubMax}
+					onApply={(min, max) => commitFilter({ pricePerSqmRubMin: min, pricePerSqmRubMax: max })}
 				/>
 				{hasActiveFilters && (
 					<Button
