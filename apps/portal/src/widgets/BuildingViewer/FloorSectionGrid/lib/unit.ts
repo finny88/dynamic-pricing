@@ -85,53 +85,41 @@ export const computeAvailableSections = (units: Unit[]): number[] => {
 	return Array.from(new Set(units.map(item => Number(item.section)))).sort((a, b) => a - b)
 }
 
+const matchesSearchFilter = (unit: Unit, searchQuery: string): boolean => {
+	const query = searchQuery.toLowerCase()
+	return (
+		(unit.unitNumber || '').toLowerCase().includes(query) ||
+		(unit.floor || '').toLowerCase().includes(query) ||
+		(unit.section || '').toLowerCase().includes(query)
+	)
+}
+
+const isExcludedByArrayFilter = <T>(value: T, filter: T[] | undefined): boolean =>
+	!!filter && filter.length > 0 && !filter.includes(value)
+
+const isExcludedByPriceFilters = (unit: Unit, activeFilters: FilterOptions): boolean =>
+	!applyPriceRubFilter(
+		[unit], activeFilters.priceRubMin, activeFilters.priceRubMax
+	)[0] ||
+	!applyPricePerSqmRubFilter(
+		[unit], activeFilters.pricePerSqmRubMin, activeFilters.pricePerSqmRubMax
+	)[0] ||
+	!applyTotalAreaSqmFilter(
+		[unit], activeFilters.totalAreaSqmMin, activeFilters.totalAreaSqmMax
+	)[0]
+
 /**
  * Helper function to check if a unit should be disabled based on active filters
  */
 export const isUnitDisabled = (unit: Unit, activeFilters: FilterOptions): boolean => {
 	if (!unit || !activeFilters) { return false }
-	
-	// Check search filter
-	if (activeFilters.searchQuery) {
-		const query = activeFilters.searchQuery.toLowerCase()
-		const matchesSearch =
-			(unit.unitNumber || '').toLowerCase().includes(query) ||
-			(unit.floor || '').toLowerCase().includes(query) ||
-			(unit.section || '').toLowerCase().includes(query)
-		if (!matchesSearch) { return true }
-	}
 
-	// Check floor filter
-	if (activeFilters.floors && activeFilters.floors.length > 0) {
-		if (!activeFilters.floors.includes(Number(unit.floor))) { return true }
-	}
-
-	// Check section filter
-	if (activeFilters.sections && activeFilters.sections.length > 0) {
-		if (!activeFilters.sections.includes(Number(unit.section))) { return true }
-	}
-
-	// Check status filter
-	if (activeFilters.statuses && activeFilters.statuses.length > 0) {
-		const status = getUnitStatus(unit)
-		if (!activeFilters.statuses.includes(status)) { return true }
-	}
-
-	// Check rooms count filter
-	if (activeFilters.roomsCount && activeFilters.roomsCount.length > 0) {
-		if (!activeFilters.roomsCount.includes(unit.roomsCount)) { return true }
-	}
-
-	// Check price range filters
-	if (!applyPriceRubFilter(
-		[unit], activeFilters.priceRubMin, activeFilters.priceRubMax
-	)[0]) { return true }
-	if (!applyPricePerSqmRubFilter(
-		[unit], activeFilters.pricePerSqmRubMin, activeFilters.pricePerSqmRubMax
-	)[0]) { return true }
-	if (!applyTotalAreaSqmFilter(
-		[unit], activeFilters.totalAreaSqmMin, activeFilters.totalAreaSqmMax
-	)[0]) { return true }
+	if (activeFilters.searchQuery && !matchesSearchFilter(unit, activeFilters.searchQuery)) { return true }
+	if (isExcludedByArrayFilter(Number(unit.floor), activeFilters.floors)) { return true }
+	if (isExcludedByArrayFilter(Number(unit.section), activeFilters.sections)) { return true }
+	if (isExcludedByArrayFilter(getUnitStatus(unit), activeFilters.statuses)) { return true }
+	if (isExcludedByArrayFilter(unit.roomsCount, activeFilters.roomsCount)) { return true }
+	if (isExcludedByPriceFilters(unit, activeFilters)) { return true }
 
 	return false
 }
