@@ -1,4 +1,4 @@
-export { GridFilters } from './GridFilters'
+export { Filters } from './Filters/Filters'
 export { StatusLegend } from './StatusLegend'
 export { UnitCell } from './UnitCell'
 export { UnitTooltipContent } from './UnitTooltipContent'

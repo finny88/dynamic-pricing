@@ -4,7 +4,7 @@ import { Box, Stack } from '@mantine/core'
 import { ARIA_LABELS } from './constants'
 import type { FloorSectionGridProps, FilterOptions, GridVariant } from './types'
 import { computeGridData, computeAvailableFloors, computeAvailableSections } from './utils'
-import { GridFilters, StatusLegend, FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
+import { Filters, StatusLegend, FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
 import classes from './FloorSectionGrid.module.css'
 
 const VARIANT_CONFIG: Record<GridVariant, { cellMinWidth: number }> = {
@@ -41,7 +41,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 	return (
 		<Stack gap={'lg'}>
 			{/* Filters */}
-			<GridFilters
+			<Filters
 				availableFloors={allFloors}
 				availableSections={allSections}
 				availableRoomsCounts={availableRoomsCounts}

@@ -1,47 +1,11 @@
-import type { FC, ReactNode } from 'react'
+import type { FC } from 'react'
 import { useState } from 'react'
-import { Group, TextInput, Popover, Chip, Stack, Button, NumberInput, ScrollArea } from '@mantine/core'
-import { IconSearch, IconChevronDown, IconChevronUp, IconX } from '@tabler/icons-react'
-import type { FilterOptions, UnitStatus } from '../types'
+import { Group, TextInput, Chip, Stack, Button, NumberInput, ScrollArea } from '@mantine/core'
+import { IconSearch, IconX } from '@tabler/icons-react'
+import type { FilterOptions, UnitStatus } from '../../types'
+import { FilterPopover } from './FilterPopover'
 
-interface FilterPopoverProps {
-	label: string
-	active?: boolean
-	onOpen?: () => void
-	children: (close: () => void) => ReactNode
-}
-
-const FilterPopover: FC<FilterPopoverProps> = ({ label, active = false, onOpen, children }) => {
-	const [opened, setOpened] = useState(false)
-
-	const close = () => setOpened(false)
-
-	const handleOpen = () => {
-		if (onOpen) { onOpen() }
-		setOpened(true)
-	}
-
-	return (
-		<Popover opened={opened} onClose={close} withinPortal>
-			<Popover.Target>
-				<Button
-					variant={active ? 'filled' : 'default'}
-					radius={'xl'}
-					size={'sm'}
-					rightSection={opened ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />}
-					onClick={() => opened ? close() : handleOpen()}
-				>
-					{label}
-				</Button>
-			</Popover.Target>
-			<Popover.Dropdown>
-				{children(close)}
-			</Popover.Dropdown>
-		</Popover>
-	)
-}
-
-interface GridFiltersProps {
+interface FiltersProps {
 	availableFloors: number[]
 	availableSections: number[]
 	availableRoomsCounts: string[]
@@ -49,7 +13,7 @@ interface GridFiltersProps {
 	initialFilters?: FilterOptions
 }
 
-export const GridFilters: FC<GridFiltersProps> = ({
+export const Filters: FC<FiltersProps> = ({
 	availableFloors,
 	availableSections,
 	availableRoomsCounts,
