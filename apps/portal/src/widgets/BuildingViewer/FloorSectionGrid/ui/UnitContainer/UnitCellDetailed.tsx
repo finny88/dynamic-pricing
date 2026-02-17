@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { UnstyledButton, Text, Stack, Group } from '@mantine/core'
-import type { Unit } from '../types'
-import { formatPrice } from '../utils'
+import type { Unit } from '../../types'
+import { formatPrice } from '../../utils'
 import classes from './UnitCellDetailed.module.css'
 
 interface UnitCellDetailedProps {

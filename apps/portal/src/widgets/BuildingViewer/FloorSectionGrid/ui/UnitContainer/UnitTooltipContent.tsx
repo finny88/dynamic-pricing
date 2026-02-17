@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { Box, Text, Stack, Group } from '@mantine/core'
-import type { Unit } from '../types'
+import type { Unit } from '../../types'
 import classes from './UnitTooltipContent.module.css'
 
 interface UnitTooltipContentProps {
