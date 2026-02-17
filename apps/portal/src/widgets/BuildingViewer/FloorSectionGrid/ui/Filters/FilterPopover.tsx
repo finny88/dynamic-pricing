@@ -1,22 +1,25 @@
-import { Button, Popover } from '@mantine/core'
-import { useState, type FC, type ReactNode } from 'react'
+import { Button, Popover, Stack } from '@mantine/core'
+import { useContext, type FC, type ReactNode } from 'react'
 import { IconChevronDown, IconChevronUp } from '@tabler/icons-react'
+import { FilterGroupContext } from './FilterGroupContext'
 
 interface FilterPopoverProps {
+	id: string
 	label: string
 	active?: boolean
 	onOpen?: () => void
 	children: (close: () => void) => ReactNode
 }
 
-export const FilterPopover: FC<FilterPopoverProps> = ({ label, active = false, onOpen, children }) => {
-	const [opened, setOpened] = useState(false)
+export const FilterPopover: FC<FilterPopoverProps> = ({ id, label, active = false, onOpen, children }) => {
+	const { openedId, setOpenedId } = useContext(FilterGroupContext)
+	const opened = openedId === id
 
-	const close = () => setOpened(false)
+	const close = () => setOpenedId(null)
 
 	const handleOpen = () => {
 		if (onOpen) { onOpen() }
-		setOpened(true)
+		setOpenedId(id)
 	}
 
 	return (
@@ -33,7 +36,9 @@ export const FilterPopover: FC<FilterPopoverProps> = ({ label, active = false, o
 				</Button>
 			</Popover.Target>
 			<Popover.Dropdown>
-				{children(close)}
+				<Stack gap={'sm'}>
+					{children(close)}
+				</Stack>
 			</Popover.Dropdown>
 		</Popover>
 	)
