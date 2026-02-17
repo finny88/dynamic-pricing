@@ -1,15 +1,25 @@
 import type { FC } from 'react'
 import { useMemo, useState } from 'react'
 import { Box, Stack } from '@mantine/core'
-import { ARIA_LABELS } from './constants'
-import type { FloorSectionGridProps, FilterOptions, GridVariant } from './types'
-import { computeGridData, computeAvailableFloors, computeAvailableSections } from './utils'
 import { Filters, StatusLegend, FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
 import classes from './FloorSectionGrid.module.css'
+import type { GridVariant } from './models/variants'
+import type { Unit } from '@entities/unit'
+import type { FilterOptions } from './models/filters'
+import { computeAvailableFloors, computeAvailableSections, computeGridData } from './lib/unit'
+import { ARIA_LABELS } from './lib/mappers'
 
 const VARIANT_CONFIG: Record<GridVariant, { cellMinWidth: number }> = {
 	compact: { cellMinWidth: 28 },
 	detailed: { cellMinWidth: 180 },
+}
+
+/**
+ * Props for FloorSectionGrid component
+ */
+export interface FloorSectionGridProps {
+	units: Unit[]
+	variant?: GridVariant
 }
 
 export const FloorSectionGrid: FC<FloorSectionGridProps> = ({

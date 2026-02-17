@@ -1,8 +1,8 @@
 import type { FC } from 'react'
 import { useState } from 'react'
 import { Chip, Group, Button } from '@mantine/core'
-import type { UnitStatus } from '../../types'
 import { FilterPopover } from './FilterPopover'
+import type { UnitStatus } from '../../models/unitStatus'
 
 interface StatusFilterProps {
 	applied: UnitStatus[] | undefined

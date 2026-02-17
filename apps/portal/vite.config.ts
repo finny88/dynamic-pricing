@@ -11,7 +11,9 @@ export default defineConfig({
 	},
 	plugins: [
 		checker({
-			typescript: true,
+			typescript: {
+				tsconfigPath: './tsconfig.app.json', // Adjust path as needed
+			},
 		}),
 		react(),
 		tsconfigPaths(),

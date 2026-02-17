@@ -1,9 +1,9 @@
 import type { FC } from 'react'
 import { UnstyledButton, Tooltip } from '@mantine/core'
-import type { Unit } from '../../types'
-import { ARIA_LABELS } from '../../constants'
 import { UnitTooltipContent } from './UnitTooltipContent'
 import classes from './UnitCell.module.css'
+import { ARIA_LABELS } from '../../lib/mappers'
+import type { Unit } from '@entities/unit'
 
 interface UnitCellProps {
 	unit: Unit

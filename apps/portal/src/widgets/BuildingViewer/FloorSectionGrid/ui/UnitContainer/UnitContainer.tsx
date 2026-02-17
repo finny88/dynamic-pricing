@@ -1,10 +1,13 @@
 import type { FC } from 'react'
 import { Box } from '@mantine/core'
-import type { Unit, FilterOptions, GridVariant } from '../../types'
-import { getUnitStatus, getUnitColors, isUnitDisabled } from '../../utils'
 import { UnitCell } from './UnitCell'
 import { UnitCellDetailed } from './UnitCellDetailed'
 import classes from './UnitContainer.module.css'
+import type { Unit } from '@entities/unit'
+import type { FilterOptions } from '../../models/filters'
+import type { GridVariant } from '../../models/variants'
+import { getUnitColors } from '../../lib/colors'
+import { getUnitStatus, isUnitDisabled } from '../../lib/unit'
 
 interface UnitContainerProps {
 	items: Unit[]

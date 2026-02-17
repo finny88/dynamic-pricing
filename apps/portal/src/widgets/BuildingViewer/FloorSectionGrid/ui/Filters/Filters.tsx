@@ -2,7 +2,6 @@ import type { FC } from 'react'
 import { useState } from 'react'
 import { Group, Button } from '@mantine/core'
 import { IconX } from '@tabler/icons-react'
-import type { FilterOptions } from '../../types'
 import { FilterGroupContext } from './FilterGroupContext'
 import { SearchFilter } from './SearchFilter'
 import { FloorsFilter } from './FloorsFilter'
@@ -10,6 +9,7 @@ import { SectionsFilter } from './SectionsFilter'
 import { StatusFilter } from './StatusFilter'
 import { RoomsFilter } from './RoomsFilter'
 import { PriceFilter } from './PriceFilter'
+import type { FilterOptions } from '../../models/filters'
 
 interface FiltersProps {
 	availableFloors: number[]

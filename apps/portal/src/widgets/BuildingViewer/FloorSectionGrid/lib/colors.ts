@@ -1,3 +1,6 @@
+import type { Unit } from '@entities/unit'
+import { getUnitStatus } from './unit'
+
 /**
  * Default color schemes for different unit statuses using Mantine colors
  */
@@ -24,12 +27,9 @@ export const DEFAULT_COLOR_SCHEMES = {
 	}
 } as const
 
-/**
- * ARIA labels and accessibility text
- */
-export const ARIA_LABELS = {
-	GRID: 'Floor section grid display',
-	UNIT: 'Unit',
-	FLOOR_LABEL: 'Floor level',
-	SECTION_LABEL: 'Section number'
-} as const
+export const getUnitColors = (unit: Unit) => {
+	if (!unit) { return DEFAULT_COLOR_SCHEMES.unknown }
+	
+	const status = getUnitStatus(unit)
+	return DEFAULT_COLOR_SCHEMES[status]
+}
