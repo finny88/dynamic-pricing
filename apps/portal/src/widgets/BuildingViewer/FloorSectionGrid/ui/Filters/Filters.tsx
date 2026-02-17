@@ -21,8 +21,8 @@ export const Filters: FC<FiltersProps> = ({
 	initialFilters = {}
 }) => {
 	const [appliedFilters, setAppliedFilters] = useState<FilterOptions>(initialFilters)
-	const [searchQuery, setSearchQuery] = useState(initialFilters.searchQuery || '')
 
+	const [draftSearch, setDraftSearch] = useState('')
 	const [draftFloors, setDraftFloors] = useState<string[]>([])
 	const [draftSections, setDraftSections] = useState<string[]>([])
 	const [draftStatuses, setDraftStatuses] = useState<string[]>([])
@@ -36,8 +36,10 @@ export const Filters: FC<FiltersProps> = ({
 		onFilterChange(next)
 	}
 
-	const handleSearchApply = () => {
-		commitFilter({ searchQuery: searchQuery || undefined })
+	const handleOpenSearch = () => setDraftSearch(appliedFilters.searchQuery ?? '')
+	const handleApplySearch = (close: () => void) => {
+		commitFilter({ searchQuery: draftSearch || undefined })
+		close()
 	}
 
 	const handleOpenFloors = () => setDraftFloors(appliedFilters.floors?.map(String) ?? [])
@@ -77,31 +79,41 @@ export const Filters: FC<FiltersProps> = ({
 	}
 
 	const handleClearAll = () => {
-		setSearchQuery('')
+		setDraftSearch('')
 		setAppliedFilters({})
 		onFilterChange({})
 	}
 
+	const searchActive = !!appliedFilters.searchQuery
 	const floorsActive = (appliedFilters.floors?.length ?? 0) > 0
 	const sectionsActive = (appliedFilters.sections?.length ?? 0) > 0
 	const statusActive = (appliedFilters.statuses?.length ?? 0) > 0
 	const roomsActive = (appliedFilters.roomsCount?.length ?? 0) > 0
 	const priceActive = appliedFilters.priceRubMin !== undefined || appliedFilters.priceRubMax !== undefined
 
-	const hasActiveFilters =
-		!!appliedFilters.searchQuery ||
-		[floorsActive, sectionsActive, statusActive, roomsActive, priceActive].some(Boolean)
+	const hasActiveFilters = [searchActive, floorsActive, sectionsActive, statusActive, roomsActive, priceActive].some(Boolean)
 
 	return (
 		<Group gap={'sm'} wrap={'wrap'}>
-			<TextInput
-				placeholder={'Search by unit number...'}
-				leftSection={<IconSearch size={16} />}
-				value={searchQuery}
-				onChange={(e) => setSearchQuery(e.currentTarget.value)}
-				onKeyDown={(e) => { if (e.key === 'Enter') { handleSearchApply() } }}
-				style={{ flex: 1, minWidth: 180 }}
-			/>
+			<FilterPopover
+				label={searchActive ? `Unit: ${appliedFilters.searchQuery}` : 'Unit number'}
+				active={searchActive}
+				onOpen={handleOpenSearch}
+			>
+				{(close) => (
+					<Stack gap={'sm'}>
+						<TextInput
+							placeholder={'Search by unit number...'}
+							leftSection={<IconSearch size={16} />}
+							value={draftSearch}
+							onChange={(e) => setDraftSearch(e.currentTarget.value)}
+							onKeyDown={(e) => { if (e.key === 'Enter') { handleApplySearch(close) } }}
+							autoFocus
+						/>
+						<Button fullWidth size={'sm'} onClick={() => handleApplySearch(close)}>Apply</Button>
+					</Stack>
+				)}
+			</FilterPopover>
 
 			<FilterPopover
 				label={floorsActive ? `Floors (${appliedFilters.floors!.length})` : 'Floors'}
