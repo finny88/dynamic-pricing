@@ -81,8 +81,27 @@ export const applyStatusFilter = (units: Unit[], statuses: UnitStatus[]): Unit[]
  */
 export const applyRoomsCountFilter = (units: Unit[], roomsCounts: string[]): Unit[] => {
 	if (!units || !roomsCounts) { return units || [] }
-	
+
 	return units.filter(unit => roomsCounts.includes(unit.roomsCount))
+}
+
+/**
+ * Helper function to apply price range filter
+ */
+export const applyPriceRubFilter = (
+	units: Unit[],
+	min?: number,
+	max?: number
+): Unit[] => {
+	if (!units || (min === undefined && max === undefined)) { return units || [] }
+
+	return units.filter(unit => {
+		const price = parseFloat((unit.actualTotalPriceRub || '').replace(/,/g, ''))
+		if (isNaN(price)) { return true }
+		if (min !== undefined && price < min) { return false }
+		if (max !== undefined && price > max) { return false }
+		return true
+	})
 }
 
 /**
@@ -183,6 +202,15 @@ export const isUnitDisabled = (unit: Unit, activeFilters: FilterOptions): boolea
 	// Check rooms count filter
 	if (activeFilters.roomsCount && activeFilters.roomsCount.length > 0) {
 		if (!activeFilters.roomsCount.includes(unit.roomsCount)) { return true }
+	}
+
+	// Check price range filter
+	if (activeFilters.priceRubMin !== undefined || activeFilters.priceRubMax !== undefined) {
+		const price = parseFloat((unit.actualTotalPriceRub || '').replace(/,/g, ''))
+		if (!isNaN(price)) {
+			if (activeFilters.priceRubMin !== undefined && price < activeFilters.priceRubMin) { return true }
+			if (activeFilters.priceRubMax !== undefined && price > activeFilters.priceRubMax) { return true }
+		}
 	}
 
 	return false

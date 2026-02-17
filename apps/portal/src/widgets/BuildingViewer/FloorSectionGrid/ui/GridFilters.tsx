@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { useState } from 'react'
-import { Stack, TextInput, MultiSelect, Group, Button, Collapse, Box } from '@mantine/core'
+import { Stack, TextInput, MultiSelect, NumberInput, Group, Button, Collapse, Box } from '@mantine/core'
 import { IconSearch, IconFilter, IconX } from '@tabler/icons-react'
 import type { FilterOptions, UnitStatus } from '../types'
 
@@ -25,6 +25,8 @@ export const GridFilters: FC<GridFiltersProps> = ({
 	const [selectedSections, setSelectedSections] = useState<string[]>(initialFilters.sections?.map(String) || [])
 	const [selectedStatuses, setSelectedStatuses] = useState<string[]>(initialFilters.statuses || [])
 	const [selectedRoomsCounts, setSelectedRoomsCounts] = useState<string[]>(initialFilters.roomsCount || [])
+	const [priceMin, setPriceMin] = useState<number | string>(initialFilters.priceRubMin ?? '')
+	const [priceMax, setPriceMax] = useState<number | string>(initialFilters.priceRubMax ?? '')
 
 	const handleApplyFilters = () => {
 		onFilterChange({
@@ -32,7 +34,9 @@ export const GridFilters: FC<GridFiltersProps> = ({
 			floors: selectedFloors.length > 0 ? selectedFloors.map(Number) : undefined,
 			sections: selectedSections.length > 0 ? selectedSections.map(Number) : undefined,
 			statuses: selectedStatuses.length > 0 ? selectedStatuses as UnitStatus[] : undefined,
-			roomsCount: selectedRoomsCounts.length > 0 ? selectedRoomsCounts : undefined
+			roomsCount: selectedRoomsCounts.length > 0 ? selectedRoomsCounts : undefined,
+			priceRubMin: typeof priceMin === 'number' ? priceMin : undefined,
+			priceRubMax: typeof priceMax === 'number' ? priceMax : undefined
 		})
 	}
 
@@ -42,15 +46,19 @@ export const GridFilters: FC<GridFiltersProps> = ({
 		setSelectedSections([])
 		setSelectedStatuses([])
 		setSelectedRoomsCounts([])
+		setPriceMin('')
+		setPriceMax('')
 		onFilterChange({})
 	}
 
-	const hasActiveFilters = 
-		searchQuery || 
-		selectedFloors.length > 0 || 
-		selectedSections.length > 0 || 
+	const hasActiveFilters =
+		searchQuery ||
+		selectedFloors.length > 0 ||
+		selectedSections.length > 0 ||
 		selectedStatuses.length > 0 ||
-		selectedRoomsCounts.length > 0
+		selectedRoomsCounts.length > 0 ||
+		priceMin !== '' ||
+		priceMax !== ''
 
 	return (
 		<Stack gap={'md'}>
@@ -132,6 +140,27 @@ export const GridFilters: FC<GridFiltersProps> = ({
 								onChange={setSelectedRoomsCounts}
 								clearable
 								searchable
+							/>
+						</Group>
+
+						<Group grow>
+							<NumberInput
+								label={'Price from (₽)'}
+								placeholder={'Min price'}
+								value={priceMin}
+								onChange={setPriceMin}
+								min={0}
+								thousandSeparator={' '}
+								allowNegative={false}
+							/>
+							<NumberInput
+								label={'Price to (₽)'}
+								placeholder={'Max price'}
+								value={priceMax}
+								onChange={setPriceMax}
+								min={0}
+								thousandSeparator={' '}
+								allowNegative={false}
 							/>
 						</Group>
 

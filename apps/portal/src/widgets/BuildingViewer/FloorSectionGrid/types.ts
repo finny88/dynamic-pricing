@@ -42,6 +42,8 @@ export interface FilterOptions {
 	statuses?: UnitStatus[]
 	roomsCount?: string[]
 	searchQuery?: string
+	priceRubMin?: number
+	priceRubMax?: number
 }
 
 /**
