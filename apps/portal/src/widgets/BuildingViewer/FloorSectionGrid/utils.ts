@@ -105,6 +105,25 @@ export const applyPriceRubFilter = (
 }
 
 /**
+ * Helper function to apply price per sqm filter
+ */
+export const applyPricePerSqmRubFilter = (
+	units: Unit[],
+	min?: number,
+	max?: number
+): Unit[] => {
+	if (!units || (min === undefined && max === undefined)) { return units || [] }
+
+	return units.filter(unit => {
+		const price = parseFloat((unit.actualPricePerSqmRub || '').replace(/,/g, ''))
+		if (isNaN(price)) { return true }
+		if (min !== undefined && price < min) { return false }
+		if (max !== undefined && price > max) { return false }
+		return true
+	})
+}
+
+/**
  * Helper function to compute grid matrix and related data
  */
 export const computeGridData = (units: Unit[], allUnits: Unit[]) => {
@@ -204,14 +223,13 @@ export const isUnitDisabled = (unit: Unit, activeFilters: FilterOptions): boolea
 		if (!activeFilters.roomsCount.includes(unit.roomsCount)) { return true }
 	}
 
-	// Check price range filter
-	if (activeFilters.priceRubMin !== undefined || activeFilters.priceRubMax !== undefined) {
-		const price = parseFloat((unit.actualTotalPriceRub || '').replace(/,/g, ''))
-		if (!isNaN(price)) {
-			if (activeFilters.priceRubMin !== undefined && price < activeFilters.priceRubMin) { return true }
-			if (activeFilters.priceRubMax !== undefined && price > activeFilters.priceRubMax) { return true }
-		}
-	}
+	// Check price range filters
+	if (!applyPriceRubFilter(
+		[unit], activeFilters.priceRubMin, activeFilters.priceRubMax
+	)[0]) { return true }
+	if (!applyPricePerSqmRubFilter(
+		[unit], activeFilters.pricePerSqmRubMin, activeFilters.pricePerSqmRubMax
+	)[0]) { return true }
 
 	return false
 }

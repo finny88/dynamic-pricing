@@ -44,6 +44,8 @@ export interface FilterOptions {
 	searchQuery?: string
 	priceRubMin?: number
 	priceRubMax?: number
+	pricePerSqmRubMin?: number
+	pricePerSqmRubMax?: number
 }
 
 /**

@@ -46,7 +46,8 @@ export const Filters: FC<FiltersProps> = ({
 		(appliedFilters.sections?.length ?? 0) > 0,
 		(appliedFilters.statuses?.length ?? 0) > 0,
 		(appliedFilters.roomsCount?.length ?? 0) > 0,
-		appliedFilters.priceRubMin !== undefined || appliedFilters.priceRubMax !== undefined
+		appliedFilters.priceRubMin !== undefined || appliedFilters.priceRubMax !== undefined,
+		appliedFilters.pricePerSqmRubMin !== undefined || appliedFilters.pricePerSqmRubMax !== undefined
 	].some(Boolean)
 
 	return (
@@ -78,7 +79,16 @@ export const Filters: FC<FiltersProps> = ({
 				<PriceFilter
 					appliedMin={appliedFilters.priceRubMin}
 					appliedMax={appliedFilters.priceRubMax}
-					onApply={(min, max) => commitFilter({ priceRubMin: min, priceRubMax: max })}
+					appliedSqmMin={appliedFilters.pricePerSqmRubMin}
+					appliedSqmMax={appliedFilters.pricePerSqmRubMax}
+					onApply={(
+						min, max, sqmMin, sqmMax
+					) => commitFilter({
+						priceRubMin: min,
+						priceRubMax: max,
+						pricePerSqmRubMin: sqmMin,
+						pricePerSqmRubMax: sqmMax
+					})}
 				/>
 				{hasActiveFilters && (
 					<Button
