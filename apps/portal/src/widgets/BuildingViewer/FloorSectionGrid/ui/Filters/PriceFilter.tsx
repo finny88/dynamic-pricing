@@ -34,7 +34,7 @@ export const PriceFilter: FC<PriceFilterProps> = ({ id, label, appliedMin, appli
 	} as const
 
 	return (
-		<FilterPopover id={id} label={label} active={isActive} onOpen={handleOpen} onApply={handleApply}>
+		<FilterPopover id={id} label={label} active={isActive} onOpen={handleOpen} onApply={handleApply} onReset={() => onApply(undefined, undefined)}>
 			{() => (
 				<Group grow>
 					<NumberInput

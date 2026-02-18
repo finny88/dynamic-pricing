@@ -27,6 +27,7 @@ export const SectionsFilter: FC<SectionsFilterProps> = ({ applied, available, on
 			active={isActive}
 			onOpen={handleOpen}
 			onApply={handleApply}
+			onReset={() => onApply(undefined)}
 		>
 			{() => (
 				<ScrollArea.Autosize mah={200}>

@@ -27,6 +27,7 @@ export const RoomsFilter: FC<RoomsFilterProps> = ({ applied, available, onApply 
 			active={isActive}
 			onOpen={handleOpen}
 			onApply={handleApply}
+			onReset={() => onApply(undefined)}
 		>
 			{() => (
 				<Chip.Group multiple value={draft} onChange={setDraft}>

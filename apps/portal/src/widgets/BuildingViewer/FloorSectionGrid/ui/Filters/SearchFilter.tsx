@@ -25,6 +25,7 @@ export const SearchFilter: FC<SearchFilterProps> = ({ applied, onApply }) => {
 			active={!!applied}
 			onOpen={handleOpen}
 			onApply={handleApply}
+			onReset={() => onApply(undefined)}
 		>
 			{(applyAndClose) => (
 				<TextInput

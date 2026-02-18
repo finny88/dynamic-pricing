@@ -27,6 +27,7 @@ export const FloorsFilter: FC<FloorsFilterProps> = ({ applied, available, onAppl
 			active={isActive}
 			onOpen={handleOpen}
 			onApply={handleApply}
+			onReset={() => onApply(undefined)}
 		>
 			{() => (
 				<ScrollArea.Autosize mah={200}>

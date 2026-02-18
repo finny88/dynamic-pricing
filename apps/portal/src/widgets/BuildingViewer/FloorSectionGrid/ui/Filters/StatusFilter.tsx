@@ -27,6 +27,7 @@ export const StatusFilter: FC<StatusFilterProps> = ({ applied, onApply }) => {
 			active={isActive}
 			onOpen={handleOpen}
 			onApply={handleApply}
+			onReset={() => onApply(undefined)}
 		>
 			{() => (
 				<Chip.Group multiple value={draft} onChange={setDraft}>
