@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, useTransition } from 'react'
 import { Box, Stack } from '@mantine/core'
 import { Filters, StatusLegend, FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
 import classes from './FloorSectionGrid.module.css'
@@ -27,6 +27,13 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 	variant = 'compact',
 }) => {
 	const [activeFilters, setActiveFilters] = useState<FilterOptions>({})
+	const [isPending, startTransition] = useTransition()
+
+	const handleFilterChange = useCallback((filters: FilterOptions) => {
+		startTransition(() => {
+			setActiveFilters(filters)
+		})
+	}, [])
 
 	// Use all units for display (no filtering, just disabling)
 	const displayedUnits = units
@@ -55,7 +62,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 				availableFloors={allFloors}
 				availableSections={allSections}
 				availableRoomsCounts={availableRoomsCounts}
-				onFilterChange={setActiveFilters}
+				onFilterChange={handleFilterChange}
 				initialFilters={activeFilters}
 			/>
 
@@ -63,7 +70,13 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 			<StatusLegend />
 
 			{/* Grid */}
-			<Box className={classes.gridContainer}>
+			<Box
+				className={classes.gridContainer}
+				style={{
+					opacity: isPending ? 0.6 : 1,
+					transition: 'opacity 150ms',
+				}}
+			>
 				{/* MAIN GRID */}
 				<Box
 					role={'grid'}
