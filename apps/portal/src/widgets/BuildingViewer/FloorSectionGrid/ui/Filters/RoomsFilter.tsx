@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { useState } from 'react'
-import { Chip, Group, Button } from '@mantine/core'
+import { Chip, Group } from '@mantine/core'
 import { FilterPopover } from './FilterPopover'
 
 interface RoomsFilterProps {
@@ -16,9 +16,8 @@ export const RoomsFilter: FC<RoomsFilterProps> = ({ applied, available, onApply 
 
 	const handleOpen = () => setDraft(applied ?? [])
 
-	const handleApply = (close: () => void) => {
+	const handleApply = () => {
 		onApply(draft.length > 0 ? draft : undefined)
-		close()
 	}
 
 	return (
@@ -27,18 +26,16 @@ export const RoomsFilter: FC<RoomsFilterProps> = ({ applied, available, onApply 
 			label={isActive ? `Rooms (${applied!.length})` : 'Rooms'}
 			active={isActive}
 			onOpen={handleOpen}
+			onApply={handleApply}
 		>
-			{(close) => (
-				<>
-					<Chip.Group multiple value={draft} onChange={setDraft}>
-						<Group gap={'xs'} wrap={'wrap'}>
-							{available.map(r => (
-								<Chip key={r} value={r} size={'sm'}>{r}</Chip>
-							))}
-						</Group>
-					</Chip.Group>
-					<Button fullWidth size={'sm'} onClick={() => handleApply(close)}>Apply</Button>
-				</>
+			{() => (
+				<Chip.Group multiple value={draft} onChange={setDraft}>
+					<Group gap={'xs'} wrap={'wrap'}>
+						{available.map(r => (
+							<Chip key={r} value={r} size={'sm'}>{r}</Chip>
+						))}
+					</Group>
+				</Chip.Group>
 			)}
 		</FilterPopover>
 	)

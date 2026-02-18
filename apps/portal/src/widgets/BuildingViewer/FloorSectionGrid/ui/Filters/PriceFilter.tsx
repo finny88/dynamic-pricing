@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { useState } from 'react'
-import { Group, NumberInput, Button } from '@mantine/core'
+import { Group, NumberInput } from '@mantine/core'
 import { FilterPopover } from './FilterPopover'
 
 interface PriceFilterProps {
@@ -22,10 +22,9 @@ export const PriceFilter: FC<PriceFilterProps> = ({ id, label, appliedMin, appli
 		setDraftMax(appliedMax ?? '')
 	}
 
-	const handleApply = (close: () => void) => {
+	const handleApply = () => {
 		onApply(typeof draftMin === 'number' ? draftMin : undefined,
 			typeof draftMax === 'number' ? draftMax : undefined)
-		close()
 	}
 
 	const numberInputProps = {
@@ -35,27 +34,24 @@ export const PriceFilter: FC<PriceFilterProps> = ({ id, label, appliedMin, appli
 	} as const
 
 	return (
-		<FilterPopover id={id} label={label} active={isActive} onOpen={handleOpen}>
-			{(close) => (
-				<>
-					<Group grow>
-						<NumberInput
-							label={'From'}
-							placeholder={'Min'}
-							value={draftMin}
-							onChange={setDraftMin}
-							{...numberInputProps}
-						/>
-						<NumberInput
-							label={'To'}
-							placeholder={'Max'}
-							value={draftMax}
-							onChange={setDraftMax}
-							{...numberInputProps}
-						/>
-					</Group>
-					<Button fullWidth size={'sm'} onClick={() => handleApply(close)}>Apply</Button>
-				</>
+		<FilterPopover id={id} label={label} active={isActive} onOpen={handleOpen} onApply={handleApply}>
+			{() => (
+				<Group grow>
+					<NumberInput
+						label={'From'}
+						placeholder={'Min'}
+						value={draftMin}
+						onChange={setDraftMin}
+						{...numberInputProps}
+					/>
+					<NumberInput
+						label={'To'}
+						placeholder={'Max'}
+						value={draftMax}
+						onChange={setDraftMax}
+						{...numberInputProps}
+					/>
+				</Group>
 			)}
 		</FilterPopover>
 	)

@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { useState } from 'react'
-import { TextInput, Button } from '@mantine/core'
+import { TextInput } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
 import { FilterPopover } from './FilterPopover'
 
@@ -14,9 +14,8 @@ export const SearchFilter: FC<SearchFilterProps> = ({ applied, onApply }) => {
 
 	const handleOpen = () => setDraft(applied ?? '')
 
-	const handleApply = (close: () => void) => {
+	const handleApply = () => {
 		onApply(draft || undefined)
-		close()
 	}
 
 	return (
@@ -25,19 +24,17 @@ export const SearchFilter: FC<SearchFilterProps> = ({ applied, onApply }) => {
 			label={applied ? `Unit: ${applied}` : 'Unit number'}
 			active={!!applied}
 			onOpen={handleOpen}
+			onApply={handleApply}
 		>
-			{(close) => (
-				<>
-					<TextInput
-						placeholder={'Search by unit number...'}
-						leftSection={<IconSearch size={16} />}
-						value={draft}
-						onChange={(e) => setDraft(e.currentTarget.value)}
-						onKeyDown={(e) => { if (e.key === 'Enter') { handleApply(close) } }}
-						autoFocus
-					/>
-					<Button fullWidth size={'sm'} onClick={() => handleApply(close)}>Apply</Button>
-				</>
+			{(applyAndClose) => (
+				<TextInput
+					placeholder={'Search by unit number...'}
+					leftSection={<IconSearch size={16} />}
+					value={draft}
+					onChange={(e) => setDraft(e.currentTarget.value)}
+					onKeyDown={(e) => { if (e.key === 'Enter') { applyAndClose() } }}
+					autoFocus
+				/>
 			)}
 		</FilterPopover>
 	)

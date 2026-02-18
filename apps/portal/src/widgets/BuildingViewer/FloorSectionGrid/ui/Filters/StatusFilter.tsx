@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { useState } from 'react'
-import { Chip, Group, Button } from '@mantine/core'
+import { Chip, Group } from '@mantine/core'
 import { FilterPopover } from './FilterPopover'
 import type { UnitStatus } from '../../models/unitStatus'
 
@@ -16,9 +16,8 @@ export const StatusFilter: FC<StatusFilterProps> = ({ applied, onApply }) => {
 
 	const handleOpen = () => setDraft(applied ?? [])
 
-	const handleApply = (close: () => void) => {
+	const handleApply = () => {
 		onApply(draft.length > 0 ? draft as UnitStatus[] : undefined)
-		close()
 	}
 
 	return (
@@ -27,19 +26,17 @@ export const StatusFilter: FC<StatusFilterProps> = ({ applied, onApply }) => {
 			label={isActive ? `Status (${applied!.length})` : 'Status'}
 			active={isActive}
 			onOpen={handleOpen}
+			onApply={handleApply}
 		>
-			{(close) => (
-				<>
-					<Chip.Group multiple value={draft} onChange={setDraft}>
-						<Group gap={'xs'} wrap={'wrap'}>
-							<Chip value={'available'} size={'sm'}>Available</Chip>
-							<Chip value={'reserved'} size={'sm'}>Reserved</Chip>
-							<Chip value={'sold'} size={'sm'}>Sold</Chip>
-							<Chip value={'unknown'} size={'sm'}>Unknown</Chip>
-						</Group>
-					</Chip.Group>
-					<Button fullWidth size={'sm'} onClick={() => handleApply(close)}>Apply</Button>
-				</>
+			{() => (
+				<Chip.Group multiple value={draft} onChange={setDraft}>
+					<Group gap={'xs'} wrap={'wrap'}>
+						<Chip value={'available'} size={'sm'}>Available</Chip>
+						<Chip value={'reserved'} size={'sm'}>Reserved</Chip>
+						<Chip value={'sold'} size={'sm'}>Sold</Chip>
+						<Chip value={'unknown'} size={'sm'}>Unknown</Chip>
+					</Group>
+				</Chip.Group>
 			)}
 		</FilterPopover>
 	)

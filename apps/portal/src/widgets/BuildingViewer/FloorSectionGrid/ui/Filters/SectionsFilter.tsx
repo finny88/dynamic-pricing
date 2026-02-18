@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { useState } from 'react'
-import { Chip, Group, Button, ScrollArea } from '@mantine/core'
+import { Chip, Group, ScrollArea } from '@mantine/core'
 import { FilterPopover } from './FilterPopover'
 
 interface SectionsFilterProps {
@@ -16,9 +16,8 @@ export const SectionsFilter: FC<SectionsFilterProps> = ({ applied, available, on
 
 	const handleOpen = () => setDraft(applied?.map(String) ?? [])
 
-	const handleApply = (close: () => void) => {
+	const handleApply = () => {
 		onApply(draft.length > 0 ? draft.map(Number) : undefined)
-		close()
 	}
 
 	return (
@@ -27,20 +26,18 @@ export const SectionsFilter: FC<SectionsFilterProps> = ({ applied, available, on
 			label={isActive ? `Sections (${applied!.length})` : 'Sections'}
 			active={isActive}
 			onOpen={handleOpen}
+			onApply={handleApply}
 		>
-			{(close) => (
-				<>
-					<ScrollArea.Autosize mah={200}>
-						<Chip.Group multiple value={draft} onChange={setDraft}>
-							<Group gap={'xs'} wrap={'wrap'} p={'xs'}>
-								{available.map(s => (
-									<Chip key={s} value={String(s)} size={'sm'}>{s}</Chip>
-								))}
-							</Group>
-						</Chip.Group>
-					</ScrollArea.Autosize>
-					<Button fullWidth size={'sm'} onClick={() => handleApply(close)}>Apply</Button>
-				</>
+			{() => (
+				<ScrollArea.Autosize mah={200}>
+					<Chip.Group multiple value={draft} onChange={setDraft}>
+						<Group gap={'xs'} wrap={'wrap'} p={'xs'}>
+							{available.map(s => (
+								<Chip key={s} value={String(s)} size={'sm'}>{s}</Chip>
+							))}
+						</Group>
+					</Chip.Group>
+				</ScrollArea.Autosize>
 			)}
 		</FilterPopover>
 	)

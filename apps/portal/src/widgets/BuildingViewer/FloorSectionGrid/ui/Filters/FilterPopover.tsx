@@ -8,10 +8,11 @@ interface FilterPopoverProps {
 	label: string
 	active?: boolean
 	onOpen?: () => void
-	children: (close: () => void) => ReactNode
+	onApply: () => void
+	children: (applyAndClose: () => void) => ReactNode
 }
 
-export const FilterPopover: FC<FilterPopoverProps> = ({ id, label, active = false, onOpen, children }) => {
+export const FilterPopover: FC<FilterPopoverProps> = ({ id, label, active = false, onOpen, onApply, children }) => {
 	const { openedId, setOpenedId } = useContext(FilterGroupContext)
 	const opened = openedId === id
 
@@ -20,6 +21,11 @@ export const FilterPopover: FC<FilterPopoverProps> = ({ id, label, active = fals
 	const handleOpen = () => {
 		if (onOpen) { onOpen() }
 		setOpenedId(id)
+	}
+
+	const applyAndClose = () => {
+		onApply()
+		close()
 	}
 
 	return (
@@ -38,7 +44,8 @@ export const FilterPopover: FC<FilterPopoverProps> = ({ id, label, active = fals
 			</Popover.Target>
 			<Popover.Dropdown>
 				<Stack gap={'sm'}>
-					{children(close)}
+					{children(applyAndClose)}
+					<Button fullWidth size={'sm'} onClick={applyAndClose}>Apply</Button>
 				</Stack>
 			</Popover.Dropdown>
 		</Popover>
