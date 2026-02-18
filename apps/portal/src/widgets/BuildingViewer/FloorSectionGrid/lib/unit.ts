@@ -15,7 +15,7 @@ export const getUnitStatus = (unit: Unit): UnitStatus => {
 	if (status.includes('брон') || status.includes('reserved') || status.includes('резерв')) {
 		return 'reserved'
 	}
-	if (status.includes('свободн') || status.includes('available') || status.includes('доступн')) {
+	if (status.includes('свободн') || status.includes('available') || status.includes('доступн') || status.includes('продается')) {
 		return 'available'
 	}
   
