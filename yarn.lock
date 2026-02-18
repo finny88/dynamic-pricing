@@ -248,7 +248,6 @@ __metadata:
     vite-tsconfig-paths: "npm:5.1.4"
     xlsx: "npm:0.18.5"
     zod: "npm:4.3.6"
-    zod-xlsx: "npm:0.10.0"
   languageName: unknown
   linkType: soft
 
@@ -9315,16 +9314,6 @@ __metadata:
   peerDependencies:
     zod: ^3.25.0 || ^4.0.0
   checksum: 10c0/0ccfec48c46de1be440b719cd02044d4abb89ed0e14c13e637cd55bf29102f67ccdba373f25def0fc7130e5f15025be4d557a7edcc95d5a3811599aade689e1b
-  languageName: node
-  linkType: hard
-
-"zod-xlsx@npm:0.10.0":
-  version: 0.10.0
-  resolution: "zod-xlsx@npm:0.10.0"
-  peerDependencies:
-    xlsx: ^0.18.5
-    zod: ^3.25.0
-  checksum: 10c0/94dfdf826beb154f5d3716cb1a6f34c214366936c522b89286f862207edce8b5b878be95c72232f4226c5e2de38ca6b88a5249c2f0a3f8939d46d4d983584a3d
   languageName: node
   linkType: hard
 

@@ -1,35 +1,69 @@
-
 import { useRef, useState } from 'react'
 import { Alert, Button, Container, Group, TextInput, Title } from '@mantine/core'
 import { IconFile, IconFolder, IconTrash } from '@tabler/icons-react'
 import * as XLSX from 'xlsx'
-import { createValidator } from 'zod-xlsx'
 import { rawUnitSchema } from '../../../entities/unit/libs/validators'
 import type { RawUnit } from '@entities/unit/models/rawUnit'
-import { mapRawUnitsToUnits } from '@entities/unit/libs/mappers'
 import { BuildingViewer } from '../../../widgets/BuildingViewer/BuildingViewer'
-
-const isRawUnit = (item: unknown): item is RawUnit => rawUnitSchema.safeParse(item).success
+import { mapRawUnitToUnit } from '../../../entities/unit/libs/mappers'
+import type { Unit } from '@entities/unit'
 
 const ACCEPT = '.xls,.xlsx,.csv'
+
+interface RowValidationError {
+	row: number;
+	column: string;
+	message: string;
+}
+
+const validateRow = (raw: Record<string, unknown>, rowIndex: number): { success: true; data: RawUnit } | { success: false; errors: RowValidationError[] } => {
+	const result = rawUnitSchema.safeParse(raw)
+
+	if (result.success) {
+		return { success: true, data: result.data }
+	}
+
+	const errors: RowValidationError[] = result.error.issues.map((issue) => ({
+		row: rowIndex,
+		column: issue.path.join('.') || 'unknown',
+		message: issue.message,
+	}))
+
+	return { success: false, errors }
+}
 
 const parseFile = async (file: File) => {
 	const buffer = await file.arrayBuffer()
 	const workbook = XLSX.read(buffer)
-	const { invalid } = createValidator(workbook, { sheetName: workbook.SheetNames[0] }).validate(rawUnitSchema)
-	if (invalid.length > 0) {
-		return { type: 'invalid' as const, invalid }
-	}
 	const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
-	const result = XLSX.utils.sheet_to_json(firstSheet, { defval: '' }).filter(isRawUnit)
-	return { type: 'result' as const, result }
+	const rawRows = XLSX.utils.sheet_to_json<Record<string, unknown>>(firstSheet, { defval: null, raw: false })
+
+	const data: Unit[] = []
+	const errors: RowValidationError[] = []
+
+	rawRows.forEach((row, index) => {
+		const rowNumber = index + 1
+
+		// Normalize keys to lowercase to be safe
+		const normalizedRow = Object.fromEntries(Object.entries(row).map(([k, v]) => [k.trim(), v]))
+
+		const result = validateRow(normalizedRow, rowNumber)
+
+		if (result.success) {
+			data.push(mapRawUnitToUnit(result.data))
+		} else {
+			errors.push(...result.errors)
+		}
+	})
+	
+	return { data, errors }
 }
 
 export const BuildingPage = () => {
 	const [file, setFile] = useState<File | null>(null)
 	const [loading, setLoading] = useState(false)
-	const [result, setResult] = useState<RawUnit[] | null>(null)
-	const [invalid, setInvalid] = useState<{ issues: unknown[]; isValid: boolean; data: Record<string, unknown> }[] | null>(null)
+	const [result, setResult] = useState<Unit[] | null>(null)
+	const [invalid, setInvalid] = useState<RowValidationError[] | null>(null)
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const handleParse = async () => {
@@ -39,11 +73,11 @@ export const BuildingPage = () => {
 		setLoading(true)
 		try {
 			const parsed = await parseFile(file)
-			if (parsed.type === 'invalid') {
-				setInvalid(parsed.invalid)
+			if (parsed.errors.length > 0) {
+				setInvalid(parsed.errors)
 				setResult(null)
 			} else {
-				setResult(parsed.result)
+				setResult(parsed.data)
 				setInvalid(null)
 			}
 		} finally {
@@ -82,6 +116,7 @@ export const BuildingPage = () => {
 									onClick={() => { 
 										setFile(null) 
 										setResult(null)
+										setInvalid(null)
 									}}
 								>
 									Удалить
@@ -121,7 +156,7 @@ export const BuildingPage = () => {
 				)}
 			</Container>
 			{result !== null && result.length > 0 && (
-				<BuildingViewer units={mapRawUnitsToUnits(result)} />
+				<BuildingViewer units={result} />
 			)}
 		</>
 	

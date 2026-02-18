@@ -1,47 +1,47 @@
 export interface RawUnit {
-	'Проект': string | number
-	'Адрес': string | number
-	'Класс': string | number
-	'Корпус': string | number
-	'Секция': string | number
-	'Старт продаж': string | number
-	'Окончание продаж': string | number
-	'Ввод в эксплуатацию': string | number
-	'№ помещения': string | number
-	'Этаж': string | number
-	'Число комнат': string | number
-	'Общая площадь, кв. м': string | number
-	'Жилая площадь, кв. м': string | number
-	'Планировка, П/план': string | number
-	'Конфигурация квартиры': string | number
-	'Количество квартир на этаже, шт.': string | number
-	'Балкон / Лоджия': string | number
-	'Веранда / Терраса': string | number
-	'Высота потолков, м': string | number
-	'Отделка': string | number
-	'Стоимость отделки, ₽/кв. м': string | number
-	'Мастер-спальня': string | number
-	'Гардеробная': string | number
-	'Кол-во санузлов, шт.': string | number
-	'Тип санузла': string | number
-	'Тип кухни': string | number
-	'Площадь кухни, кв. м': string | number
-	'Близость к лифту': string | number
-	'Вид': string | number
-	'Плановая стоимость строительства, руб': string | number
-	'Статус факт': string | number
-	'Дата продажи': string | number
-	'Цена 1 кв. м факт, ₽': string | number
-	'Общая цена факт, ₽': string | number
-	'Тип покупателя': string | number
-	'Число покупателей': string | number
-	'Тип сделки': string | number
-	'Цена кв. м на старте продаж, ₽': string | number
-	'Общая цена на старте, ₽': string | number
-	'Вариант оплаты': string | number
-	'Дата регистрации договора ': string | number
-	'Размер скидки, ₽': string | number
-	'Информация о спецпрограммах': string | number
-	'Детали спецпрограммы': string | number
-	'Дата формирования файла': string
+	'Проект'?: string | null
+	'Адрес'?: string | null
+	'Класс'?: string | null
+	'Корпус'?: string | null
+	'Секция': string | null
+	'Старт продаж'?: string | null
+	'Окончание продаж'?: string | null
+	'Ввод в эксплуатацию'?: string | null
+	'№ помещения': string | null
+	'Этаж': string | null
+	'Число комнат': string | null
+	'Общая площадь, кв. м': string | null
+	'Жилая площадь, кв. м'?: string | null
+	'Планировка, П/план'?: string | null
+	'Конфигурация квартиры'?: string | null
+	'Количество квартир на этаже, шт.'?: string | null
+	'Балкон / Лоджия'?: string | null
+	'Веранда / Терраса'?: string | null
+	'Высота потолков, м'?: string | null
+	'Отделка'?: string | null
+	'Стоимость отделки, ₽/кв. м'?: string | null
+	'Мастер-спальня'?: string | null
+	'Гардеробная'?: string | null
+	'Кол-во санузлов, шт.'?: string | null
+	'Тип санузла'?: string | null
+	'Тип кухни'?: string | null
+	'Площадь кухни, кв. м'?: string | null
+	'Близость к лифту'?: string | null
+	'Вид'?: string | null
+	'Плановая стоимость строительства, руб'?: string | null
+	'Статус факт': string | null
+	'Дата продажи'?: string | null
+	'Цена 1 кв. м факт, ₽': string | null
+	'Общая цена факт, ₽': string | null
+	'Тип покупателя'?: string | null
+	'Число покупателей'?: string | null
+	'Тип сделки'?: string | null
+	'Цена кв. м на старте продаж, ₽'?: string | null
+	'Общая цена на старте, ₽'?: string | null
+	'Вариант оплаты'?: string | null
+	'Дата регистрации договора '?: string | null
+	'Размер скидки, ₽'?: string | null
+	'Информация о спецпрограммах'?: string | null
+	'Детали спецпрограммы'?: string | null
+	'Дата формирования файла'?: string
 }
