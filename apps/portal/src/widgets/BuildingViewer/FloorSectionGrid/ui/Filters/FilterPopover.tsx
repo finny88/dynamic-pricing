@@ -23,7 +23,7 @@ export const FilterPopover: FC<FilterPopoverProps> = ({ id, label, active = fals
 	}
 
 	return (
-		<Popover opened={opened} onClose={close} withinPortal>
+		<Popover opened={opened} onDismiss={close} withinPortal>
 			<Popover.Target>
 				<Button
 					variant={active ? 'filled' : 'default'}
@@ -31,6 +31,7 @@ export const FilterPopover: FC<FilterPopoverProps> = ({ id, label, active = fals
 					size={'sm'}
 					rightSection={opened ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />}
 					onClick={() => opened ? close() : handleOpen()}
+					onKeyDown={() => { if (opened) { close() } }}
 				>
 					{label}
 				</Button>
