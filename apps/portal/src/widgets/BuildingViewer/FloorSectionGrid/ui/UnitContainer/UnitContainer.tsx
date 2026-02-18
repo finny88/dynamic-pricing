@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import { memo } from 'react'
 import { Box } from '@mantine/core'
 import { UnitCell } from './UnitCell'
 import { UnitCellDetailed } from './UnitCellDetailed'
@@ -17,7 +18,7 @@ interface UnitContainerProps {
 	variant?: GridVariant
 }
 
-export const UnitContainer: FC<UnitContainerProps> = ({
+const UnitContainerComponent: FC<UnitContainerProps> = ({
 	items,
 	floorIndex,
 	sectionIndex,
@@ -53,3 +54,5 @@ export const UnitContainer: FC<UnitContainerProps> = ({
 		</Box>
 	)
 }
+
+export const UnitContainer = memo(UnitContainerComponent)
