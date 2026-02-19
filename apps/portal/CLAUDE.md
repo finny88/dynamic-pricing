@@ -31,6 +31,13 @@ feature-name/
 3. Export only the public interface via index.ts
 4. Verify the import direction is valid
 
+## Dependency Management
+
+Always install dependencies with exact versions — never use carets (`^`) or tildes (`~`):
+- `yarn add <package>@<version>` — use `yarn add --exact <package>` or specify the version explicitly
+- `yarn add -D <package>@<version>` — same rule applies for devDependencies
+- Never allow version ranges in `package.json`; all entries must be pinned (e.g. `"react": "19.2.0"`, not `"react": "^19.2.0"`)
+
 ## ESLint Rules — Never Violate
 
 The project enforces lint rules via `eslint.config.js`. All generated code must pass `yarn lint` without errors.
