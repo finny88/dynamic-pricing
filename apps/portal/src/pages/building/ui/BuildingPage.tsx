@@ -49,7 +49,7 @@ const parseFile = async (file: File) => {
 	const errors: RowValidationError[] = []
 
 	rawRows.forEach((row, index) => {
-		const rowNumber = index + 1
+		const rowNumber = index + 2
 
 		// Normalize keys to lowercase to be safe
 		const normalizedRow = Object.fromEntries(Object.entries(row).map(([k, v]) => [k.trim(), v]))
@@ -94,7 +94,7 @@ export const BuildingPage = () => {
 
 	return (
 		<>
-			<Container pt={'sm'} style={{ display: 'flex', flexDirection: 'column', height: invalid !== null && invalid.length > 0 ? '100vh' : undefined }}>
+			<Container pb={'sm'} style={{ display: 'flex', flexDirection: 'column', height: invalid !== null && invalid.length > 0 ? '100vh' : undefined }}>
 				<input
 					ref={inputRef}
 					type={'file'}
@@ -145,7 +145,7 @@ export const BuildingPage = () => {
 				<Button
 					variant={'filled'}
 					mt={'sm'}
-					style={{ width: 'fit-content' }}
+					style={{ width: 'fit-content', flexShrink: 0 }}
 					disabled={!file}
 					loading={loading}
 					onClick={() => { void handleParse() }}
@@ -153,7 +153,7 @@ export const BuildingPage = () => {
 					Загрузить файл
 				</Button>
 				{invalid !== null && invalid.length > 0 && (
-					<Alert variant={'light'} color={'red'} mt={'sm'} style={{ flex: 1, overflow: 'auto' }}>
+					<Alert variant={'light'} color={'red'} mt={'sm'} style={{ flex: '0 1 auto', overflow: 'auto' }}>
 						<pre style={{ margin: 0 }}>{JSON.stringify(
 							invalid,
 							null,
