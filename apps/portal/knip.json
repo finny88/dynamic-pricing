@@ -1,0 +1,9 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/{app,entities,features,pages,shared,widgets}/*/index.ts"
+  ],
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignoreDependencies": ["postcss", "@mantine/hooks"],
+  "ignoreBinaries": ["vite", "tsc", "eslint", "knip"]
+}

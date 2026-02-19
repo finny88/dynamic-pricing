@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "typecheck": "tsc --project tsconfig.app.json"
+    "typecheck": "tsc --project tsconfig.app.json",
+    "knip": "knip"
   },
   "dependencies": {
     "@mantine/core": "8.3.14",
@@ -33,6 +34,7 @@
     "eslint-plugin-react-hooks": "7.0.1",
     "eslint-plugin-react-refresh": "0.4.24",
     "globals": "16.5.0",
+    "knip": "^5.84.1",
     "postcss": "8.5.6",
     "postcss-preset-mantine": "1.18.0",
     "postcss-simple-vars": "7.0.1",

@@ -4,7 +4,7 @@ import { getUnitStatus } from './unit'
 /**
  * Default color schemes for different unit statuses using Mantine colors
  */
-export const DEFAULT_COLOR_SCHEMES = {
+const DEFAULT_COLOR_SCHEMES = {
 	available: {
 		background: 'var(--mantine-color-green-6)',
 		text: 'var(--mantine-color-green-9)',

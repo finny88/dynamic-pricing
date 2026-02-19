@@ -1,7 +1,5 @@
 export { Filters } from './Filters'
 export { StatusLegend } from './StatusLegend'
-export { UnitCell } from './UnitContainer/UnitCell'
-export { UnitTooltipContent } from './UnitContainer/UnitTooltipContent'
 export { FloorLabel } from './FloorLabel/FloorLabel'
 export { SectionLabel } from './SectionLabel'
 export { UnitContainer } from './UnitContainer'

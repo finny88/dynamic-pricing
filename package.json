@@ -16,6 +16,7 @@
     "build": "lerna run build",
     "typecheck": "lerna run typecheck",
     "lint": "lerna run lint",
+    "knip": "lerna run knip",
     "postinstall": "husky install"
   },
   "lint-staged": {

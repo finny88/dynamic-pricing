@@ -1,7 +1,45 @@
 import type { Unit } from '@entities/unit'
 import type { UnitStatus } from '../model/unitStatus'
 import type { FilterOptions } from '../model/filters'
-import { applyPricePerSqmRubFilter, applyPriceRubFilter, applyTotalAreaSqmFilter } from './filters'
+
+const applyPriceRubFilter = (
+	units: Unit[], min?: number, max?: number
+): Unit[] => {
+	if (!units || (min === undefined && max === undefined)) { return units || [] }
+	return units.filter(unit => {
+		const price = parseFloat((unit.actualTotalPriceRub || '').replace(/,/g, ''))
+		if (isNaN(price)) { return true }
+		if (min !== undefined && price < min) { return false }
+		if (max !== undefined && price > max) { return false }
+		return true
+	})
+}
+
+const applyPricePerSqmRubFilter = (
+	units: Unit[], min?: number, max?: number
+): Unit[] => {
+	if (!units || (min === undefined && max === undefined)) { return units || [] }
+	return units.filter(unit => {
+		const price = parseFloat((unit.actualPricePerSqmRub || '').replace(/,/g, ''))
+		if (isNaN(price)) { return true }
+		if (min !== undefined && price < min) { return false }
+		if (max !== undefined && price > max) { return false }
+		return true
+	})
+}
+
+const applyTotalAreaSqmFilter = (
+	units: Unit[], min?: number, max?: number
+): Unit[] => {
+	if (!units || (min === undefined && max === undefined)) { return units || [] }
+	return units.filter(unit => {
+		const area = parseFloat((unit.totalAreaSqm || '').replace(/,/g, ''))
+		if (isNaN(area)) { return true }
+		if (min !== undefined && area < min) { return false }
+		if (max !== undefined && area > max) { return false }
+		return true
+	})
+}
 
 /**
  * Utility function to determine unit status from unit data

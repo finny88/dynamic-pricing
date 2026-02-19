@@ -17,7 +17,7 @@ const VARIANT_CONFIG: Record<GridVariant, { cellMinWidth: number }> = {
 /**
  * Props for FloorSectionGrid component
  */
-export interface FloorSectionGridProps {
+interface FloorSectionGridProps {
 	units: Unit[]
 	variant?: GridVariant
 }
