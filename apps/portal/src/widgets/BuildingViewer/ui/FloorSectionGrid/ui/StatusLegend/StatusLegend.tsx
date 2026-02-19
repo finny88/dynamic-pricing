@@ -17,6 +17,10 @@ export const StatusLegend: FC = () => {
 				<Box className={`${classes.legendBox} ${classes.legendBoxSold}`} />
 				<Text size={'sm'}>Продано</Text>
 			</Group>
+			<Group gap={'xs'}>
+				<Box className={`${classes.legendBox} ${classes.legendBoxUnknown}`} />
+				<Text size={'sm'}>Неизвестно</Text>
+			</Group>
 		</Group>
 	)
 }

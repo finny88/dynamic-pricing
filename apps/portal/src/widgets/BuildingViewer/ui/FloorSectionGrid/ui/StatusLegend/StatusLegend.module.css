@@ -14,3 +14,7 @@
 .legendBoxSold {
   background-color: var(--mantine-color-gray-5);
 }
+
+.legendBoxUnknown {
+  background-color: var(--mantine-color-dark-6);
+}
