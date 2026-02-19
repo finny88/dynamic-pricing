@@ -14,6 +14,7 @@ interface RowValidationError {
 	row: number;
 	column: string;
 	message: string;
+	value: unknown;
 }
 
 const validateRow = (raw: Record<string, unknown>, rowIndex: number): { success: true; data: RawUnit } | { success: false; errors: RowValidationError[] } => {
@@ -27,6 +28,12 @@ const validateRow = (raw: Record<string, unknown>, rowIndex: number): { success:
 		row: rowIndex,
 		column: issue.path.join('.') || 'unknown',
 		message: issue.message,
+		value: issue.path.reduce<unknown>((obj, key) => {
+			if (obj !== null && typeof obj === 'object' && (typeof key === 'string' || typeof key === 'number')) {
+				return (obj as Record<string | number, unknown>)[key]
+			}
+			return undefined
+		}, raw),
 	}))
 
 	return { success: false, errors }
