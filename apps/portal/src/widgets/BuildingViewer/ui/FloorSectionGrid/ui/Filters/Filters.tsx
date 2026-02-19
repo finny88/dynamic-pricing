@@ -77,21 +77,21 @@ export const Filters: FC<FiltersProps> = ({
 				/>
 				<PriceFilter
 					id={'price-total'}
-					label={'Price (₽)'}
+					label={'Цена (₽)'}
 					appliedMin={activeFilters.priceRubMin}
 					appliedMax={activeFilters.priceRubMax}
 					onApply={(min, max) => commitFilter({ priceRubMin: min, priceRubMax: max })}
 				/>
 				<PriceFilter
 					id={'price-sqm'}
-					label={'Price/m² (₽)'}
+					label={'Цена за м² (₽)'}
 					appliedMin={activeFilters.pricePerSqmRubMin}
 					appliedMax={activeFilters.pricePerSqmRubMax}
 					onApply={(min, max) => commitFilter({ pricePerSqmRubMin: min, pricePerSqmRubMax: max })}
 				/>
 				<PriceFilter
 					id={'area'}
-					label={'Area (m²)'}
+					label={'Площадь (м²)'}
 					appliedMin={activeFilters.totalAreaSqmMin}
 					appliedMax={activeFilters.totalAreaSqmMax}
 					onApply={(min, max) => commitFilter({ totalAreaSqmMin: min, totalAreaSqmMax: max })}
@@ -104,7 +104,7 @@ export const Filters: FC<FiltersProps> = ({
 						leftSection={<IconX size={14} />}
 						onClick={handleClearAll}
 					>
-						Clear
+						Очистить
 					</Button>
 				)}
 			</Group>

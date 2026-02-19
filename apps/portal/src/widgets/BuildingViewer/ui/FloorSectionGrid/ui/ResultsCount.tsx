@@ -14,7 +14,7 @@ export const ResultsCount: FC<ResultsCountProps> = ({ units, activeFilters }) =>
 
 	return (
 		<Text size={'sm'} c={'dimmed'} ta={'center'}>
-			Selected {selectedCount} units
+			Выбрано {selectedCount} из {units.length}
 		</Text>
 	)
 }

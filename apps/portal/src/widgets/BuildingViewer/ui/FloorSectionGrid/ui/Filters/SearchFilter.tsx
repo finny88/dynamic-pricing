@@ -21,7 +21,7 @@ export const SearchFilter: FC<SearchFilterProps> = ({ applied, onApply }) => {
 	return (
 		<FilterPopover
 			id={'search'}
-			label={applied ? `Unit: ${applied}` : 'Unit number'}
+			label={applied ? `Помещение: ${applied}` : 'Номер помещения'}
 			active={!!applied}
 			onOpen={handleOpen}
 			onApply={handleApply}
@@ -29,7 +29,7 @@ export const SearchFilter: FC<SearchFilterProps> = ({ applied, onApply }) => {
 		>
 			{(applyAndClose) => (
 				<TextInput
-					placeholder={'Search by unit number...'}
+					placeholder={'Поиск по номеру помещения...'}
 					leftSection={<IconSearch size={16} />}
 					value={draft}
 					onChange={(e) => setDraft(e.currentTarget.value)}

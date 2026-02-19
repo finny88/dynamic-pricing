@@ -23,7 +23,7 @@ export const RoomsFilter: FC<RoomsFilterProps> = ({ applied, available, onApply 
 	return (
 		<FilterPopover
 			id={'rooms'}
-			label={isActive ? `Rooms (${applied!.length})` : 'Rooms'}
+			label={isActive ? `Комнаты (${applied!.length})` : 'Комнаты'}
 			active={isActive}
 			onOpen={handleOpen}
 			onApply={handleApply}

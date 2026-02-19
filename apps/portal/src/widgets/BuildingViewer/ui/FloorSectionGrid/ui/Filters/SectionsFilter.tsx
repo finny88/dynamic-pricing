@@ -23,7 +23,7 @@ export const SectionsFilter: FC<SectionsFilterProps> = ({ applied, available, on
 	return (
 		<FilterPopover
 			id={'sections'}
-			label={isActive ? `Sections (${applied!.length})` : 'Sections'}
+			label={isActive ? `Секции (${applied!.length})` : 'Секции'}
 			active={isActive}
 			onOpen={handleOpen}
 			onApply={handleApply}

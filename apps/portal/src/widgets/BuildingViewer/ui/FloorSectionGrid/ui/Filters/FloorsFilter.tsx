@@ -23,7 +23,7 @@ export const FloorsFilter: FC<FloorsFilterProps> = ({ applied, available, onAppl
 	return (
 		<FilterPopover
 			id={'floors'}
-			label={isActive ? `Floors (${applied!.length})` : 'Floors'}
+			label={isActive ? `Этажи (${applied!.length})` : 'Этажи'}
 			active={isActive}
 			onOpen={handleOpen}
 			onApply={handleApply}

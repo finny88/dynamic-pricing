@@ -32,7 +32,7 @@ export const StatusFilter: FC<StatusFilterProps> = ({ applied, onApply }) => {
 	return (
 		<FilterPopover
 			id={'status'}
-			label={isActive ? `Status (${applied!.length})` : 'Status'}
+			label={isActive ? `Статус (${applied!.length})` : 'Статус'}
 			active={isActive}
 			onOpen={handleOpen}
 			onApply={handleApply}
@@ -41,10 +41,10 @@ export const StatusFilter: FC<StatusFilterProps> = ({ applied, onApply }) => {
 			{() => (
 				<Chip.Group multiple value={draft} onChange={setDraft}>
 					<Group gap={'xs'} wrap={'wrap'}>
-						<Chip value={'available'} size={'sm'} styles={chipStyles('available')}>Available</Chip>
-						<Chip value={'reserved'} size={'sm'} styles={chipStyles('reserved')}>Reserved</Chip>
-						<Chip value={'sold'} size={'sm'} styles={chipStyles('sold')}>Sold</Chip>
-						<Chip value={'unknown'} size={'sm'} styles={chipStyles('unknown')}>Unknown</Chip>
+						<Chip value={'available'} size={'sm'} styles={chipStyles('available')}>Доступно</Chip>
+						<Chip value={'reserved'} size={'sm'} styles={chipStyles('reserved')}>Забронировано</Chip>
+						<Chip value={'sold'} size={'sm'} styles={chipStyles('sold')}>Продано</Chip>
+						<Chip value={'unknown'} size={'sm'} styles={chipStyles('unknown')}>Неизвестно</Chip>
 					</Group>
 				</Chip.Group>
 			)}

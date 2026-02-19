@@ -38,15 +38,15 @@ export const PriceFilter: FC<PriceFilterProps> = ({ id, label, appliedMin, appli
 			{() => (
 				<Group grow>
 					<NumberInput
-						label={'From'}
-						placeholder={'Min'}
+						label={'От'}
+						placeholder={'Мин'}
 						value={draftMin}
 						onChange={setDraftMin}
 						{...numberInputProps}
 					/>
 					<NumberInput
-						label={'To'}
-						placeholder={'Max'}
+						label={'До'}
+						placeholder={'Макс'}
 						value={draftMax}
 						onChange={setDraftMax}
 						{...numberInputProps}

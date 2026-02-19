@@ -51,8 +51,8 @@ export const FilterPopover: FC<FilterPopoverProps> = ({ id, label, active = fals
 			<Popover.Dropdown>
 				<Stack gap={'sm'}>
 					{children(applyAndClose)}
-					<Button fullWidth size={'sm'} onClick={applyAndClose}>Apply</Button>
-					{active && <Button fullWidth size={'sm'} variant={'subtle'} onClick={resetAndClose}>Reset</Button>}
+					<Button fullWidth size={'sm'} onClick={applyAndClose}>Применить</Button>
+					{active && <Button fullWidth size={'sm'} variant={'subtle'} onClick={resetAndClose}>Сбросить</Button>}
 				</Stack>
 			</Popover.Dropdown>
 		</Popover>
