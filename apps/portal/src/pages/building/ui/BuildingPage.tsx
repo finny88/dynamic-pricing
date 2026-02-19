@@ -10,6 +10,9 @@ import type { Unit } from '@entities/unit'
 
 const ACCEPT = '.xls,.xlsx,.csv'
 
+const isIndexable = (value: unknown): value is Record<string | number, unknown> =>
+	value !== null && typeof value === 'object'
+
 interface RowValidationError {
 	row: number;
 	column: string;
@@ -29,8 +32,8 @@ const validateRow = (raw: Record<string, unknown>, rowIndex: number): { success:
 		column: issue.path.join('.') || 'unknown',
 		message: issue.message,
 		value: issue.path.reduce<unknown>((obj, key) => {
-			if (obj !== null && typeof obj === 'object' && (typeof key === 'string' || typeof key === 'number')) {
-				return (obj as Record<string | number, unknown>)[key]
+			if (isIndexable(obj) && (typeof key === 'string' || typeof key === 'number')) {
+				return obj[key]
 			}
 			return undefined
 		}, raw),
