@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { useCallback, useMemo, useState, useTransition } from 'react'
+import { useMemo } from 'react'
 import { Box, Stack } from '@mantine/core'
 import { Filters, StatusLegend, FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
 import classes from './FloorSectionGrid.module.css'
@@ -14,26 +14,21 @@ const VARIANT_CONFIG: Record<GridVariant, { cellMinWidth: number }> = {
 	detailed: { cellMinWidth: 180 },
 }
 
-/**
- * Props for FloorSectionGrid component
- */
 interface FloorSectionGridProps {
 	units: Unit[]
 	variant?: GridVariant
+	activeFilters: FilterOptions
+	onFilterChange: (filters: FilterOptions) => void
+	isPending: boolean
 }
 
 export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 	units,
 	variant = 'compact',
+	activeFilters,
+	onFilterChange,
+	isPending,
 }) => {
-	const [activeFilters, setActiveFilters] = useState<FilterOptions>({})
-	const [isPending, startTransition] = useTransition()
-
-	const handleFilterChange = useCallback((filters: FilterOptions) => {
-		startTransition(() => {
-			setActiveFilters(filters)
-		})
-	}, [])
 
 	// Use all units for display (no filtering, just disabling)
 	const displayedUnits = units
@@ -62,8 +57,8 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 				availableFloors={allFloors}
 				availableSections={allSections}
 				availableRoomsCounts={availableRoomsCounts}
-				onFilterChange={handleFilterChange}
-				initialFilters={activeFilters}
+				activeFilters={activeFilters}
+				onFilterChange={onFilterChange}
 			/>
 
 			{/* Legend */}

@@ -15,41 +15,37 @@ interface FiltersProps {
 	availableFloors: number[]
 	availableSections: number[]
 	availableRoomsCounts: string[]
+	activeFilters: FilterOptions
 	onFilterChange: (filters: FilterOptions) => void
-	initialFilters?: FilterOptions
 }
 
 export const Filters: FC<FiltersProps> = ({
 	availableFloors,
 	availableSections,
 	availableRoomsCounts,
+	activeFilters,
 	onFilterChange,
-	initialFilters = {}
 }) => {
-	const [appliedFilters, setAppliedFilters] = useState<FilterOptions>(initialFilters)
 	const [openedId, setOpenedId] = useState<string | null>(null)
 
 	const commitFilter = (partial: Partial<FilterOptions>) => {
-		const next = { ...appliedFilters, ...partial }
-		setAppliedFilters(next)
-		onFilterChange(next)
+		onFilterChange({ ...activeFilters, ...partial })
 	}
 
 	const handleClearAll = () => {
-		setAppliedFilters({})
 		onFilterChange({})
 	}
 
 	const hasActiveFilters = [
-		!!appliedFilters.searchQuery,
-		(appliedFilters.floors?.length ?? 0) > 0,
-		(appliedFilters.sections?.length ?? 0) > 0,
-		(appliedFilters.statuses?.length ?? 0) > 0,
-		(appliedFilters.roomsCount?.length ?? 0) > 0,
+		!!activeFilters.searchQuery,
+		(activeFilters.floors?.length ?? 0) > 0,
+		(activeFilters.sections?.length ?? 0) > 0,
+		(activeFilters.statuses?.length ?? 0) > 0,
+		(activeFilters.roomsCount?.length ?? 0) > 0,
 		[
-			appliedFilters.priceRubMin, appliedFilters.priceRubMax,
-			appliedFilters.pricePerSqmRubMin, appliedFilters.pricePerSqmRubMax,
-			appliedFilters.totalAreaSqmMin, appliedFilters.totalAreaSqmMax
+			activeFilters.priceRubMin, activeFilters.priceRubMax,
+			activeFilters.pricePerSqmRubMin, activeFilters.pricePerSqmRubMax,
+			activeFilters.totalAreaSqmMin, activeFilters.totalAreaSqmMax
 		].some(v => v !== undefined)
 	].some(Boolean)
 
@@ -57,47 +53,47 @@ export const Filters: FC<FiltersProps> = ({
 		<FilterGroupContext.Provider value={{ openedId, setOpenedId }}>
 			<Group gap={'sm'} wrap={'wrap'}>
 				<SearchFilter
-					applied={appliedFilters.searchQuery}
+					applied={activeFilters.searchQuery}
 					onApply={(v) => commitFilter({ searchQuery: v })}
 				/>
 				<FloorsFilter
-					applied={appliedFilters.floors}
+					applied={activeFilters.floors}
 					available={availableFloors}
 					onApply={(v) => commitFilter({ floors: v })}
 				/>
 				<SectionsFilter
-					applied={appliedFilters.sections}
+					applied={activeFilters.sections}
 					available={availableSections}
 					onApply={(v) => commitFilter({ sections: v })}
 				/>
 				<StatusFilter
-					applied={appliedFilters.statuses}
+					applied={activeFilters.statuses}
 					onApply={(v) => commitFilter({ statuses: v })}
 				/>
 				<RoomsFilter
-					applied={appliedFilters.roomsCount}
+					applied={activeFilters.roomsCount}
 					available={availableRoomsCounts}
 					onApply={(v) => commitFilter({ roomsCount: v })}
 				/>
 				<PriceFilter
 					id={'price-total'}
 					label={'Price (₽)'}
-					appliedMin={appliedFilters.priceRubMin}
-					appliedMax={appliedFilters.priceRubMax}
+					appliedMin={activeFilters.priceRubMin}
+					appliedMax={activeFilters.priceRubMax}
 					onApply={(min, max) => commitFilter({ priceRubMin: min, priceRubMax: max })}
 				/>
 				<PriceFilter
 					id={'price-sqm'}
 					label={'Price/m² (₽)'}
-					appliedMin={appliedFilters.pricePerSqmRubMin}
-					appliedMax={appliedFilters.pricePerSqmRubMax}
+					appliedMin={activeFilters.pricePerSqmRubMin}
+					appliedMax={activeFilters.pricePerSqmRubMax}
 					onApply={(min, max) => commitFilter({ pricePerSqmRubMin: min, pricePerSqmRubMax: max })}
 				/>
 				<PriceFilter
 					id={'area'}
 					label={'Area (m²)'}
-					appliedMin={appliedFilters.totalAreaSqmMin}
-					appliedMax={appliedFilters.totalAreaSqmMax}
+					appliedMin={activeFilters.totalAreaSqmMin}
+					appliedMax={activeFilters.totalAreaSqmMax}
 					onApply={(min, max) => commitFilter({ totalAreaSqmMin: min, totalAreaSqmMax: max })}
 				/>
 				{hasActiveFilters && (

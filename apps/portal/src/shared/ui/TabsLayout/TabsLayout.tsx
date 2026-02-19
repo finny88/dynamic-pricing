@@ -32,7 +32,7 @@ export const TabsLayout = <T extends string>({ tabs, defaultTab }: Props<T>) => 
 				</Tabs.List>
 
 				{Object.entries<TabConfig>(tabs).map(([key, { content }]) => (
-					<Tabs.Panel key={key} value={key} className={classes.tabPanel}>
+					<Tabs.Panel key={key} value={key} className={classes.tabPanel} keepMounted>
 						{content}
 					</Tabs.Panel>
 				))}
