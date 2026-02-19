@@ -1,3 +1,4 @@
+import { createRequire } from 'module'
 import js from '@eslint/js'
 import globals from 'globals'
 import react from 'eslint-plugin-react'
@@ -6,7 +7,39 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import prettierConfig from 'eslint-config-prettier'
 import stylistic from '@stylistic/eslint-plugin'
+import boundaries from 'eslint-plugin-boundaries'
 import { defineConfig, globalIgnores } from 'eslint/config'
+
+const require = createRequire(import.meta.url)
+const { layersLib } = require('@feature-sliced/eslint-config/utils')
+
+const getFsdElements = () => [
+	...layersLib.FS_LAYERS.map((layer) => ({
+		type: layer,
+		pattern: `src/${layer}/!(_*){,/*}`,
+		mode: 'folder',
+		capture: ['slices'],
+	})),
+	...layersLib.FS_LAYERS.map((layer) => ({
+		type: `gm_${layer}`,
+		pattern: `src/${layer}/_*`,
+		mode: 'folder',
+		capture: ['slices'],
+	})),
+]
+
+const getFsdBoundaryRules = () => [
+	...layersLib.getUpperLayers('shared').map((layer) => ({
+		from: layer,
+		allow: layersLib.getLowerLayers(layer),
+	})),
+	{ from: 'shared', allow: 'shared' },
+	{ from: 'app', allow: 'app' },
+	...layersLib.FS_LAYERS.map((layer) => ({
+		from: `gm_${layer}`,
+		allow: [layer, ...layersLib.getLowerLayers(layer)],
+	})),
+]
 
 export default defineConfig([
 	// Ignore build output
@@ -102,5 +135,28 @@ export default defineConfig([
 			'@stylistic/object-curly-spacing': ['error', 'always'],
 			'@stylistic/no-multi-spaces': 'error'
 		}
-	}
+	},
+
+	// FSD layer boundary enforcement (@feature-sliced/eslint-config)
+	{
+		files: ['src/**/*.{ts,tsx}'],
+		plugins: { boundaries },
+		settings: {
+			'boundaries/elements': getFsdElements(),
+			'import/resolver': {
+				typescript: {
+					project: './tsconfig.app.json',
+				},
+			},
+		},
+		rules: {
+			'boundaries/element-types': [
+				'error', {
+					default: 'disallow',
+					message: '"${file.type}" is not allowed to import "${dependency.type}" | See: https://feature-sliced.design/docs/reference/layers',
+					rules: getFsdBoundaryRules(),
+				}
+			],
+		},
+	},
 ])

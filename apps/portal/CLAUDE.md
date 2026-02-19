@@ -30,3 +30,33 @@ feature-name/
 2. Create a slice folder with the appropriate segments
 3. Export only the public interface via index.ts
 4. Verify the import direction is valid
+
+## ESLint Rules — Never Violate
+
+The project enforces lint rules via `eslint.config.js`. All generated code must pass `yarn lint` without errors.
+
+### FSD boundary rule (`boundaries/element-types`)
+Configured via `eslint-plugin-boundaries` + `@feature-sliced/eslint-config`. Violations are **errors**, not warnings.
+- A layer must never import from a layer above it or from the same layer
+- Forbidden examples:
+  ```ts
+  // inside features/ — importing from widgets/ is forbidden
+  import { BuildingViewer } from '@widgets/building-viewer'
+
+  // inside entities/ — importing from features/ is forbidden
+  import { ExcelUpload } from '@features/excel-upload'
+
+  // inside shared/ — importing from anything above is forbidden
+  import { UnitCard } from '@entities/unit'
+  ```
+
+### TypeScript & code quality rules
+Key rules to respect when generating code:
+- `interface` not `type` for object shapes (`@typescript-eslint/consistent-type-definitions`)
+- `import type` for type-only imports (`@typescript-eslint/consistent-type-imports`)
+- Arrow function expressions only — no `function` declarations (`func-style`)
+- No `console.*` calls (`no-console`)
+- No nested ternaries (`no-nested-ternary`)
+- Tabs for indentation, single quotes, no semicolons
+- Files must not exceed 300 lines (`max-lines`)
+- Nesting must not exceed 4 levels (`max-depth`)
