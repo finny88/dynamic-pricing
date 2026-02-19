@@ -1,6 +1,6 @@
 import type { Unit } from '@entities/unit'
 import { getUnitStatus } from './unit'
-import type { UnitStatus } from '../models/unitStatus'
+import type { UnitStatus } from '../model/unitStatus'
 
 /**
  * Helper function to apply search filter

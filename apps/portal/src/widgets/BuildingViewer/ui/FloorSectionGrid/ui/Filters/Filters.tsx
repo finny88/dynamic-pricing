@@ -9,7 +9,7 @@ import { SectionsFilter } from './SectionsFilter'
 import { StatusFilter } from './StatusFilter'
 import { RoomsFilter } from './RoomsFilter'
 import { PriceFilter } from './PriceFilter'
-import type { FilterOptions } from '../../models/filters'
+import type { FilterOptions } from '../../model/filters'
 
 interface FiltersProps {
 	availableFloors: number[]

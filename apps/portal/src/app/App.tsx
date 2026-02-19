@@ -1,9 +1,9 @@
 import '@mantine/core/styles.css'
 import { MantineProvider } from '@mantine/core'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { theme } from '@shared/theme'
-import { BuildingPage } from '@pages/building/ui/BuildingPage'
-import { BuildingViewerPage } from '@pages/building-viewer/ui/BuildingViewerPage'
+import { theme } from '@shared/config/theme'
+import { BuildingPage } from '@pages/building'
+import { BuildingViewerPage } from '@pages/building-viewer'
 
 const App = () => {
 	return (

@@ -1,5 +1,5 @@
-import type { Unit } from '../models/unit'
-import type { RawUnit } from '../models/rawUnit'
+import type { Unit } from '../model/unit'
+import type { RawUnit } from '../model/rawUnit'
 
 export const mapRawUnitToUnit = (raw: RawUnit): Unit => ({
 	project: raw['Проект'] ?? '',

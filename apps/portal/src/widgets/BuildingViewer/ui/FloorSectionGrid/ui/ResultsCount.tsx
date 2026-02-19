@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { Text } from '@mantine/core'
 import type { Unit } from '@entities/unit'
-import type { FilterOptions } from '../models/filters'
+import type { FilterOptions } from '../model/filters'
 import { isUnitDisabled } from '../lib/unit'
 
 interface ResultsCountProps {

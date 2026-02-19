@@ -1,6 +1,6 @@
 import type { Unit } from '@entities/unit'
-import type { UnitStatus } from '../models/unitStatus'
-import type { FilterOptions } from '../models/filters'
+import type { UnitStatus } from '../model/unitStatus'
+import type { FilterOptions } from '../model/filters'
 import { applyPricePerSqmRubFilter, applyPriceRubFilter, applyTotalAreaSqmFilter } from './filters'
 
 /**

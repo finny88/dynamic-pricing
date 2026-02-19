@@ -1,1 +1,1 @@
-export * from './BuildingViewer'
+export * from './ui/BuildingViewer'

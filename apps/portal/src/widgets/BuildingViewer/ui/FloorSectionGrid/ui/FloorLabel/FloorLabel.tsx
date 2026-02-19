@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { Box, Text } from '@mantine/core'
 import classes from './FloorLabel.module.css'
-import type { GridVariant } from '../../models/variants'
+import type { GridVariant } from '../../model/variants'
 
 interface FloorLabelProps {
 	floor: string
