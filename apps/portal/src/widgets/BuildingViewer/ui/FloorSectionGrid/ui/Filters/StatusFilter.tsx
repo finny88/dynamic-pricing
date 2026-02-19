@@ -1,8 +1,17 @@
 import type { FC } from 'react'
 import { useState } from 'react'
+import type { ChipProps } from '@mantine/core'
 import { Chip, Group } from '@mantine/core'
 import { FilterPopover } from './FilterPopover'
 import type { UnitStatus } from '../../model/unitStatus'
+import { DEFAULT_COLOR_SCHEMES } from '../../lib/colors'
+
+const chipStyles = (status: keyof typeof DEFAULT_COLOR_SCHEMES): ChipProps['styles'] => ({
+	label: {
+		backgroundColor: DEFAULT_COLOR_SCHEMES[status].background,
+		color: DEFAULT_COLOR_SCHEMES[status].text,
+	},
+})
 
 interface StatusFilterProps {
 	applied: UnitStatus[] | undefined
@@ -32,10 +41,10 @@ export const StatusFilter: FC<StatusFilterProps> = ({ applied, onApply }) => {
 			{() => (
 				<Chip.Group multiple value={draft} onChange={setDraft}>
 					<Group gap={'xs'} wrap={'wrap'}>
-						<Chip value={'available'} size={'sm'}>Available</Chip>
-						<Chip value={'reserved'} size={'sm'}>Reserved</Chip>
-						<Chip value={'sold'} size={'sm'}>Sold</Chip>
-						<Chip value={'unknown'} size={'sm'}>Unknown</Chip>
+						<Chip value={'available'} size={'sm'} styles={chipStyles('available')}>Available</Chip>
+						<Chip value={'reserved'} size={'sm'} styles={chipStyles('reserved')}>Reserved</Chip>
+						<Chip value={'sold'} size={'sm'} styles={chipStyles('sold')}>Sold</Chip>
+						<Chip value={'unknown'} size={'sm'} styles={chipStyles('unknown')}>Unknown</Chip>
 					</Group>
 				</Chip.Group>
 			)}
