@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Alert, Button, Container, Group, TextInput, Title } from '@mantine/core'
 import { IconFile, IconFolder, IconTrash } from '@tabler/icons-react'
 import * as XLSX from 'xlsx'
 import { rawUnitSchema } from '../../../entities/unit/libs/validators'
 import type { RawUnit } from '@entities/unit/models/rawUnit'
-import { BuildingViewer } from '../../../widgets/BuildingViewer/BuildingViewer'
 import { mapRawUnitToUnit } from '../../../entities/unit/libs/mappers'
 import type { Unit } from '@entities/unit'
 
@@ -70,9 +70,9 @@ const parseFile = async (file: File) => {
 }
 
 export const BuildingPage = () => {
+	const navigate = useNavigate()
 	const [file, setFile] = useState<File | null>(null)
 	const [loading, setLoading] = useState(false)
-	const [result, setResult] = useState<Unit[] | null>(null)
 	const [invalid, setInvalid] = useState<RowValidationError[] | null>(null)
 	const inputRef = useRef<HTMLInputElement>(null)
 
@@ -85,10 +85,8 @@ export const BuildingPage = () => {
 			const parsed = await parseFile(file)
 			if (parsed.errors.length > 0) {
 				setInvalid(parsed.errors)
-				setResult(null)
 			} else {
-				setResult(parsed.data)
-				setInvalid(null)
+				void navigate('/viewer', { state: { units: parsed.data } })
 			}
 		} finally {
 			setLoading(false)
@@ -123,9 +121,8 @@ export const BuildingPage = () => {
 									color={'red'}
 									disabled={loading}
 									leftSection={<IconTrash size={16} />}
-									onClick={() => { 
-										setFile(null) 
-										setResult(null)
+									onClick={() => {
+										setFile(null)
 										setInvalid(null)
 									}}
 								>
@@ -165,9 +162,6 @@ export const BuildingPage = () => {
 					</Alert>
 				)}
 			</Container>
-			{result !== null && result.length > 0 && (
-				<BuildingViewer units={result} />
-			)}
 		</>
 	
 	)
