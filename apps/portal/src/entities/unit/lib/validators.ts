@@ -25,4 +25,4 @@ export const rawUnitSchema = z.object({
 	'Общая цена факт, ₽': ExcelNumberLikeString,
 	'Цена 1 кв. м факт, ₽': ExcelNumberLikeString,
 	'Общая площадь, кв. м': ExcelNumberLikeString,
-})
+}).passthrough()
