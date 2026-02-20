@@ -69,14 +69,6 @@
 	background-color: var(--mantine-color-yellow-1);
 }
 
-.draggableColumn {
-	cursor: grab;
-}
-
-.draggableColumn:active {
-	cursor: grabbing;
-}
-
 .draggingColumn {
 	background-color: var(--mantine-primary-color-light) !important;
 }

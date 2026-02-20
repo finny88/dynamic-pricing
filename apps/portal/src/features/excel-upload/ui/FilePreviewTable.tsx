@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { Table, Text } from '@mantine/core'
 import { IconArrowsMove } from '@tabler/icons-react'
@@ -8,6 +9,14 @@ import { createColumnDragImage } from '../lib/createColumnDragImage'
 import styles from './FilePreviewTable.module.css'
 
 const columnHelper = createColumnHelper<unknown[]>()
+
+const createIconCursor = (color: string) => {
+	const svg = renderToStaticMarkup(<IconArrowsMove size={20} color={color} />)
+	return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 10 10, move`
+}
+
+const cursorDefault = createIconCursor('#868e96')
+const cursorDragging = createIconCursor('#343a40')
 
 const toColumnLetter = (index: number): string => {
 	let result = ''
@@ -63,6 +72,7 @@ export const FilePreviewTable = ({ preview }: Props) => {
 
 	const columnDragProps = (colIndex: number) => ({
 		draggable: true as const,
+		style: { cursor: draggingCol !== null ? cursorDragging : cursorDefault },
 		onDragStart: (e: React.DragEvent) => handleColumnDragStart(e, colIndex),
 		onDragEnd: handleColumnDragEnd,
 	})
