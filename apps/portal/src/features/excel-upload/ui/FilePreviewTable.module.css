@@ -1,0 +1,45 @@
+.wrapper {
+	margin-top: var(--mantine-spacing-sm);
+}
+
+.scroll {
+	overflow-x: auto;
+}
+
+.table {
+	min-width: 100%;
+	font-size: var(--mantine-font-size-sm);
+}
+
+.lineNumberCell {
+	width: 1%;
+	white-space: nowrap;
+	text-align: center;
+	color: var(--mantine-color-dimmed);
+	font-size: var(--mantine-font-size-xs);
+	background-color: var(--mantine-color-gray-0);
+	user-select: none;
+}
+
+.columnLetterCell {
+	white-space: nowrap;
+	text-align: center;
+	color: var(--mantine-color-dimmed);
+	font-size: var(--mantine-font-size-xs);
+	font-weight: 400;
+	background-color: var(--mantine-color-gray-0);
+	user-select: none;
+}
+
+.th {
+	white-space: nowrap;
+	font-weight: 600;
+	background-color: var(--mantine-color-gray-0);
+}
+
+.td {
+	white-space: nowrap;
+	max-width: 200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

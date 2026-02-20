@@ -34,6 +34,24 @@ const validateRow = (raw: Record<string, unknown>, rowIndex: number): { success:
 	return { success: false, errors }
 }
 
+export interface FilePreview {
+	header: string[];
+	rows: unknown[][];
+}
+
+export const parseFilePreview = async (file: File): Promise<FilePreview> => {
+	const buffer = await file.arrayBuffer()
+	const workbook = XLSX.read(buffer)
+	const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
+	const rawRows = XLSX.utils.sheet_to_json<unknown[]>(firstSheet, { header: 1, defval: null, raw: false })
+
+	const [headerRow, ...dataRows] = rawRows
+	const header = (headerRow as unknown[] ?? []).map((cell) => String(cell ?? ''))
+	const rows = dataRows.slice(0, 5)
+
+	return { header, rows }
+}
+
 export const parseFile = async (file: File): Promise<{ data: Unit[]; errors: RowValidationError[] }> => {
 	const buffer = await file.arrayBuffer()
 	const workbook = XLSX.read(buffer)
