@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { Table, Text } from '@mantine/core'
+import { IconArrowsMove } from '@tabler/icons-react'
 import type { FilePreview } from '../lib/parseFile'
 import { ExpectedFormatTable } from './ExpectedFormatTable'
 import { createColumnDragImage } from '../lib/createColumnDragImage'
@@ -121,7 +122,10 @@ export const FilePreviewTable = ({ preview }: Props) => {
 												{...columnDragProps(colIndex)}
 												{...columnMouseProps(colIndex)}
 											>
-												{flexRender(col.column.columnDef.header, col.getContext())}
+												<div className={styles.headerContent}>
+													{flexRender(col.column.columnDef.header, col.getContext())}
+													<IconArrowsMove size={16} className={styles.headerIcon} />
+												</div>
 											</Table.Th>
 										)
 									})}

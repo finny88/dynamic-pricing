@@ -35,6 +35,26 @@
 	white-space: nowrap;
 	font-weight: 600;
 	background-color: var(--mantine-color-gray-0);
+	position: relative;
+}
+
+.headerContent {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding-right: 28px;
+}
+
+.headerIcon {
+	color: var(--mantine-color-dimmed);
+	transition: color 0.15s ease;
+	position: absolute;
+	top: 4px;
+	right: 4px;
+}
+
+.th:hover .headerIcon {
+	color: var(--mantine-color-gray-7);
 }
 
 .expectedTh {
