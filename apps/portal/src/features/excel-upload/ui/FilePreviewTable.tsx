@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { Table, Text } from '@mantine/core'
 import type { FilePreview } from '../lib/parseFile'
@@ -24,6 +24,19 @@ interface Props {
 
 export const FilePreviewTable = ({ preview }: Props) => {
 	const { header, rows } = preview
+	const [mapping, setMapping] = useState<Record<string, number>>({})
+
+	const handleDrop = (targetKey: string, sourceIndex: number) => {
+		setMapping((prev) => ({ ...prev, [targetKey]: sourceIndex }))
+	}
+
+	const handleRemoveMapping = (key: string) => {
+		setMapping((prev) => {
+			const next = { ...prev }
+			delete next[key]
+			return next
+		})
+	}
 
 	const columns = useMemo(() => header.map((col, index) =>
 		columnHelper.accessor((row) => row[index], {
@@ -50,7 +63,12 @@ export const FilePreviewTable = ({ preview }: Props) => {
 							<Table.Tr>
 								<Table.Th className={styles.lineNumberCell} />
 								{header.map((_, index) => (
-									<Table.Th key={index} className={styles.columnLetterCell}>
+									<Table.Th
+										key={index}
+										className={`${styles.columnLetterCell} ${styles.draggableHeader}`}
+										draggable
+										onDragStart={(e) => e.dataTransfer.setData('text/plain', String(index))}
+									>
 										{toColumnLetter(index)}
 									</Table.Th>
 								))}
@@ -59,7 +77,12 @@ export const FilePreviewTable = ({ preview }: Props) => {
 								<Table.Tr key={headerGroup.id}>
 									<Table.Th className={styles.lineNumberCell} />
 									{headerGroup.headers.map((col) => (
-										<Table.Th key={col.id} className={styles.th}>
+										<Table.Th
+											key={col.id}
+											className={`${styles.th} ${styles.draggableHeader}`}
+											draggable
+											onDragStart={(e) => e.dataTransfer.setData('text/plain', col.id)}
+										>
 											{flexRender(col.column.columnDef.header, col.getContext())}
 										</Table.Th>
 									))}
@@ -81,7 +104,13 @@ export const FilePreviewTable = ({ preview }: Props) => {
 					</Table>
 				</div>
 			</div>
-			<ExpectedFormatTable />
+			<ExpectedFormatTable
+				rows={rows}
+				header={header}
+				mapping={mapping}
+				onDrop={handleDrop}
+				onRemoveMapping={handleRemoveMapping}
+			/>
 		</>
 	)
 }

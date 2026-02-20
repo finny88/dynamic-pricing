@@ -49,6 +49,26 @@
 	background-color: var(--mantine-color-yellow-1);
 }
 
+.draggableHeader {
+	cursor: grab;
+}
+
+.draggableHeader:active {
+	cursor: grabbing;
+}
+
+.dropTarget {
+	outline: 2px dashed var(--mantine-primary-color-filled);
+	outline-offset: -2px;
+	background-color: var(--mantine-primary-color-light) !important;
+}
+
+.mappingCell {
+	background-color: var(--mantine-color-gray-0);
+	max-width: 200px;
+	overflow: hidden;
+}
+
 .td {
 	white-space: nowrap;
 	max-width: 200px;
