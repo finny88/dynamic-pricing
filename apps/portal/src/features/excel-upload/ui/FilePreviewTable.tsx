@@ -27,6 +27,7 @@ export const FilePreviewTable = ({ preview }: Props) => {
 	const { header, rows } = preview
 	const [mapping, setMapping] = useState<Record<string, number>>({})
 	const [draggingCol, setDraggingCol] = useState<number | null>(null)
+	const [hoveredCol, setHoveredCol] = useState<number | null>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
 
 	const handleDrop = (targetKey: string, sourceIndex: number) => {
@@ -79,7 +80,12 @@ export const FilePreviewTable = ({ preview }: Props) => {
 	})
 
 	const colClass = (colIndex: number, base: string) =>
-		`${base} ${styles.draggableColumn}${draggingCol === colIndex ? ` ${styles.draggingColumn}` : ''}`
+		`${base} ${styles.draggableColumn}${draggingCol === colIndex ? ` ${styles.draggingColumn}` : ''}${hoveredCol === colIndex ? ` ${styles.hoveredColumn}` : ''}`
+
+	const columnMouseProps = (colIndex: number) => ({
+		onMouseEnter: () => setHoveredCol(colIndex),
+		onMouseLeave: () => setHoveredCol(null),
+	})
 
 	return (
 		<>
@@ -97,6 +103,7 @@ export const FilePreviewTable = ({ preview }: Props) => {
 										key={index}
 										className={colClass(index, styles.columnLetterCell)}
 										{...columnDragProps(index)}
+										{...columnMouseProps(index)}
 									>
 										{toColumnLetter(index)}
 									</Table.Th>
@@ -112,6 +119,7 @@ export const FilePreviewTable = ({ preview }: Props) => {
 												key={col.id}
 												className={colClass(colIndex, styles.th)}
 												{...columnDragProps(colIndex)}
+												{...columnMouseProps(colIndex)}
 											>
 												{flexRender(col.column.columnDef.header, col.getContext())}
 											</Table.Th>
@@ -131,6 +139,7 @@ export const FilePreviewTable = ({ preview }: Props) => {
 												key={cell.id}
 												className={colClass(colIndex, styles.td)}
 												{...columnDragProps(colIndex)}
+												{...columnMouseProps(colIndex)}
 											>
 												{String(cell.getValue() ?? '')}
 											</Table.Td>
