@@ -49,12 +49,16 @@
 	background-color: var(--mantine-color-yellow-1);
 }
 
-.draggableHeader {
+.draggableColumn {
 	cursor: grab;
 }
 
-.draggableHeader:active {
+.draggableColumn:active {
 	cursor: grabbing;
+}
+
+.draggingColumn {
+	background-color: var(--mantine-primary-color-light) !important;
 }
 
 .dropTarget {

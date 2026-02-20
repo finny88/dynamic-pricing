@@ -23,6 +23,19 @@ export const ExpectedFormatTable = ({ rows, header, mapping, onDrop, onRemoveMap
 
 	const hasMappings = Object.keys(mapping).length > 0
 
+	const dropProps = (key: string) => ({
+		onDragOver: (e: React.DragEvent) => { e.preventDefault(); setDragOverKey(key) },
+		onDragLeave: () => setDragOverKey(null),
+		onDrop: (e: React.DragEvent) => {
+			e.preventDefault()
+			setDragOverKey(null)
+			onDrop(key, Number(e.dataTransfer.getData('text/plain')))
+		},
+	})
+
+	const colClass = (key: string, base: string) =>
+		dragOverKey === key ? `${base} ${styles.dropTarget}` : base
+
 	return (
 		<div className={styles.wrapper}>
 			<Text size={'sm'} c={'dimmed'} mb={'xs'}>
@@ -34,19 +47,12 @@ export const ExpectedFormatTable = ({ rows, header, mapping, onDrop, onRemoveMap
 						<Table.Tr>
 							<Table.Th className={styles.lineNumberCell} />
 							{SORTED_KEYS.map((key) => {
-								const isOver = dragOverKey === key
 								const baseClass = REQUIRED_KEYS.has(key) ? styles.expectedThRequired : styles.expectedTh
 								return (
 									<Table.Th
 										key={key}
-										className={isOver ? `${baseClass} ${styles.dropTarget}` : baseClass}
-										onDragOver={(e) => { e.preventDefault(); setDragOverKey(key) }}
-										onDragLeave={() => setDragOverKey(null)}
-										onDrop={(e) => {
-											e.preventDefault()
-											setDragOverKey(null)
-											onDrop(key, Number(e.dataTransfer.getData('text/plain')))
-										}}
+										className={colClass(key, baseClass)}
+										{...dropProps(key)}
 									>
 										{key}
 									</Table.Th>
@@ -59,7 +65,11 @@ export const ExpectedFormatTable = ({ rows, header, mapping, onDrop, onRemoveMap
 							<Table.Tr>
 								<Table.Td className={styles.lineNumberCell} />
 								{SORTED_KEYS.map((key) => (
-									<Table.Td key={key} className={styles.mappingCell}>
+									<Table.Td
+										key={key}
+										className={colClass(key, styles.mappingCell)}
+										{...dropProps(key)}
+									>
 										{mapping[key] !== undefined && (
 											<Group gap={4} wrap={'nowrap'}>
 												<Text size={'xs'} truncate flex={1}>
@@ -76,7 +86,11 @@ export const ExpectedFormatTable = ({ rows, header, mapping, onDrop, onRemoveMap
 							<Table.Tr key={i}>
 								<Table.Td className={styles.lineNumberCell}>{i + 1}</Table.Td>
 								{SORTED_KEYS.map((key) => (
-									<Table.Td key={key} className={styles.td}>
+									<Table.Td
+										key={key}
+										className={colClass(key, styles.td)}
+										{...dropProps(key)}
+									>
 										{mapping[key] !== undefined ? String(rows[i]?.[mapping[key]] ?? '') : ''}
 									</Table.Td>
 								))}

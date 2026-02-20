@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { Table, Text } from '@mantine/core'
 import type { FilePreview } from '../lib/parseFile'
 import { ExpectedFormatTable } from './ExpectedFormatTable'
+import { createColumnDragImage } from '../lib/createColumnDragImage'
 import styles from './FilePreviewTable.module.css'
 
 const columnHelper = createColumnHelper<unknown[]>()
@@ -25,6 +26,8 @@ interface Props {
 export const FilePreviewTable = ({ preview }: Props) => {
 	const { header, rows } = preview
 	const [mapping, setMapping] = useState<Record<string, number>>({})
+	const [draggingCol, setDraggingCol] = useState<number | null>(null)
+	const tableRef = useRef<HTMLTableElement>(null)
 
 	const handleDrop = (targetKey: string, sourceIndex: number) => {
 		setMapping((prev) => ({ ...prev, [targetKey]: sourceIndex }))
@@ -37,6 +40,30 @@ export const FilePreviewTable = ({ preview }: Props) => {
 			return next
 		})
 	}
+
+	const handleColumnDragStart = (e: React.DragEvent, colIndex: number) => {
+		e.dataTransfer.setData('text/plain', String(colIndex))
+		e.dataTransfer.effectAllowed = 'copyMove'
+		setDraggingCol(colIndex)
+
+		if (tableRef.current) {
+			createColumnDragImage(
+				e,
+				tableRef.current,
+				colIndex,
+			)
+		}
+	}
+
+	const handleColumnDragEnd = () => {
+		setDraggingCol(null)
+	}
+
+	const columnDragProps = (colIndex: number) => ({
+		draggable: true as const,
+		onDragStart: (e: React.DragEvent) => handleColumnDragStart(e, colIndex),
+		onDragEnd: handleColumnDragEnd,
+	})
 
 	const columns = useMemo(() => header.map((col, index) =>
 		columnHelper.accessor((row) => row[index], {
@@ -51,6 +78,9 @@ export const FilePreviewTable = ({ preview }: Props) => {
 		getCoreRowModel: getCoreRowModel(),
 	})
 
+	const colClass = (colIndex: number, base: string) =>
+		`${base} ${styles.draggableColumn}${draggingCol === colIndex ? ` ${styles.draggingColumn}` : ''}`
+
 	return (
 		<>
 			<div className={styles.wrapper}>
@@ -58,16 +88,15 @@ export const FilePreviewTable = ({ preview }: Props) => {
 					Предпросмотр файла (первые 5 строк)
 				</Text>
 				<div className={styles.scroll}>
-					<Table withTableBorder withColumnBorders className={styles.table}>
+					<Table withTableBorder withColumnBorders className={styles.table} ref={tableRef}>
 						<Table.Thead>
 							<Table.Tr>
 								<Table.Th className={styles.lineNumberCell} />
 								{header.map((_, index) => (
 									<Table.Th
 										key={index}
-										className={`${styles.columnLetterCell} ${styles.draggableHeader}`}
-										draggable
-										onDragStart={(e) => e.dataTransfer.setData('text/plain', String(index))}
+										className={colClass(index, styles.columnLetterCell)}
+										{...columnDragProps(index)}
 									>
 										{toColumnLetter(index)}
 									</Table.Th>
@@ -76,16 +105,18 @@ export const FilePreviewTable = ({ preview }: Props) => {
 							{table.getHeaderGroups().map((headerGroup) => (
 								<Table.Tr key={headerGroup.id}>
 									<Table.Th className={styles.lineNumberCell} />
-									{headerGroup.headers.map((col) => (
-										<Table.Th
-											key={col.id}
-											className={`${styles.th} ${styles.draggableHeader}`}
-											draggable
-											onDragStart={(e) => e.dataTransfer.setData('text/plain', col.id)}
-										>
-											{flexRender(col.column.columnDef.header, col.getContext())}
-										</Table.Th>
-									))}
+									{headerGroup.headers.map((col) => {
+										const colIndex = Number(col.id)
+										return (
+											<Table.Th
+												key={col.id}
+												className={colClass(colIndex, styles.th)}
+												{...columnDragProps(colIndex)}
+											>
+												{flexRender(col.column.columnDef.header, col.getContext())}
+											</Table.Th>
+										)
+									})}
 								</Table.Tr>
 							))}
 						</Table.Thead>
@@ -93,11 +124,18 @@ export const FilePreviewTable = ({ preview }: Props) => {
 							{table.getRowModel().rows.map((row, index) => (
 								<Table.Tr key={row.id}>
 									<Table.Td className={styles.lineNumberCell}>{index + 1}</Table.Td>
-									{row.getVisibleCells().map((cell) => (
-										<Table.Td key={cell.id} className={styles.td}>
-											{String(cell.getValue() ?? '')}
-										</Table.Td>
-									))}
+									{row.getVisibleCells().map((cell) => {
+										const colIndex = Number(cell.column.id)
+										return (
+											<Table.Td
+												key={cell.id}
+												className={colClass(colIndex, styles.td)}
+												{...columnDragProps(colIndex)}
+											>
+												{String(cell.getValue() ?? '')}
+											</Table.Td>
+										)
+									})}
 								</Table.Tr>
 							))}
 						</Table.Tbody>
