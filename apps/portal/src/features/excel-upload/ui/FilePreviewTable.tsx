@@ -125,6 +125,7 @@ export const FilePreviewTable = ({ preview }: Props) => {
 									<Table.Th className={styles.lineNumberCell} />
 									{headerGroup.headers.map((col) => {
 										const colIndex = Number(col.id)
+										const isMapped = Object.values(mapping).includes(colIndex)
 										return (
 											<Table.Th
 												key={col.id}
@@ -132,10 +133,12 @@ export const FilePreviewTable = ({ preview }: Props) => {
 												{...columnDragProps(colIndex)}
 												{...columnMouseProps(colIndex)}
 											>
-												<div className={styles.headerContent}>
-													{flexRender(col.column.columnDef.header, col.getContext())}
-													<IconArrowsMove size={16} className={styles.headerIcon} />
-												</div>
+												{!isMapped && (
+													<div className={styles.headerContent}>
+														{flexRender(col.column.columnDef.header, col.getContext())}
+														<IconArrowsMove size={16} className={styles.headerIcon} />
+													</div>
+												)}
 											</Table.Th>
 										)
 									})}
@@ -148,6 +151,7 @@ export const FilePreviewTable = ({ preview }: Props) => {
 									<Table.Td className={styles.lineNumberCell}>{index + 1}</Table.Td>
 									{row.getVisibleCells().map((cell) => {
 										const colIndex = Number(cell.column.id)
+										const isMapped = Object.values(mapping).includes(colIndex)
 										return (
 											<Table.Td
 												key={cell.id}
@@ -155,7 +159,7 @@ export const FilePreviewTable = ({ preview }: Props) => {
 												{...columnDragProps(colIndex)}
 												{...columnMouseProps(colIndex)}
 											>
-												{String(cell.getValue() ?? '')}
+												{isMapped ? '' : String(cell.getValue() ?? '')}
 											</Table.Td>
 										)
 									})}
