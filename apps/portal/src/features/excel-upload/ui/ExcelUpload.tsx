@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { Alert, Button, Container, Group, TextInput, Title } from '@mantine/core'
 import { IconFile, IconFolder, IconTrash } from '@tabler/icons-react'
+import type * as z from 'zod'
 import type { Unit } from '@entities/unit'
 import { parseFile, parseFilePreview } from '../lib/parseFile'
 import type { FilePreview, RowValidationError } from '../lib/parseFile'
@@ -26,13 +27,15 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 		setPreview(filePreview)
 	}
 
-	const handleParse = async (columnMapping: Record<number, string>) => {
+	const handleParse = async (columnMapping: Record<string, string>, schema: z.ZodType) => {
 		if (!file) {
 			return
 		}
 		setLoading(true)
 		try {
-			const parsed = await parseFile(file, columnMapping)
+			const parsed = await parseFile(
+				file, columnMapping, schema
+			)
 			if (parsed.errors.length > 0) {
 				setInvalid(parsed.errors)
 			} else {
@@ -99,7 +102,7 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 				preview || (invalid !== null && invalid.length > 0)
 			) && (
 				<Container size={'fluid'} px={'md'} pb={'sm'} style={{ flex: '0 1 auto', overflow: 'auto' }}>
-					{preview && <FilePreviewTable preview={preview} loading={loading} onParse={(columnMapping) => { void handleParse(columnMapping) }} />}
+					{preview && <FilePreviewTable preview={preview} loading={loading} onParse={(columnMapping, schema) => { void handleParse(columnMapping, schema) }} />}
 					{invalid !== null && invalid.length > 0 && (
 						<Alert variant={'light'} color={'red'}>
 							<pre style={{ margin: 0 }}>{JSON.stringify(

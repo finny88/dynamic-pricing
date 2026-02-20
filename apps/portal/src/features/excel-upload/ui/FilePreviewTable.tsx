@@ -3,7 +3,9 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { Button, Table, Text } from '@mantine/core'
 import { IconArrowsMove } from '@tabler/icons-react'
+import * as z from 'zod'
 import type { FilePreview } from '../lib/parseFile'
+import { rawUnitSchema } from '@entities/unit'
 import { REQUIRED_KEYS } from '../lib/requiredKeys'
 import { ExpectedFormatTable } from './ExpectedFormatTable'
 import { createColumnDragImage } from '../lib/createColumnDragImage'
@@ -33,19 +35,19 @@ const toColumnLetter = (index: number): string => {
 interface Props {
 	preview: FilePreview
 	loading: boolean
-	onParse: (columnMapping: Record<number, string>) => void
+	onParse: (columnMapping: Record<string, string>, schema: z.ZodType) => void
 }
 
 export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 	const { header, rows } = preview
-	const [mapping, setMapping] = useState<Record<string, number>>({})
+	const [mapping, setMapping] = useState<Record<string, string>>({})
 	const allRequiredMapped = [...REQUIRED_KEYS].every((key) => mapping[key] !== undefined)
 	const [draggingCol, setDraggingCol] = useState<number | null>(null)
 	const [hoveredCol, setHoveredCol] = useState<number | null>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
 
-	const handleDrop = (targetKey: string, sourceIndex: number) => {
-		setMapping((prev) => ({ ...prev, [targetKey]: sourceIndex }))
+	const handleDrop = (targetKey: string, sourceHeaderName: string) => {
+		setMapping((prev) => ({ ...prev, [targetKey]: sourceHeaderName }))
 	}
 
 	const handleRemoveMapping = (key: string) => {
@@ -57,7 +59,7 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 	}
 
 	const handleColumnDragStart = (e: React.DragEvent, colIndex: number) => {
-		e.dataTransfer.setData('text/plain', String(colIndex))
+		e.dataTransfer.setData('text/plain', header[colIndex])
 		e.dataTransfer.effectAllowed = 'copyMove'
 		setDraggingCol(colIndex)
 
@@ -103,8 +105,13 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 	})
 
 	const onParseClick = () => {
-		const columnMapping = Object.fromEntries(Object.entries(mapping).map(([key, colIndex]) => [colIndex, key])) as Record<number, string>
-		onParse(columnMapping)
+		const dynamicShape: Record<string, z.ZodType> = {}
+		for (const [schemaKey, headerName] of Object.entries(mapping)) {
+			dynamicShape[headerName] = rawUnitSchema.shape[schemaKey as keyof typeof rawUnitSchema.shape]
+		}
+		const dynamicSchema = z.object(dynamicShape)
+
+		onParse(mapping, dynamicSchema)
 	}
 
 	return (
@@ -134,7 +141,7 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 									<Table.Th className={styles.lineNumberCell} />
 									{headerGroup.headers.map((col) => {
 										const colIndex = Number(col.id)
-										const isMapped = Object.values(mapping).includes(colIndex)
+										const isMapped = Object.values(mapping).includes(header[colIndex])
 										return (
 											<Table.Th
 												key={col.id}
@@ -160,7 +167,7 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 									<Table.Td className={styles.lineNumberCell}>{index + 1}</Table.Td>
 									{row.getVisibleCells().map((cell) => {
 										const colIndex = Number(cell.column.id)
-										const isMapped = Object.values(mapping).includes(colIndex)
+										const isMapped = Object.values(mapping).includes(header[colIndex])
 										return (
 											<Table.Td
 												key={cell.id}

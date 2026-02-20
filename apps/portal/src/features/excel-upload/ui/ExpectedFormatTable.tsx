@@ -3,6 +3,7 @@ import { CloseButton, Group, Table, Text } from '@mantine/core'
 import { RAW_UNIT_KEYS } from '@entities/unit'
 import { REQUIRED_KEYS } from '../lib/requiredKeys'
 import styles from './FilePreviewTable.module.css'
+
 const SORTED_KEYS = [
 	...RAW_UNIT_KEYS.filter((key) => REQUIRED_KEYS.has(key)),
 	...RAW_UNIT_KEYS.filter((key) => !REQUIRED_KEYS.has(key)),
@@ -12,8 +13,8 @@ const EMPTY_ROWS = Array.from({ length: 5 }, (_, i) => i)
 interface Props {
 	rows: unknown[][]
 	header: string[]
-	mapping: Record<string, number>
-	onDrop: (targetKey: string, sourceIndex: number) => void
+	mapping: Record<string, string>
+	onDrop: (targetKey: string, sourceHeaderName: string) => void
 	onRemoveMapping: (key: string) => void
 }
 
@@ -28,7 +29,7 @@ export const ExpectedFormatTable = ({ rows, header, mapping, onDrop, onRemoveMap
 		onDrop: (e: React.DragEvent) => {
 			e.preventDefault()
 			setDragOverKey(null)
-			onDrop(key, Number(e.dataTransfer.getData('text/plain')))
+			onDrop(key, e.dataTransfer.getData('text/plain'))
 		},
 	})
 
@@ -72,7 +73,7 @@ export const ExpectedFormatTable = ({ rows, header, mapping, onDrop, onRemoveMap
 										{mapping[key] !== undefined && (
 											<Group gap={4} wrap={'nowrap'}>
 												<Text size={'xs'} truncate flex={1}>
-													{header[mapping[key]]}
+													{mapping[key]}
 												</Text>
 												<CloseButton size={'xs'} onClick={() => onRemoveMapping(key)} />
 											</Group>
@@ -84,15 +85,18 @@ export const ExpectedFormatTable = ({ rows, header, mapping, onDrop, onRemoveMap
 						{EMPTY_ROWS.map((i) => (
 							<Table.Tr key={i}>
 								<Table.Td className={styles.lineNumberCell}>{i + 1}</Table.Td>
-								{SORTED_KEYS.map((key) => (
-									<Table.Td
-										key={key}
-										className={colClass(key, styles.td)}
-										{...dropProps(key)}
-									>
-										{mapping[key] !== undefined ? String(rows[i]?.[mapping[key]] ?? '') : ''}
-									</Table.Td>
-								))}
+								{SORTED_KEYS.map((key) => {
+									const colIndex = mapping[key] !== undefined ? header.indexOf(mapping[key]) : -1
+									return (
+										<Table.Td
+											key={key}
+											className={colClass(key, styles.td)}
+											{...dropProps(key)}
+										>
+											{colIndex >= 0 ? String(rows[i]?.[colIndex] ?? '') : ''}
+										</Table.Td>
+									)
+								})}
 							</Table.Tr>
 						))}
 					</Table.Tbody>
