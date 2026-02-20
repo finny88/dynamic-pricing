@@ -26,13 +26,13 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 		setPreview(filePreview)
 	}
 
-	const handleParse = async () => {
+	const handleParse = async (columnMapping: Record<number, string>) => {
 		if (!file) {
 			return
 		}
 		setLoading(true)
 		try {
-			const parsed = await parseFile(file)
+			const parsed = await parseFile(file, columnMapping)
 			if (parsed.errors.length > 0) {
 				setInvalid(parsed.errors)
 			} else {
@@ -94,29 +94,19 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 					}
 					rightSectionPointerEvents={'auto'}
 				/>
-				<Button
-					variant={'filled'}
-					mt={'sm'}
-					style={{ width: 'fit-content', flexShrink: 0 }}
-					disabled={!file}
-					loading={loading}
-					onClick={() => { void handleParse() }}
-				>
-					Загрузить файл
-				</Button>
 			</Container>
-			{preview && (
-				<Container size={'fluid'} px={'md'} pb={'sm'}>
-					<FilePreviewTable preview={preview} />
-				</Container>
-			)}
-			{invalid !== null && invalid.length > 0 && (
+			{(
+				preview || (invalid !== null && invalid.length > 0)
+			) && (
 				<Container size={'fluid'} px={'md'} pb={'sm'} style={{ flex: '0 1 auto', overflow: 'auto' }}>
-					<Alert variant={'light'} color={'red'}>
-						<pre style={{ margin: 0 }}>{JSON.stringify(
-							invalid, null, 2
-						)}</pre>
-					</Alert>
+					{preview && <FilePreviewTable preview={preview} loading={loading} onParse={(columnMapping) => { void handleParse(columnMapping) }} />}
+					{invalid !== null && invalid.length > 0 && (
+						<Alert variant={'light'} color={'red'}>
+							<pre style={{ margin: 0 }}>{JSON.stringify(
+								invalid, null, 2
+							)}</pre>
+						</Alert>
+					)}
 				</Container>
 			)}
 		</>

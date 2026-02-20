@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { CloseButton, Group, Table, Text } from '@mantine/core'
-import { RAW_UNIT_KEYS, rawUnitSchema } from '@entities/unit'
+import { RAW_UNIT_KEYS } from '@entities/unit'
+import { REQUIRED_KEYS } from '../lib/requiredKeys'
 import styles from './FilePreviewTable.module.css'
-
-const REQUIRED_KEYS = new Set(Object.keys(rawUnitSchema.shape))
 const SORTED_KEYS = [
 	...RAW_UNIT_KEYS.filter((key) => REQUIRED_KEYS.has(key)),
 	...RAW_UNIT_KEYS.filter((key) => !REQUIRED_KEYS.has(key)),

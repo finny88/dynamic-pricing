@@ -52,19 +52,20 @@ export const parseFilePreview = async (file: File): Promise<FilePreview> => {
 	return { header, rows }
 }
 
-export const parseFile = async (file: File): Promise<{ data: Unit[]; errors: RowValidationError[] }> => {
+export const parseFile = async (file: File, columnMapping: Record<number, string>): Promise<{ data: Unit[]; errors: RowValidationError[] }> => {
 	const buffer = await file.arrayBuffer()
 	const workbook = XLSX.read(buffer)
 	const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
-	const rawRows = XLSX.utils.sheet_to_json<Record<string, unknown>>(firstSheet, { defval: null, raw: false })
+	const rawRows = XLSX.utils.sheet_to_json<unknown[]>(firstSheet, { header: 1, defval: null, raw: false })
+	const [, ...dataRows] = rawRows
 
 	const data: Unit[] = []
 	const errors: RowValidationError[] = []
 
-	rawRows.forEach((row, index) => {
+	dataRows.forEach((row, index) => {
 		const rowNumber = index + 2
-		const normalizedRow = Object.fromEntries(Object.entries(row).map(([k, v]) => [k.trim(), v]))
-		const result = validateRow(normalizedRow, rowNumber)
+		const namedRow = Object.fromEntries(Object.entries(columnMapping).map(([colIndex, key]) => [key, row[Number(colIndex)] ?? null]))
+		const result = validateRow(namedRow, rowNumber)
 
 		if (result.success) {
 			data.push(mapRawUnitToUnit(result.data))

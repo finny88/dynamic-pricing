@@ -1,9 +1,10 @@
 import { useMemo, useRef, useState } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { Table, Text } from '@mantine/core'
+import { Button, Table, Text } from '@mantine/core'
 import { IconArrowsMove } from '@tabler/icons-react'
 import type { FilePreview } from '../lib/parseFile'
+import { REQUIRED_KEYS } from '../lib/requiredKeys'
 import { ExpectedFormatTable } from './ExpectedFormatTable'
 import { createColumnDragImage } from '../lib/createColumnDragImage'
 import styles from './FilePreviewTable.module.css'
@@ -31,11 +32,14 @@ const toColumnLetter = (index: number): string => {
 
 interface Props {
 	preview: FilePreview
+	loading: boolean
+	onParse: (columnMapping: Record<number, string>) => void
 }
 
-export const FilePreviewTable = ({ preview }: Props) => {
+export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 	const { header, rows } = preview
 	const [mapping, setMapping] = useState<Record<string, number>>({})
+	const allRequiredMapped = [...REQUIRED_KEYS].every((key) => mapping[key] !== undefined)
 	const [draggingCol, setDraggingCol] = useState<number | null>(null)
 	const [hoveredCol, setHoveredCol] = useState<number | null>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
@@ -97,6 +101,11 @@ export const FilePreviewTable = ({ preview }: Props) => {
 		onMouseEnter: () => setHoveredCol(colIndex),
 		onMouseLeave: () => setHoveredCol(null),
 	})
+
+	const onParseClick = () => {
+		const columnMapping = Object.fromEntries(Object.entries(mapping).map(([key, colIndex]) => [colIndex, key])) as Record<number, string>
+		onParse(columnMapping)
+	}
 
 	return (
 		<>
@@ -176,6 +185,15 @@ export const FilePreviewTable = ({ preview }: Props) => {
 				onDrop={handleDrop}
 				onRemoveMapping={handleRemoveMapping}
 			/>
+			<Button
+				variant={'filled'}
+				style={{ width: 'fit-content', flexShrink: 0, marginTop: 12 }}
+				disabled={!allRequiredMapped}
+				loading={loading}
+				onClick={onParseClick}
+			>
+				Распарсить файл
+			</Button>
 		</>
 	)
 }
