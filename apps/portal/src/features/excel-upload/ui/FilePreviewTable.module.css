@@ -37,6 +37,18 @@
 	background-color: var(--mantine-color-gray-0);
 }
 
+.expectedTh {
+	white-space: nowrap;
+	font-weight: 600;
+	background-color: var(--mantine-color-gray-1);
+}
+
+.expectedThRequired {
+	white-space: nowrap;
+	font-weight: 600;
+	background-color: var(--mantine-color-yellow-1);
+}
+
 .td {
 	white-space: nowrap;
 	max-width: 200px;
