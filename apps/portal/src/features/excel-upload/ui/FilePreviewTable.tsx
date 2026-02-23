@@ -1,5 +1,4 @@
 import { useMemo, useRef, useState } from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { Button, Table, Text } from '@mantine/core'
 import { IconArrowsMove } from '@tabler/icons-react'
@@ -13,17 +12,6 @@ import styles from './FilePreviewTable.module.css'
 
 const columnHelper = createColumnHelper<unknown[]>()
 
-const createIconCursor = (color: string) => {
-	const shadow = '<defs><filter id=\'s\' x=\'-20%\' y=\'-20%\' width=\'140%\' height=\'140%\'><feDropShadow dx=\'0\' dy=\'0\' stdDeviation=\'1.5\' flood-color=\'black\' flood-opacity=\'0.7\'/></filter></defs><g filter=\'url(#s)\'>'
-	const svg = renderToStaticMarkup(<IconArrowsMove size={28} color={color} />)
-		// .replace(/ class="[^"]*"/g, '')
-		.replace('fill="none"', `fill="${color}"`)
-		.replace('<path', `${shadow}<path`)
-		.replace('</svg>', '<path d=\'M9 12H15M12 9V15\' fill=\'none\' stroke-linecap=\'round\'></path></g></svg>')
-	return `url("data:image/svg+xml,${encodeURIComponent(svg)}") 10 10, move`
-}
-
-const cursorDnd = createIconCursor('#ffffff')
 
 const isRawUnitSchemaKey = (key: string): key is keyof typeof rawUnitSchema.shape =>
 	key in rawUnitSchema.shape
@@ -85,7 +73,7 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 
 	const columnDragProps = (colIndex: number) => ({
 		draggable: true as const,
-		style: { cursor: cursorDnd },
+		style: { cursor: 'move' },
 		onDragStart: (e: React.DragEvent) => handleColumnDragStart(e, colIndex),
 		onDragEnd: handleColumnDragEnd,
 	})
