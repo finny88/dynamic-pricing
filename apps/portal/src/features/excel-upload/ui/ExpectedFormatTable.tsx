@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { CloseButton, Group, Table, Text } from '@mantine/core'
 import { RAW_UNIT_KEYS } from '@entities/unit'
 import { REQUIRED_KEYS } from '../lib/requiredKeys'
@@ -14,24 +13,12 @@ interface Props {
 	rows: unknown[][]
 	header: string[]
 	mapping: Record<string, string>
-	onDrop: (targetKey: string, sourceHeaderName: string) => void
+	dragOverKey: string | null
 	onRemoveMapping: (key: string) => void
 }
 
-export const ExpectedFormatTable = ({ rows, header, mapping, onDrop, onRemoveMapping }: Props) => {
-	const [dragOverKey, setDragOverKey] = useState<string | null>(null)
-
+export const ExpectedFormatTable = ({ rows, header, mapping, dragOverKey, onRemoveMapping }: Props) => {
 	const hasMappings = Object.keys(mapping).length > 0
-
-	const dropProps = (key: string) => ({
-		onDragOver: (e: React.DragEvent) => { e.preventDefault(); setDragOverKey(key) },
-		onDragLeave: () => setDragOverKey(null),
-		onDrop: (e: React.DragEvent) => {
-			e.preventDefault()
-			setDragOverKey(null)
-			onDrop(key, e.dataTransfer.getData('text/plain'))
-		},
-	})
 
 	const colClass = (key: string, base: string) =>
 		dragOverKey === key ? `${base} ${styles.dropTarget}` : base
@@ -52,7 +39,7 @@ export const ExpectedFormatTable = ({ rows, header, mapping, onDrop, onRemoveMap
 									<Table.Th
 										key={key}
 										className={colClass(key, baseClass)}
-										{...dropProps(key)}
+										data-drop-key={key}
 									>
 										{key}
 									</Table.Th>
@@ -68,7 +55,7 @@ export const ExpectedFormatTable = ({ rows, header, mapping, onDrop, onRemoveMap
 									<Table.Td
 										key={key}
 										className={colClass(key, styles.mappingCell)}
-										{...dropProps(key)}
+										data-drop-key={key}
 									>
 										{mapping[key] !== undefined && (
 											<Group gap={4} wrap={'nowrap'}>
@@ -91,7 +78,7 @@ export const ExpectedFormatTable = ({ rows, header, mapping, onDrop, onRemoveMap
 										<Table.Td
 											key={key}
 											className={colClass(key, styles.td)}
-											{...dropProps(key)}
+											data-drop-key={key}
 										>
 											{colIndex >= 0 ? String(rows[i]?.[colIndex] ?? '') : ''}
 										</Table.Td>

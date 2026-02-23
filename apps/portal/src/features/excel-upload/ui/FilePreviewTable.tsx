@@ -7,17 +7,12 @@ import type { FilePreview } from '../lib/parseFile'
 import { rawUnitSchema } from '@entities/unit'
 import { REQUIRED_KEYS } from '../lib/requiredKeys'
 import { ExpectedFormatTable } from './ExpectedFormatTable'
-import { createColumnDragImage } from '../lib/createColumnDragImage'
+import { createColumnGhost, type ColumnGhost } from '../lib/createColumnDragImage'
 import styles from './FilePreviewTable.module.css'
 
 const columnHelper = createColumnHelper<unknown[]>()
 
-const forceMoveEffect = (e: DragEvent) => {
-	e.preventDefault()
-	if (e.dataTransfer) {
-		e.dataTransfer.dropEffect = 'move'
-	}
-}
+const DRAG_THRESHOLD = 5
 
 const isRawUnitSchemaKey = (key: string): key is keyof typeof rawUnitSchema.shape =>
 	key in rawUnitSchema.shape
@@ -45,7 +40,9 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 	const allRequiredMapped = [...REQUIRED_KEYS].every((key) => mapping[key] !== undefined)
 	const [draggingCol, setDraggingCol] = useState<number | null>(null)
 	const [hoveredCol, setHoveredCol] = useState<number | null>(null)
+	const [dragOverKey, setDragOverKey] = useState<string | null>(null)
 	const tableRef = useRef<HTMLTableElement>(null)
+	const ghostRef = useRef<ColumnGhost | null>(null)
 
 	const handleDrop = (targetKey: string, sourceHeaderName: string) => {
 		setMapping((prev) => ({ ...prev, [targetKey]: sourceHeaderName }))
@@ -59,43 +56,61 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 		})
 	}
 
-	const handleColumnDragStart = (e: React.DragEvent, colIndex: number) => {
-		e.dataTransfer.setData('text/plain', header[colIndex])
-		e.dataTransfer.effectAllowed = 'move'
-		setDraggingCol(colIndex)
-		document.documentElement.classList.add('column-dragging')
-		document.addEventListener(
-			'dragover', forceMoveEffect, true,
-		)
-		document.addEventListener(
-			'dragenter', forceMoveEffect, true,
-		)
+	const handleColumnMouseDown = (e: React.MouseEvent, colIndex: number) => {
+		e.preventDefault()
+		const startX = e.clientX
+		const startY = e.clientY
+		const headerName = header[colIndex]
+		let started = false
 
-		if (tableRef.current) {
-			createColumnDragImage(
-				e,
-				tableRef.current,
-				colIndex,
-			)
+		const onMouseMove = (ev: MouseEvent) => {
+			if (!started) {
+				if (Math.abs(ev.clientX - startX) + Math.abs(ev.clientY - startY) < DRAG_THRESHOLD) {
+					return
+				}
+				started = true
+				setDraggingCol(colIndex)
+				document.documentElement.classList.add('column-dragging')
+				if (tableRef.current) {
+					ghostRef.current = createColumnGhost(
+						tableRef.current, colIndex, startX, startY,
+					)
+				}
+			}
+
+			ghostRef.current?.update(ev.clientX, ev.clientY)
+
+			const el = document.elementFromPoint(ev.clientX, ev.clientY)
+			const dropTarget = el?.closest<HTMLElement>('[data-drop-key]')
+			setDragOverKey(dropTarget?.dataset.dropKey ?? null)
 		}
-	}
 
-	const handleColumnDragEnd = () => {
-		setDraggingCol(null)
-		document.documentElement.classList.remove('column-dragging')
-		document.removeEventListener(
-			'dragover', forceMoveEffect, true,
-		)
-		document.removeEventListener(
-			'dragenter', forceMoveEffect, true,
-		)
+		const onMouseUp = (ev: MouseEvent) => {
+			document.removeEventListener('mousemove', onMouseMove)
+			document.removeEventListener('mouseup', onMouseUp)
+
+			if (started) {
+				const el = document.elementFromPoint(ev.clientX, ev.clientY)
+				const dropTarget = el?.closest<HTMLElement>('[data-drop-key]')
+				if (dropTarget?.dataset.dropKey) {
+					handleDrop(dropTarget.dataset.dropKey, headerName)
+				}
+
+				ghostRef.current?.destroy()
+				ghostRef.current = null
+				setDraggingCol(null)
+				setDragOverKey(null)
+				document.documentElement.classList.remove('column-dragging')
+			}
+		}
+
+		document.addEventListener('mousemove', onMouseMove)
+		document.addEventListener('mouseup', onMouseUp)
 	}
 
 	const columnDragProps = (colIndex: number) => ({
-		draggable: true as const,
-		style: { cursor: 'move' },
-		onDragStart: (e: React.DragEvent) => handleColumnDragStart(e, colIndex),
-		onDragEnd: handleColumnDragEnd,
+		style: { cursor: 'move' as const },
+		onMouseDown: (e: React.MouseEvent) => handleColumnMouseDown(e, colIndex),
 	})
 
 	const columns = useMemo(() => header.map((col, index) =>
@@ -206,7 +221,7 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 				rows={rows}
 				header={header}
 				mapping={mapping}
-				onDrop={handleDrop}
+				dragOverKey={dragOverKey}
 				onRemoveMapping={handleRemoveMapping}
 			/>
 			<Button
