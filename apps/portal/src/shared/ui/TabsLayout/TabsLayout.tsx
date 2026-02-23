@@ -6,6 +6,7 @@ import classes from './TabsLayout.module.css'
 export interface TabConfig {
 	label: string
 	content: ReactNode
+	icon?: ReactNode
 }
 
 interface Props<T extends string> {
@@ -24,8 +25,8 @@ export const TabsLayout = <T extends string>({ tabs, defaultTab }: Props<T>) => 
 				className={classes.tabs}
 			>
 				<Tabs.List className={classes.tabsList}>
-					{Object.entries<TabConfig>(tabs).map(([key, { label }]) => (
-						<Tabs.Tab key={key} value={key}>
+					{Object.entries<TabConfig>(tabs).map(([key, { label, icon }]) => (
+						<Tabs.Tab key={key} value={key} leftSection={icon}>
 							{label}
 						</Tabs.Tab>
 					))}
