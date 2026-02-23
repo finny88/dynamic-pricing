@@ -21,6 +21,9 @@ const createIconCursor = (color: string) => {
 const cursorDefault = createIconCursor('#868e96')
 const cursorDragging = createIconCursor('#343a40')
 
+const isRawUnitSchemaKey = (key: string): key is keyof typeof rawUnitSchema.shape =>
+	key in rawUnitSchema.shape
+
 const toColumnLetter = (index: number): string => {
 	let result = ''
 	let n = index + 1
@@ -107,9 +110,11 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 	const onParseClick = () => {
 		const dynamicShape: Record<string, z.ZodType> = {}
 		for (const [schemaKey, headerName] of Object.entries(mapping)) {
-			dynamicShape[headerName] = rawUnitSchema.shape[schemaKey as keyof typeof rawUnitSchema.shape]
+			if (isRawUnitSchemaKey(schemaKey)) {
+				dynamicShape[headerName] = rawUnitSchema.shape[schemaKey]
+			}
 		}
-		const dynamicSchema = z.object(dynamicShape)
+		const dynamicSchema = z.object(dynamicShape).passthrough()
 
 		onParse(mapping, dynamicSchema)
 	}
