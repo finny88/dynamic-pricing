@@ -69,6 +69,11 @@
 	background-color: var(--mantine-color-yellow-1);
 }
 
+:global(html.column-dragging),
+:global(html.column-dragging) * {
+	cursor: move !important;
+}
+
 .draggingColumn {
 	background-color: var(--mantine-primary-color-light) !important;
 }

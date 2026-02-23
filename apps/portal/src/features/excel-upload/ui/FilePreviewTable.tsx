@@ -12,6 +12,12 @@ import styles from './FilePreviewTable.module.css'
 
 const columnHelper = createColumnHelper<unknown[]>()
 
+const forceMoveEffect = (e: DragEvent) => {
+	e.preventDefault()
+	if (e.dataTransfer) {
+		e.dataTransfer.dropEffect = 'move'
+	}
+}
 
 const isRawUnitSchemaKey = (key: string): key is keyof typeof rawUnitSchema.shape =>
 	key in rawUnitSchema.shape
@@ -55,8 +61,15 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 
 	const handleColumnDragStart = (e: React.DragEvent, colIndex: number) => {
 		e.dataTransfer.setData('text/plain', header[colIndex])
-		e.dataTransfer.effectAllowed = 'copyMove'
+		e.dataTransfer.effectAllowed = 'move'
 		setDraggingCol(colIndex)
+		document.documentElement.classList.add('column-dragging')
+		document.addEventListener(
+			'dragover', forceMoveEffect, true,
+		)
+		document.addEventListener(
+			'dragenter', forceMoveEffect, true,
+		)
 
 		if (tableRef.current) {
 			createColumnDragImage(
@@ -69,6 +82,13 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 
 	const handleColumnDragEnd = () => {
 		setDraggingCol(null)
+		document.documentElement.classList.remove('column-dragging')
+		document.removeEventListener(
+			'dragover', forceMoveEffect, true,
+		)
+		document.removeEventListener(
+			'dragenter', forceMoveEffect, true,
+		)
 	}
 
 	const columnDragProps = (colIndex: number) => ({
