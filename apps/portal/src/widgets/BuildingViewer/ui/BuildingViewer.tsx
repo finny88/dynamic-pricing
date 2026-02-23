@@ -3,6 +3,7 @@ import { TabsLayout, type TabConfig } from '@shared/ui/TabsLayout'
 import type { Unit } from '@entities/unit'
 import type { FilterOptions } from './FloorSectionGrid/model/filters'
 import { FloorSectionGrid } from './FloorSectionGrid'
+import { UnitsTable } from './UnitsTable'
 
 type BuildingViewerTabs = 'grid' | 'grid-plus' | 'rooms'
 
@@ -37,7 +38,7 @@ export const BuildingViewer = ({ units }: Props) => {
 		},
 		[tabsKeys.ROOMS]: {
 			label: 'Помещения',
-			content: 'Помещения'
+			content: <UnitsTable units={units} />
 		}
 	}
 
