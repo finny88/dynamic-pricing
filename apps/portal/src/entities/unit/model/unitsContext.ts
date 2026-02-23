@@ -3,12 +3,14 @@ import type { Unit } from './unit'
 
 export interface UnitsContextValue {
 	units: Unit[] | null
-	setUnits: (units: Unit[]) => void
+	mappedRawKeys: Set<string> | null
+	setUnits: (units: Unit[], mappedRawKeys: Set<string>) => void
 	clearUnits: () => void
 }
 
 export const UnitsContext = createContext<UnitsContextValue>({
 	units: null,
+	mappedRawKeys: null,
 	setUnits: () => {},
 	clearUnits: () => {},
 })

@@ -10,7 +10,7 @@ import { FilePreviewTable } from './FilePreviewTable'
 const ACCEPT = '.xls,.xlsx,.csv'
 
 interface Props {
-	onSuccess: (units: Unit[]) => void
+	onSuccess: (units: Unit[], mappedRawKeys: Set<string>) => void
 }
 
 export const ExcelUpload = ({ onSuccess }: Props) => {
@@ -41,7 +41,7 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 				setInvalid(parsed.errors)
 				setErrorsModalOpen(true)
 			} else {
-				onSuccess(parsed.data)
+				onSuccess(parsed.data, new Set(Object.keys(columnMapping)))
 			}
 		} finally {
 			setLoading(false)

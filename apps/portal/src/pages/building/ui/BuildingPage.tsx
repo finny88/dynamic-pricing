@@ -13,8 +13,8 @@ export const BuildingPage = () => {
 	const { setUnits } = useUnits()
 	const [navigating, setNavigating] = useState(false)
 
-	const handleSuccess = (units: Unit[]) => {
-		setUnits(units)
+	const handleSuccess = (units: Unit[], mappedRawKeys: Set<string>) => {
+		setUnits(units, mappedRawKeys)
 		notifications.show({
 			title: 'Файл обработан',
 			message: `Загружено ${units.length} помещений`,

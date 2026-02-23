@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
 	createColumnHelper,
 	flexRender,
@@ -9,7 +9,7 @@ import {
 } from '@tanstack/react-table'
 import { Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Table, Text } from '@mantine/core'
 import { IconCheck } from '@tabler/icons-react'
-import type { Unit } from '@entities/unit'
+import { type Unit, useUnits } from '@entities/unit'
 
 const columnHelper = createColumnHelper<Unit>()
 
@@ -67,8 +67,6 @@ const DEFAULT_VISIBLE_IDS = new Set([
 	'totalAreaSqm', 'actualStatus', 'actualTotalPriceRub', 'actualPricePerSqmRub',
 ])
 
-const DEFAULT_COLUMN_VISIBILITY: VisibilityState = Object.fromEntries(COLUMNS.map((col) => [col.id, DEFAULT_VISIBLE_IDS.has(col.id as string)]))
-
 const PAGE_SIZE = 10
 
 interface Props {
@@ -76,12 +74,20 @@ interface Props {
 }
 
 export const UnitsTable = ({ units }: Props) => {
-	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(DEFAULT_COLUMN_VISIBILITY)
+	const { mappedRawKeys } = useUnits()
+
+	const filteredColumns = useMemo(() => {
+		if (!mappedRawKeys) { return COLUMNS }
+		return COLUMNS.filter((col) => mappedRawKeys.has(col.header as string))
+	}, [mappedRawKeys])
+
+	const initialVisibility: VisibilityState = Object.fromEntries(filteredColumns.map((col) => [col.id, DEFAULT_VISIBLE_IDS.has(col.id as string)]))
+	const [columnVisibility, setColumnVisibility] = useState(initialVisibility)
 	const [modalOpen, setModalOpen] = useState(false)
 
 	const table = useReactTable({
 		data: units,
-		columns: COLUMNS,
+		columns: filteredColumns,
 		state: { columnVisibility },
 		onColumnVisibilityChange: setColumnVisibility,
 		getCoreRowModel: getCoreRowModel(),
@@ -104,6 +110,7 @@ export const UnitsTable = ({ units }: Props) => {
 				title={'Поля для отображения'}
 				size={'lg'}
 				scrollAreaComponent={ScrollArea.Autosize}
+				centered
 			>
 				<SimpleGrid cols={3} spacing={'xs'}>
 					{table.getAllLeafColumns().map((column) => {
@@ -112,7 +119,7 @@ export const UnitsTable = ({ units }: Props) => {
 							<Button
 								key={column.id}
 								variant={isVisible ? 'filled' : 'default'}
-								color={isVisible ? 'red' : undefined}
+								color={isVisible ? 'blue' : undefined}
 								rightSection={isVisible ? <IconCheck size={14} /> : null}
 								justify={'space-between'}
 								fullWidth
