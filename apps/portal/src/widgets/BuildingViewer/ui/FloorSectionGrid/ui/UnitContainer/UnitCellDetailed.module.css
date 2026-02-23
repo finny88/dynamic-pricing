@@ -32,10 +32,6 @@
   cursor: not-allowed;
 }
 
-.unitButton.disabled:hover {
-  background-color: inherit !important;
-  border-color: transparent !important;
-}
 
 .content {
   width: 100%;
