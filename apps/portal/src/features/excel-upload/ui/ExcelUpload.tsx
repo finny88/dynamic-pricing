@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
-import { Alert, Button, Container, Group, TextInput, Title } from '@mantine/core'
-import { IconFile, IconFolder, IconTrash } from '@tabler/icons-react'
+import { ActionIcon, Button, Container, Group, Modal, ScrollArea, Table, Text, TextInput, Title, Tooltip } from '@mantine/core'
+import { IconCopy, IconFile, IconFolder, IconTrash } from '@tabler/icons-react'
 import type * as z from 'zod'
 import type { Unit } from '@entities/unit'
 import { parseFile, parseFilePreview } from '../lib/parseFile'
@@ -18,6 +18,7 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 	const [preview, setPreview] = useState<FilePreview | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [invalid, setInvalid] = useState<RowValidationError[] | null>(null)
+	const [errorsModalOpen, setErrorsModalOpen] = useState(false)
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const handleFileChange = async (selected: File) => {
@@ -38,6 +39,7 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 			)
 			if (parsed.errors.length > 0) {
 				setInvalid(parsed.errors)
+				setErrorsModalOpen(true)
 			} else {
 				onSuccess(parsed.data)
 			}
@@ -46,8 +48,60 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 		}
 	}
 
+	const handleCopyErrors = () => {
+		const text = JSON.stringify(
+			invalid, null, 2
+		)
+		void navigator.clipboard.writeText(text)
+	}
+
 	return (
 		<>
+			<Modal
+				opened={errorsModalOpen}
+				onClose={() => setErrorsModalOpen(false)}
+				title={
+					<Group gap={'xs'}>
+						<Text c={'red'} fw={600}>Ошибки валидации</Text>
+						<Tooltip label={'Скопировать'}>
+							<ActionIcon
+								variant={'subtle'}
+								color={'gray'}
+								onClick={handleCopyErrors}
+							>
+								<IconCopy size={16} />
+							</ActionIcon>
+						</Tooltip>
+					</Group>
+				}
+				size={'lg'}
+				centered
+				scrollAreaComponent={ScrollArea.Autosize}
+			>
+				<Table striped withTableBorder>
+					<Table.Thead>
+						<Table.Tr>
+							<Table.Th>Строка</Table.Th>
+							<Table.Th>Колонка</Table.Th>
+							<Table.Th>Ошибка</Table.Th>
+							<Table.Th>Значение</Table.Th>
+						</Table.Tr>
+					</Table.Thead>
+					<Table.Tbody>
+						{invalid?.map((err, i) => (
+							<Table.Tr key={i}>
+								<Table.Td>{err.row}</Table.Td>
+								<Table.Td>{err.column}</Table.Td>
+								<Table.Td>{err.message}</Table.Td>
+								<Table.Td>{String(err.value ?? '')}</Table.Td>
+							</Table.Tr>
+						))}
+					</Table.Tbody>
+				</Table>
+				<Button mt={'md'} color={'red'} onClick={() => setErrorsModalOpen(false)}>
+					Закрыть
+				</Button>
+			</Modal>
 			<Container pb={'sm'}>
 				<input
 					ref={inputRef}
@@ -98,18 +152,9 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 					rightSectionPointerEvents={'auto'}
 				/>
 			</Container>
-			{(
-				preview || (invalid !== null && invalid.length > 0)
-			) && (
+			{preview && (
 				<Container size={'fluid'} px={'md'} pb={'sm'} style={{ flex: '0 1 auto', overflow: 'auto' }}>
-					{preview && <FilePreviewTable preview={preview} loading={loading} onParse={(columnMapping, schema) => { void handleParse(columnMapping, schema) }} />}
-					{invalid !== null && invalid.length > 0 && (
-						<Alert variant={'light'} color={'red'}>
-							<pre style={{ margin: 0 }}>{JSON.stringify(
-								invalid, null, 2
-							)}</pre>
-						</Alert>
-					)}
+					<FilePreviewTable preview={preview} loading={loading} onParse={(columnMapping, schema) => { void handleParse(columnMapping, schema) }} />
 				</Container>
 			)}
 		</>
