@@ -13,6 +13,7 @@ import { Box, Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Table, T
 import { IconArrowDown, IconArrowUp, IconArrowsSort, IconCheck } from '@tabler/icons-react'
 import { type Unit, useUnits, rawUnitSchema } from '@entities/unit'
 import { getUnitColors } from './FloorSectionGrid/lib/colors'
+import { formatPrice } from './FloorSectionGrid/lib/formats'
 import type { FilterOptions } from './FloorSectionGrid/model/filters'
 import { isUnitDisabled } from './FloorSectionGrid/lib/unit'
 
@@ -40,8 +41,8 @@ const COLUMNS = [
 			</Group>
 		),
 	}),
-	columnHelper.accessor('actualTotalPriceRub', { id: 'actualTotalPriceRub', header: 'Общая цена' }),
-	columnHelper.accessor('actualPricePerSqmRub', { id: 'actualPricePerSqmRub', header: 'Цена за 1 кв.м.' }),
+	columnHelper.accessor('actualTotalPriceRub', { id: 'actualTotalPriceRub', header: 'Общая цена', cell: ({ getValue }) => formatPrice(getValue()) }),
+	columnHelper.accessor('actualPricePerSqmRub', { id: 'actualPricePerSqmRub', header: 'Цена за 1 кв.м.', cell: ({ getValue }) => formatPrice(getValue()) }),
 	columnHelper.accessor('livingAreaSqm', { id: 'livingAreaSqm', header: 'Жилая площадь' }),
 	columnHelper.accessor('saleDate', { id: 'saleDate', header: 'Дата продажи' }),
 	columnHelper.accessor('project', { id: 'project', header: 'Проект' }),
@@ -58,7 +59,7 @@ const COLUMNS = [
 	columnHelper.accessor('verandaOrTerrace', { id: 'verandaOrTerrace', header: 'Веранда / Терраса' }),
 	columnHelper.accessor('ceilingHeightM', { id: 'ceilingHeightM', header: 'Высота потолков, м' }),
 	columnHelper.accessor('finishing', { id: 'finishing', header: 'Отделка' }),
-	columnHelper.accessor('finishingCostPerSqmRub', { id: 'finishingCostPerSqmRub', header: 'Стоимость отделки, ₽/кв. м' }),
+	columnHelper.accessor('finishingCostPerSqmRub', { id: 'finishingCostPerSqmRub', header: 'Стоимость отделки, ₽/кв. м', cell: ({ getValue }) => formatPrice(getValue()) }),
 	columnHelper.accessor('masterBedroom', { id: 'masterBedroom', header: 'Мастер-спальня' }),
 	columnHelper.accessor('walkInCloset', { id: 'walkInCloset', header: 'Гардеробная' }),
 	columnHelper.accessor('bathroomsCount', { id: 'bathroomsCount', header: 'Кол-во санузлов, шт.' }),
@@ -67,15 +68,15 @@ const COLUMNS = [
 	columnHelper.accessor('kitchenAreaSqm', { id: 'kitchenAreaSqm', header: 'Площадь кухни, кв. м' }),
 	columnHelper.accessor('elevatorProximity', { id: 'elevatorProximity', header: 'Близость к лифту' }),
 	columnHelper.accessor('viewType', { id: 'viewType', header: 'Вид' }),
-	columnHelper.accessor('plannedConstructionCostRub', { id: 'plannedConstructionCostRub', header: 'Плановая стоимость строительства, руб' }),
+	columnHelper.accessor('plannedConstructionCostRub', { id: 'plannedConstructionCostRub', header: 'Плановая стоимость строительства, руб', cell: ({ getValue }) => formatPrice(getValue()) }),
 	columnHelper.accessor('buyerType', { id: 'buyerType', header: 'Тип покупателя' }),
 	columnHelper.accessor('buyersCount', { id: 'buyersCount', header: 'Число покупателей' }),
 	columnHelper.accessor('dealType', { id: 'dealType', header: 'Тип сделки' }),
-	columnHelper.accessor('initialPricePerSqmRub', { id: 'initialPricePerSqmRub', header: 'Цена кв. м на старте продаж, ₽' }),
-	columnHelper.accessor('initialTotalPriceRub', { id: 'initialTotalPriceRub', header: 'Общая цена на старте, ₽' }),
+	columnHelper.accessor('initialPricePerSqmRub', { id: 'initialPricePerSqmRub', header: 'Цена кв. м на старте продаж, ₽', cell: ({ getValue }) => formatPrice(getValue()) }),
+	columnHelper.accessor('initialTotalPriceRub', { id: 'initialTotalPriceRub', header: 'Общая цена на старте, ₽', cell: ({ getValue }) => formatPrice(getValue()) }),
 	columnHelper.accessor('paymentMethod', { id: 'paymentMethod', header: 'Вариант оплаты' }),
 	columnHelper.accessor('contractRegistrationDate', { id: 'contractRegistrationDate', header: 'Дата регистрации договора' }),
-	columnHelper.accessor('discountAmountRub', { id: 'discountAmountRub', header: 'Размер скидки, ₽' }),
+	columnHelper.accessor('discountAmountRub', { id: 'discountAmountRub', header: 'Размер скидки, ₽', cell: ({ getValue }) => formatPrice(getValue()) }),
 	columnHelper.accessor('specialProgramInfo', { id: 'specialProgramInfo', header: 'Информация о спецпрограммах' }),
 	columnHelper.accessor('specialProgramDetails', { id: 'specialProgramDetails', header: 'Детали спецпрограммы' }),
 	columnHelper.accessor('fileGeneratedDate', { id: 'fileGeneratedDate', header: 'Дата формирования файла' }),
