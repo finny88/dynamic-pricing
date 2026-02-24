@@ -20,7 +20,7 @@ export const rawUnitSchema = z.object({
 	'Статус': z.string(),
 	'Номер квартиры': ExcelNumberLikeString,
 	'Этаж': ExcelNumberLikeString,
-	'Подьезд': ExcelNumberLikeString,
+	'Подъезд': ExcelNumberLikeString,
 	'Количество комнат': ExcelNumberLikeString,
 	'Общая цена': ExcelNumberLikeString,
 	'Цена за 1 кв.м.': ExcelNumberLikeString,

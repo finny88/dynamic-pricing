@@ -3,7 +3,7 @@ export const RAW_UNIT_KEYS = [
 	'Адрес',
 	'Класс',
 	'Корпус',
-	'Подьезд',
+	'Подъезд',
 	'Старт продаж',
 	'Окончание продаж',
 	'Ввод в эксплуатацию',
@@ -51,7 +51,7 @@ export interface RawUnit {
 	'Адрес'?: string | null
 	'Класс'?: string | null
 	'Корпус'?: string | null
-	'Подьезд': string | null
+	'Подъезд': string | null
 	'Старт продаж'?: string | null
 	'Окончание продаж'?: string | null
 	'Ввод в эксплуатацию'?: string | null

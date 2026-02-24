@@ -9,7 +9,7 @@ import {
 } from '@tanstack/react-table'
 import { Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Table, Text } from '@mantine/core'
 import { IconCheck } from '@tabler/icons-react'
-import { type Unit, useUnits } from '@entities/unit'
+import { type Unit, useUnits, rawUnitSchema } from '@entities/unit'
 
 const columnHelper = createColumnHelper<Unit>()
 
@@ -21,7 +21,7 @@ const COLUMNS = [
 	columnHelper.accessor('totalAreaSqm', { id: 'totalAreaSqm', header: 'Общая площадь' }),
 	columnHelper.accessor('actualStatus', { id: 'actualStatus', header: 'Статус' }),
 	columnHelper.accessor('actualTotalPriceRub', { id: 'actualTotalPriceRub', header: 'Общая цена' }),
-	columnHelper.accessor('actualPricePerSqmRub', { id: 'actualPricePerSqmRub', header: 'Цена 1 кв. м.' }),
+	columnHelper.accessor('actualPricePerSqmRub', { id: 'actualPricePerSqmRub', header: 'Цена за 1 кв.м.' }),
 	columnHelper.accessor('livingAreaSqm', { id: 'livingAreaSqm', header: 'Жилая площадь' }),
 	columnHelper.accessor('saleDate', { id: 'saleDate', header: 'Дата продажи' }),
 	columnHelper.accessor('project', { id: 'project', header: 'Проект' }),
@@ -61,11 +61,8 @@ const COLUMNS = [
 	columnHelper.accessor('fileGeneratedDate', { id: 'fileGeneratedDate', header: 'Дата формирования файла' }),
 ]
 
-// Default visible columns match REQUIRED_KEYS from rawUnitSchema
-const DEFAULT_VISIBLE_IDS = new Set([
-	'unitNumber', 'floor', 'section', 'roomsCount',
-	'totalAreaSqm', 'actualStatus', 'actualTotalPriceRub', 'actualPricePerSqmRub',
-])
+const schemaKeys = new Set(Object.keys(rawUnitSchema.shape))
+const DEFAULT_VISIBLE_IDS = new Set(COLUMNS.filter(col => schemaKeys.has(col.header as string)).map(col => col.id as string))
 
 const PAGE_SIZE = 10
 
