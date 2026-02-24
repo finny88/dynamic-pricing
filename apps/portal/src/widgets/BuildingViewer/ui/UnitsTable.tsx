@@ -7,9 +7,10 @@ import {
 	useReactTable,
 	type VisibilityState,
 } from '@tanstack/react-table'
-import { Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Table, Text } from '@mantine/core'
+import { Box, Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Table, Text } from '@mantine/core'
 import { IconCheck } from '@tabler/icons-react'
 import { type Unit, useUnits, rawUnitSchema } from '@entities/unit'
+import { getUnitColors } from './FloorSectionGrid/lib/colors'
 
 const columnHelper = createColumnHelper<Unit>()
 
@@ -19,7 +20,16 @@ const COLUMNS = [
 	columnHelper.accessor('section', { id: 'section', header: 'Подъезд' }),
 	columnHelper.accessor('roomsCount', { id: 'roomsCount', header: 'Количество комнат' }),
 	columnHelper.accessor('totalAreaSqm', { id: 'totalAreaSqm', header: 'Общая площадь' }),
-	columnHelper.accessor('actualStatus', { id: 'actualStatus', header: 'Статус' }),
+	columnHelper.accessor('actualStatus', {
+		id: 'actualStatus',
+		header: 'Статус',
+		cell: ({ row, getValue }) => (
+			<Group gap={'xs'} wrap={'nowrap'}>
+				<Box style={{ width: 16, height: 16, flexShrink: 0, backgroundColor: getUnitColors(row.original).background }} />
+				<span>{getValue()}</span>
+			</Group>
+		),
+	}),
 	columnHelper.accessor('actualTotalPriceRub', { id: 'actualTotalPriceRub', header: 'Общая цена' }),
 	columnHelper.accessor('actualPricePerSqmRub', { id: 'actualPricePerSqmRub', header: 'Цена за 1 кв.м.' }),
 	columnHelper.accessor('livingAreaSqm', { id: 'livingAreaSqm', header: 'Жилая площадь' }),
