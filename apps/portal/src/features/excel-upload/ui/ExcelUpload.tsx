@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { ActionIcon, Button, Container, Group, Modal, ScrollArea, Table, Text, TextInput, Title, Tooltip } from '@mantine/core'
-import { IconCopy, IconFile, IconFolder, IconTrash } from '@tabler/icons-react'
+import { IconCopy, IconFile, IconFileSpreadsheet, IconFolder, IconTrash } from '@tabler/icons-react'
+import * as XLSX from 'xlsx'
 import type * as z from 'zod'
 import type { Unit } from '@entities/unit'
 import { parseFile, parseFilePreview } from '../lib/parseFile'
@@ -55,6 +56,24 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 		void navigator.clipboard.writeText(text)
 	}
 
+	const handleExportErrors = () => {
+		if (!invalid) {
+			return
+		}
+		const rows = invalid.map((err) => ({
+			'Строка': err.row,
+			'Колонка': err.column,
+			'Ошибка': err.message,
+			'Значение': String(err.value ?? ''),
+		}))
+		const ws = XLSX.utils.json_to_sheet(rows)
+		const wb = XLSX.utils.book_new()
+		XLSX.utils.book_append_sheet(
+			wb, ws, 'Ошибки'
+		)
+		XLSX.writeFile(wb, 'ошибки_валидации.xlsx')
+	}
+
 	return (
 		<>
 			<Modal
@@ -70,6 +89,15 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 								onClick={handleCopyErrors}
 							>
 								<IconCopy size={16} />
+							</ActionIcon>
+						</Tooltip>
+						<Tooltip label={'Выгрузить в excel'}>
+							<ActionIcon
+								variant={'subtle'}
+								color={'gray'}
+								onClick={handleExportErrors}
+							>
+								<IconFileSpreadsheet size={16} />
 							</ActionIcon>
 						</Tooltip>
 					</Group>
