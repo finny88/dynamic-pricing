@@ -4,17 +4,25 @@ import {
 	flexRender,
 	getCoreRowModel,
 	getPaginationRowModel,
+	getSortedRowModel,
 	useReactTable,
+	type SortingState,
 	type VisibilityState,
 } from '@tanstack/react-table'
 import { Box, Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Table, Text } from '@mantine/core'
-import { IconCheck } from '@tabler/icons-react'
+import { IconArrowDown, IconArrowUp, IconArrowsSort, IconCheck } from '@tabler/icons-react'
 import { type Unit, useUnits, rawUnitSchema } from '@entities/unit'
 import { getUnitColors } from './FloorSectionGrid/lib/colors'
 import type { FilterOptions } from './FloorSectionGrid/model/filters'
 import { isUnitDisabled } from './FloorSectionGrid/lib/unit'
 
 const columnHelper = createColumnHelper<Unit>()
+
+const SortIcon = ({ sorted }: { sorted: false | 'asc' | 'desc' }) => {
+	if (sorted === 'asc') { return <IconArrowUp size={14} style={{ flexShrink: 0 }} /> }
+	if (sorted === 'desc') { return <IconArrowDown size={14} style={{ flexShrink: 0 }} /> }
+	return <IconArrowsSort size={14} style={{ flexShrink: 0, opacity: 0.4 }} />
+}
 
 const COLUMNS = [
 	columnHelper.accessor('unitNumber', { id: 'unitNumber', header: 'Номер квартиры' }),
@@ -97,14 +105,18 @@ export const UnitsTable = ({ units, activeFilters }: Props) => {
 
 	const initialVisibility: VisibilityState = Object.fromEntries(filteredColumns.map((col) => [col.id, DEFAULT_VISIBLE_IDS.has(col.id as string)]))
 	const [columnVisibility, setColumnVisibility] = useState(initialVisibility)
+	const [sorting, setSorting] = useState<SortingState>([])
 	const [modalOpen, setModalOpen] = useState(false)
 
 	const table = useReactTable({
 		data: filteredUnits,
 		columns: filteredColumns,
-		state: { columnVisibility },
+		defaultColumn: { sortingFn: 'alphanumeric' },
+		state: { columnVisibility, sorting },
 		onColumnVisibilityChange: setColumnVisibility,
+		onSortingChange: setSorting,
 		getCoreRowModel: getCoreRowModel(),
+		getSortedRowModel: getSortedRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		initialState: {
 			pagination: { pageSize: PAGE_SIZE, pageIndex: 0 },
@@ -155,11 +167,21 @@ export const UnitsTable = ({ units, activeFilters }: Props) => {
 				<Table.Thead>
 					{table.getHeaderGroups().map((headerGroup) => (
 						<Table.Tr key={headerGroup.id}>
-							{headerGroup.headers.map((header) => (
-								<Table.Th key={header.id}>
-									{flexRender(header.column.columnDef.header, header.getContext())}
-								</Table.Th>
-							))}
+							{headerGroup.headers.map((header) => {
+								const sorted = header.column.getIsSorted()
+								return (
+									<Table.Th
+										key={header.id}
+										onClick={header.column.getToggleSortingHandler()}
+										style={{ cursor: 'pointer', userSelect: 'none' }}
+									>
+										<Group gap={4} wrap={'nowrap'}>
+											{flexRender(header.column.columnDef.header, header.getContext())}
+											<SortIcon sorted={sorted} />
+										</Group>
+									</Table.Th>
+								)
+							})}
 						</Table.Tr>
 					))}
 				</Table.Thead>
