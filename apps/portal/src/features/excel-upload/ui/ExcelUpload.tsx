@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react'
 import { ActionIcon, Button, Container, Group, Modal, ScrollArea, Table, Text, TextInput, Title, Tooltip } from '@mantine/core'
-import { IconCopy, IconFile, IconFileSpreadsheet, IconFolder, IconTrash } from '@tabler/icons-react'
+import { IconCopy, IconFile, IconFileSpreadsheet, IconFolder, IconHighlight, IconTrash } from '@tabler/icons-react'
 import * as XLSX from 'xlsx'
+import ExcelJS from 'exceljs'
 import type * as z from 'zod'
 import type { Unit } from '@entities/unit'
 import { parseFile, parseFilePreview } from '../lib/parseFile'
@@ -29,20 +30,20 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 		setPreview(filePreview)
 	}
 
-	const handleParse = async (columnMapping: Record<string, string>, schema: z.ZodType) => {
+	const handleParse = async (mapping: Record<string, string>, schema: z.ZodType) => {
 		if (!file) {
 			return
 		}
 		setLoading(true)
 		try {
 			const parsed = await parseFile(
-				file, columnMapping, schema
+				file, mapping, schema
 			)
 			if (parsed.errors.length > 0) {
 				setInvalid(parsed.errors)
 				setErrorsModalOpen(true)
 			} else {
-				onSuccess(parsed.data, new Set(Object.keys(columnMapping)))
+				onSuccess(parsed.data, new Set(Object.keys(mapping)))
 			}
 		} finally {
 			setLoading(false)
@@ -74,6 +75,46 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 		XLSX.writeFile(wb, 'ошибки_валидации.xlsx')
 	}
 
+	const handleExportSourceWithErrors = async () => {
+		if (!file || !invalid) {
+			return
+		}
+		const buffer = await file.arrayBuffer()
+		const sheetJsWb = XLSX.read(buffer)
+		const sheet = sheetJsWb.Sheets[sheetJsWb.SheetNames[0]]
+		const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, raw: false, defval: null })
+
+		const headers = ((rows[0] ?? []) as string[]).map(String)
+		const errorCells = new Set(invalid.map((err) => `${err.row}:${err.column}`))
+		const errorFill: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFCCCC' } }
+
+		const wb = new ExcelJS.Workbook()
+		const ws = wb.addWorksheet(sheetJsWb.SheetNames[0] ?? 'Sheet1')
+
+		rows.forEach((row, rowIndex) => {
+			const excelRow = ws.addRow(row as (string | null)[])
+			if (rowIndex === 0) {
+				excelRow.font = { bold: true }
+			} else {
+				const excelRowNum = rowIndex + 1
+				headers.forEach((header, colIdx) => {
+					if (errorCells.has(`${excelRowNum}:${header}`)) {
+						excelRow.getCell(colIdx + 1).fill = errorFill
+					}
+				})
+			}
+		})
+
+		const outBuffer = await wb.xlsx.writeBuffer()
+		const blob = new Blob([outBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+		const url = URL.createObjectURL(blob)
+		const a = document.createElement('a')
+		a.href = url
+		a.download = file.name.replace(/(\.\w+)$/, '_с_ошибками$1')
+		a.click()
+		URL.revokeObjectURL(url)
+	}
+
 	return (
 		<>
 			<Modal
@@ -98,6 +139,15 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 								onClick={handleExportErrors}
 							>
 								<IconFileSpreadsheet size={16} />
+							</ActionIcon>
+						</Tooltip>
+						<Tooltip label={'Выгрузить исходный файл с ошибками'}>
+							<ActionIcon
+								variant={'subtle'}
+								color={'gray'}
+								onClick={() => { void handleExportSourceWithErrors() }}
+							>
+								<IconHighlight size={16} />
 							</ActionIcon>
 						</Tooltip>
 					</Group>
@@ -182,7 +232,7 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 			</Container>
 			{preview && (
 				<Container size={'fluid'} px={'md'} pb={'sm'} style={{ flex: '0 1 auto', overflow: 'auto' }}>
-					<FilePreviewTable preview={preview} loading={loading} onParse={(columnMapping, schema) => { void handleParse(columnMapping, schema) }} />
+					<FilePreviewTable preview={preview} loading={loading} onParse={(mapping, schema) => { void handleParse(mapping, schema) }} />
 				</Container>
 			)}
 		</>
