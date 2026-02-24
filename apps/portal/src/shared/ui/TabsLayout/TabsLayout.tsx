@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useState } from 'react'
-import { Tabs, Container } from '@mantine/core'
+import { Tabs } from '@mantine/core'
 import classes from './TabsLayout.module.css'
 
 export interface TabConfig {
@@ -18,7 +18,7 @@ export const TabsLayout = <T extends string>({ tabs, defaultTab }: Props<T>) => 
 	const [activeTab, setActiveTab] = useState<T>(defaultTab)
 
 	return (
-		<Container size={'xxl'} p={'md'}>
+		<>
 			<Tabs
 				value={activeTab}
 				onChange={(value) => setActiveTab(value as T)}
@@ -38,6 +38,6 @@ export const TabsLayout = <T extends string>({ tabs, defaultTab }: Props<T>) => 
 					</Tabs.Panel>
 				))}
 			</Tabs>
-		</Container>
+		</>
 	)
 }

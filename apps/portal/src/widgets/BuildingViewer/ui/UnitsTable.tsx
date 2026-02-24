@@ -11,6 +11,8 @@ import { Box, Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Table, T
 import { IconCheck } from '@tabler/icons-react'
 import { type Unit, useUnits, rawUnitSchema } from '@entities/unit'
 import { getUnitColors } from './FloorSectionGrid/lib/colors'
+import type { FilterOptions } from './FloorSectionGrid/model/filters'
+import { isUnitDisabled } from './FloorSectionGrid/lib/unit'
 
 const columnHelper = createColumnHelper<Unit>()
 
@@ -78,9 +80,10 @@ const PAGE_SIZE = 10
 
 interface Props {
 	units: Unit[]
+	activeFilters: FilterOptions
 }
 
-export const UnitsTable = ({ units }: Props) => {
+export const UnitsTable = ({ units, activeFilters }: Props) => {
 	const { mappedRawKeys } = useUnits()
 
 	const filteredColumns = useMemo(() => {
@@ -88,12 +91,16 @@ export const UnitsTable = ({ units }: Props) => {
 		return COLUMNS.filter((col) => mappedRawKeys.has(col.header as string))
 	}, [mappedRawKeys])
 
+	const filteredUnits = useMemo(() =>
+		units.filter(unit => !isUnitDisabled(unit, activeFilters)),
+	[units, activeFilters])
+
 	const initialVisibility: VisibilityState = Object.fromEntries(filteredColumns.map((col) => [col.id, DEFAULT_VISIBLE_IDS.has(col.id as string)]))
 	const [columnVisibility, setColumnVisibility] = useState(initialVisibility)
 	const [modalOpen, setModalOpen] = useState(false)
 
 	const table = useReactTable({
-		data: units,
+		data: filteredUnits,
 		columns: filteredColumns,
 		state: { columnVisibility },
 		onColumnVisibilityChange: setColumnVisibility,
@@ -107,7 +114,7 @@ export const UnitsTable = ({ units }: Props) => {
 	const { pageIndex } = table.getState().pagination
 	const totalPages = table.getPageCount()
 	const from = (pageIndex * PAGE_SIZE) + 1
-	const to = Math.min((pageIndex + 1) * PAGE_SIZE, units.length)
+	const to = Math.min((pageIndex + 1) * PAGE_SIZE, filteredUnits.length)
 
 	return (
 		<>
@@ -169,10 +176,10 @@ export const UnitsTable = ({ units }: Props) => {
 				</Table.Tbody>
 			</Table>
 
-			{units.length > 0 && (
+			{filteredUnits.length > 0 && (
 				<Group justify={'space-between'} mt={'md'}>
 					<Text size={'sm'} c={'dimmed'}>
-						{from}–{to} из {units.length}
+						{from}–{to} из {filteredUnits.length}
 					</Text>
 					<Pagination
 						total={totalPages}

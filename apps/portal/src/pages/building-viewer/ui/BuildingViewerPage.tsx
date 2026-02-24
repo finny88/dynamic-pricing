@@ -12,7 +12,7 @@ export const BuildingViewerPage = () => {
 	}
 
 	return (
-		<Container size={'xxl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }}>
+		<Container size={'xxl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
 			<BuildingTitle units={units} />
 			<BuildingViewer units={units} />
 		</Container>

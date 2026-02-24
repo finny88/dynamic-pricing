@@ -1,12 +1,12 @@
 import type { FC } from 'react'
 import { useMemo } from 'react'
 import { Box, Stack } from '@mantine/core'
-import { Filters, StatusLegend, FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
+import { StatusLegend, FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
 import classes from './FloorSectionGrid.module.css'
 import type { GridVariant } from './model/variants'
 import type { Unit } from '@entities/unit'
 import type { FilterOptions } from './model/filters'
-import { computeAvailableFloors, computeAvailableSections, computeGridData } from './lib/unit'
+import { computeGridData } from './lib/unit'
 import { ARIA_LABELS } from './lib/mappers'
 
 const VARIANT_CONFIG: Record<GridVariant, { cellMinWidth: number }> = {
@@ -18,7 +18,6 @@ interface FloorSectionGridProps {
 	units: Unit[]
 	variant?: GridVariant
 	activeFilters: FilterOptions
-	onFilterChange: (filters: FilterOptions) => void
 	isPending: boolean
 }
 
@@ -26,25 +25,12 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 	units,
 	variant = 'compact',
 	activeFilters,
-	onFilterChange,
 	isPending,
 }) => {
 
-	// Use all units for display (no filtering, just disabling)
-	const displayedUnits = units
-
-	const { sections, floors, matrix, availableRoomsCounts } = useMemo(() => {
-		return computeGridData(displayedUnits, units)
-	}, [displayedUnits, units])
-
-	// Get all available floors and sections from original units for filters
-	const allFloors = useMemo(() =>
-		computeAvailableFloors(units),
-	[units])
-
-	const allSections = useMemo(() =>
-		computeAvailableSections(units),
-	[units])
+	const { sections, floors, matrix } = useMemo(() => {
+		return computeGridData(units, units)
+	}, [units])
 
 	const { cellMinWidth } = VARIANT_CONFIG[variant]
 	const gridTemplateColumns = `auto repeat(${sections.length}, minmax(${cellMinWidth}px, auto))`
@@ -52,15 +38,6 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 
 	return (
 		<Stack gap={'lg'}>
-			{/* Filters */}
-			<Filters
-				availableFloors={allFloors}
-				availableSections={allSections}
-				availableRoomsCounts={availableRoomsCounts}
-				activeFilters={activeFilters}
-				onFilterChange={onFilterChange}
-			/>
-
 			{/* Legend */}
 			<StatusLegend />
 

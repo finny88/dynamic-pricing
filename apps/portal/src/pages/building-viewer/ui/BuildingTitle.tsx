@@ -16,11 +16,10 @@ export const BuildingTitle = ({ units }: BuildingTitleProps) => {
 	}, [units])
 
 	return (
-		<Group mb={'md'} pos={'relative'} justify={'center'}>
+		<Group mb={'lg'} pos={'relative'} justify={'center'}>
 			<Tooltip label={'Распарсить новый документ'}>
 				<ActionIcon
 					variant={'subtle'}
-					ml={'xl'}
 					radius={'xl'}
 					style={{ border: '1px solid black' }}
 					onClick={clearUnits}
