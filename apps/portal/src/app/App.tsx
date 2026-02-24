@@ -11,7 +11,7 @@ const App = () => {
 	return (
 		<MantineProvider theme={theme}>
 			<Notifications />
-			<BrowserRouter>
+			<BrowserRouter basename={import.meta.env.BASE_URL}>
 				<UnitsProvider>
 					<Routes>
 						{routes.map(({ path, element }) => (
