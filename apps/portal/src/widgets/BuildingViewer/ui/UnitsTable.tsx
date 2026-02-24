@@ -14,15 +14,15 @@ import { type Unit, useUnits } from '@entities/unit'
 const columnHelper = createColumnHelper<Unit>()
 
 const COLUMNS = [
-	columnHelper.accessor('unitNumber', { id: 'unitNumber', header: '№ помещения' }),
+	columnHelper.accessor('unitNumber', { id: 'unitNumber', header: 'Номер квартиры' }),
 	columnHelper.accessor('floor', { id: 'floor', header: 'Этаж' }),
-	columnHelper.accessor('section', { id: 'section', header: 'Секция' }),
-	columnHelper.accessor('roomsCount', { id: 'roomsCount', header: 'Число комнат' }),
-	columnHelper.accessor('totalAreaSqm', { id: 'totalAreaSqm', header: 'Общая площадь, кв. м' }),
-	columnHelper.accessor('actualStatus', { id: 'actualStatus', header: 'Статус факт' }),
-	columnHelper.accessor('actualTotalPriceRub', { id: 'actualTotalPriceRub', header: 'Общая цена факт, ₽' }),
-	columnHelper.accessor('actualPricePerSqmRub', { id: 'actualPricePerSqmRub', header: 'Цена 1 кв. м факт, ₽' }),
-	columnHelper.accessor('livingAreaSqm', { id: 'livingAreaSqm', header: 'Жилая площадь, кв. м' }),
+	columnHelper.accessor('section', { id: 'section', header: 'Подъезд' }),
+	columnHelper.accessor('roomsCount', { id: 'roomsCount', header: 'Количество комнат' }),
+	columnHelper.accessor('totalAreaSqm', { id: 'totalAreaSqm', header: 'Общая площадь' }),
+	columnHelper.accessor('actualStatus', { id: 'actualStatus', header: 'Статус' }),
+	columnHelper.accessor('actualTotalPriceRub', { id: 'actualTotalPriceRub', header: 'Общая цена' }),
+	columnHelper.accessor('actualPricePerSqmRub', { id: 'actualPricePerSqmRub', header: 'Цена 1 кв. м.' }),
+	columnHelper.accessor('livingAreaSqm', { id: 'livingAreaSqm', header: 'Жилая площадь' }),
 	columnHelper.accessor('saleDate', { id: 'saleDate', header: 'Дата продажи' }),
 	columnHelper.accessor('project', { id: 'project', header: 'Проект' }),
 	columnHelper.accessor('address', { id: 'address', header: 'Адрес' }),

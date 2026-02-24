@@ -17,12 +17,12 @@ const ExcelNumberLikeString = z
 	})
 
 export const rawUnitSchema = z.object({
-	'Статус факт': z.string(),
-	'№ помещения': ExcelNumberLikeString,
+	'Статус': z.string(),
+	'Номер квартиры': ExcelNumberLikeString,
 	'Этаж': ExcelNumberLikeString,
-	'Секция': ExcelNumberLikeString,
-	'Число комнат': ExcelNumberLikeString,
-	'Общая цена факт, ₽': ExcelNumberLikeString,
-	'Цена 1 кв. м факт, ₽': ExcelNumberLikeString,
-	'Общая площадь, кв. м': ExcelNumberLikeString,
+	'Подьезд': ExcelNumberLikeString,
+	'Количество комнат': ExcelNumberLikeString,
+	'Общая цена': ExcelNumberLikeString,
+	'Цена за 1 кв.м.': ExcelNumberLikeString,
+	'Общая площадь': ExcelNumberLikeString,
 })
