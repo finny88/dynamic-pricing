@@ -5,6 +5,20 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>portal</title>
+    <script>
+      // Restore the path encoded by 404.html before the React app mounts.
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var p = params.get('p');
+        if (p) {
+          var q = params.get('q');
+          var url = window.location.pathname.replace(/\/$/, '') + p.replace(/~and~/g, '&') +
+            (q ? '?' + q.replace(/~and~/g, '&') : '') +
+            window.location.hash;
+          window.history.replaceState(null, '', url);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
