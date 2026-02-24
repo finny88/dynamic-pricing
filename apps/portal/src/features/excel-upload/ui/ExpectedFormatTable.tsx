@@ -1,7 +1,14 @@
-import { CloseButton, Group, Table, Text } from '@mantine/core'
+import { CloseButton, Table, Text } from '@mantine/core'
 import { RAW_UNIT_KEYS } from '@entities/unit'
 import { REQUIRED_KEYS } from '../lib/requiredKeys'
 import styles from './FilePreviewTable.module.css'
+
+const boldCloseIcon = (
+	<svg viewBox={'0 0 15 15'} width={12} height={12} fill={'none'} stroke={'var(--mantine-color-red-8)'} strokeWidth={4} strokeLinecap={'round'}>
+		<line x1={3} y1={3} x2={12} y2={12} />
+		<line x1={12} y1={3} x2={3} y2={12} />
+	</svg>
+)
 
 const SORTED_KEYS = [
 	...RAW_UNIT_KEYS.filter((key) => REQUIRED_KEYS.has(key)),
@@ -38,7 +45,7 @@ export const ExpectedFormatTable = ({ rows, header, mapping, dragOverKey, onRemo
 								return (
 									<Table.Th
 										key={key}
-										className={colClass(key, baseClass)}
+										className={baseClass}
 										data-drop-key={key}
 									>
 										{key}
@@ -58,12 +65,18 @@ export const ExpectedFormatTable = ({ rows, header, mapping, dragOverKey, onRemo
 										data-drop-key={key}
 									>
 										{mapping[key] !== undefined && (
-											<Group gap={4} wrap={'nowrap'}>
-												<Text size={'xs'} truncate flex={1}>
+											<>
+												<Text size={'xs'} truncate pr={20}>
 													{mapping[key]}
 												</Text>
-												<CloseButton size={'xs'} onClick={() => onRemoveMapping(key)} />
-											</Group>
+												<CloseButton
+													className={styles.mappingCloseButton}
+													size={'xs'}
+													variant={'transparent'}
+													icon={boldCloseIcon}
+													onClick={() => onRemoveMapping(key)}
+												/>
+											</>
 										)}
 									</Table.Td>
 								))}

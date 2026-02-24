@@ -83,15 +83,20 @@
 }
 
 .dropTarget {
-	outline: 2px dashed var(--mantine-primary-color-filled);
-	outline-offset: -2px;
-	background-color: var(--mantine-primary-color-light) !important;
+	background-color: var(--mantine-color-yellow-2) !important;
 }
 
 .mappingCell {
 	background-color: var(--mantine-color-gray-0);
 	max-width: 200px;
 	overflow: hidden;
+	position: relative;
+}
+
+.mappingCloseButton {
+	position: absolute;
+	top: 2px;
+	right: 2px;
 }
 
 .td {
