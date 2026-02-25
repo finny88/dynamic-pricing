@@ -1,6 +1,8 @@
-import { ActionIcon, Badge, Card, Container, Divider, Group, Menu, SimpleGrid, Stack, Text, Title } from '@mantine/core'
-import { IconDots, IconMapPin, IconPencil, IconTrash } from '@tabler/icons-react'
+import { useState } from 'react'
+import { ActionIcon, Badge, Button, Card, Container, Divider, Group, Menu, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { IconDots, IconMapPin, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react'
 import { useGetProjectsQuery } from '@entities/project'
+import { CreateProjectModal } from './CreateProjectModal'
 
 const housingClassLabels: Record<string, string> = {
 	business: 'Бизнес',
@@ -18,15 +20,21 @@ const formatDate = (iso: string) =>
 
 export const ProjectsPage = () => {
 	const { data: projects = [] } = useGetProjectsQuery()
+	const [modalOpened, setModalOpened] = useState(false)
 
 	return (
 		<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
-			<Stack gap={4} mb={'xl'}>
-				<Title order={2}>Каталог ЖК</Title>
-				<Text size={'sm'} c={'dimmed'}>
-					Управление объектами и квартирографией
-				</Text>
-			</Stack>
+			<Group justify={'space-between'} align={'flex-start'} mb={'xl'}>
+				<Stack gap={4}>
+					<Title order={2}>Каталог ЖК</Title>
+					<Text size={'sm'} c={'dimmed'}>
+						Управление объектами и квартирографией
+					</Text>
+				</Stack>
+				<Button leftSection={<IconPlus size={16} />} onClick={() => setModalOpened(true)}>
+					Создать ЖК
+				</Button>
+			</Group>
 			<SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing={'md'}>
 				{projects.map((project) => (
 					<Card key={project.id} shadow={'sm'} padding={'lg'} radius={'md'} withBorder>
@@ -88,6 +96,8 @@ export const ProjectsPage = () => {
 					</Card>
 				))}
 			</SimpleGrid>
+
+			<CreateProjectModal opened={modalOpened} onClose={() => setModalOpened(false)} />
 		</Container>
 	)
 }
