@@ -1,7 +1,10 @@
-import { Controller, useForm } from 'react-hook-form'
-import { Button, Group, Modal, Select, SimpleGrid, Stack, Text, TextInput, Title } from '@mantine/core'
-import { IconChevronDown } from '@tabler/icons-react'
+import { useImperativeHandle, type Ref } from 'react'
+import { useForm } from 'react-hook-form'
+import { Modal, Stack, Text, Title } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import { useCreateProjectMutation, type CreateProjectDto } from '@entities/project'
+import { ProjectFormFields } from './ProjectFormFields'
+import type { ProjectFormValues } from './projectFormConfig'
 
 const initialProject: CreateProjectDto = {
 	id: '',
@@ -19,33 +22,21 @@ const initialProject: CreateProjectDto = {
 	factArea: 0,
 }
 
-const housingClassOptions = [
-	{ value: 'economy', label: 'Эконом' },
-	{ value: 'comfort', label: 'Комфорт' },
-	{ value: 'business', label: 'Бизнес' },
-	{ value: 'elite', label: 'Элит' },
-]
-
-interface Props {
-	opened: boolean
-	onClose: () => void
+export interface CreateProjectModalHandle {
+	open: () => void
 }
 
-type FormValues = Pick<CreateProjectDto, 'name' | 'code' | 'housingClass' | 'city' | 'address'>
-
-export const CreateProjectModal = ({ opened, onClose }: Props) => {
+export const CreateProjectModal = ({ ref }: { ref: Ref<CreateProjectModalHandle> }) => {
 	const [createProject, { isLoading }] = useCreateProjectMutation()
+	const [opened, { open, close }] = useDisclosure(false)
 
-	const { register, handleSubmit, control, reset, formState: { errors } } = useForm<FormValues>({
+	const { register, handleSubmit, control, reset, formState: { errors } } = useForm<ProjectFormValues>({
 		defaultValues: initialProject,
 	})
 
-	const handleClose = () => {
-		reset()
-		onClose()
-	}
+	useImperativeHandle(ref, () => ({ open }))
 
-	const onSubmit = async (values: FormValues) => {
+	const onSubmit = async (values: ProjectFormValues) => {
 		const dto: CreateProjectDto = {
 			...initialProject,
 			id: crypto.randomUUID(),
@@ -58,67 +49,31 @@ export const CreateProjectModal = ({ opened, onClose }: Props) => {
 
 		const result = await createProject(dto)
 		if ('error' in result) { return }
-		handleClose()
+		close()
 	}
 
 	return (
-		<Modal opened={opened} onClose={handleClose} size={'lg'} title={
-			<Stack gap={2}>
-				<Title order={4}>Новый ЖК</Title>
-				<Text size={'sm'} c={'dimmed'}>Заполните базовую информацию</Text>
-			</Stack>
-		}>
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<Stack gap={'md'}>
-					<TextInput
-						label={'Название ЖК'}
-						placeholder={'Введите название'}
-						required
-						error={errors.name?.message}
-						{...register('name', { required: 'Название обязательно для заполнения' })}
-					/>
-					<SimpleGrid cols={2}>
-						<TextInput
-							label={'Код проекта'}
-							placeholder={'Введите код'}
-							{...register('code')}
-						/>
-						<TextInput
-							label={'Город'}
-							placeholder={'Введите город'}
-							{...register('city')}
-						/>
-					</SimpleGrid>
-					<TextInput
-						label={'Адрес'}
-						placeholder={'Введите адрес'}
-						{...register('address')}
-					/>
-					<Controller
-						name={'housingClass'}
-						control={control}
-						render={({ field }) => (
-							<Select
-								label={'Класс жилья'}
-								placeholder={'Выберите класс'}
-								data={housingClassOptions}
-								value={field.value}
-								onChange={field.onChange}
-								clearable
-								w={'50%'}
-								rightSection={<IconChevronDown size={16} />}
-							/>
-						)}
-					/>
-					<Group justify={'flex-end'} mt={'sm'}>
-						<Button variant={'default'} onClick={handleClose}>
-							Отмена
-						</Button>
-						<Button type={'submit'} loading={isLoading}>
-							Создать
-						</Button>
-					</Group>
+		<Modal
+			opened={opened}
+			onClose={close}
+			onExitTransitionEnd={() => reset()}
+			size={'lg'}
+			title={
+				<Stack gap={2}>
+					<Title order={4}>Новый ЖК</Title>
+					<Text size={'sm'} c={'dimmed'}>Заполните базовую информацию</Text>
 				</Stack>
+			}
+		>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<ProjectFormFields
+					register={register}
+					control={control}
+					errors={errors}
+					isLoading={isLoading}
+					submitLabel={'Создать'}
+					onCancel={close}
+				/>
 			</form>
 		</Modal>
 	)

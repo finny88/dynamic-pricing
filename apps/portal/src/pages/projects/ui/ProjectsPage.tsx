@@ -1,23 +1,17 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ActionIcon, Badge, Button, Card, Center, Container, Divider, Group, Menu, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { IconDots, IconMapPin, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react'
 import { useGetProjectsQuery, type Project } from '@entities/project'
-import { CreateProjectModal } from './CreateProjectModal'
+import { CreateProjectModal, type CreateProjectModalHandle } from './CreateProjectModal'
 import { EditProjectModal } from './EditProjectModal'
-
-const housingClassLabels: Record<string, string> = {
-	business: 'Бизнес',
-	comfort: 'Комфорт',
-	economy: 'Эконом',
-	elite: 'Элит',
-}
+import { housingClassLabels } from './projectFormConfig'
 
 const formatDate = (iso: string) =>
 	new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
 export const ProjectsPage = () => {
 	const { data: projects = [] } = useGetProjectsQuery()
-	const [modalOpened, setModalOpened] = useState(false)
+	const createModalRef = useRef<CreateProjectModalHandle>(null)
 	const [editingProject, setEditingProject] = useState<Project | null>(null)
 
 	return (
@@ -29,7 +23,7 @@ export const ProjectsPage = () => {
 						Управление объектами и квартирографией
 					</Text>
 				</Stack>
-				<Button leftSection={<IconPlus size={16} />} onClick={() => setModalOpened(true)}>
+				<Button leftSection={<IconPlus size={16} />} onClick={() => createModalRef.current?.open()}>
 					Создать ЖК
 				</Button>
 			</Group>
@@ -100,14 +94,11 @@ export const ProjectsPage = () => {
 				</SimpleGrid>
 			)}
 
-			<CreateProjectModal opened={modalOpened} onClose={() => setModalOpened(false)} />
-			{editingProject && (
-				<EditProjectModal
-					opened={!!editingProject}
-					onClose={() => setEditingProject(null)}
-					project={editingProject}
-				/>
-			)}
+			<CreateProjectModal ref={createModalRef} />
+			<EditProjectModal
+				project={editingProject}
+				onClose={() => setEditingProject(null)}
+			/>
 		</Container>
 	)
 }
