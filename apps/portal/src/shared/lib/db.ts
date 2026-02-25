@@ -1,39 +1,11 @@
-import projectsData from '@shared/assets/projects.json'
-
 const DB_NAME = 'dynamic-price'
-const DB_VERSION = 1
+const DB_VERSION = 2
 
 export const STORES = {
 	PROJECTS: 'projects',
 } as const
 
 let dbPromise: Promise<IDBDatabase> | null = null
-
-const seedProjects = (db: IDBDatabase): Promise<void> => {
-	return new Promise((resolve, reject) => {
-		const tx = db.transaction(STORES.PROJECTS, 'readonly')
-		const countRequest = tx.objectStore(STORES.PROJECTS).count()
-
-		countRequest.onsuccess = () => {
-			if (countRequest.result > 0) {
-				resolve()
-				return
-			}
-
-			const writeTx = db.transaction(STORES.PROJECTS, 'readwrite')
-			const store = writeTx.objectStore(STORES.PROJECTS)
-
-			for (const project of projectsData.projects) {
-				store.add(project)
-			}
-
-			writeTx.oncomplete = () => resolve()
-			writeTx.onerror = () => reject(writeTx.error)
-		}
-
-		countRequest.onerror = () => reject(countRequest.error)
-	})
-}
 
 const openDB = (): Promise<IDBDatabase> => {
 	if (dbPromise) { return dbPromise }
@@ -43,14 +15,14 @@ const openDB = (): Promise<IDBDatabase> => {
 
 		request.onupgradeneeded = (event) => {
 			const db = (event.target as IDBOpenDBRequest).result
-			if (!db.objectStoreNames.contains(STORES.PROJECTS)) {
-				db.createObjectStore(STORES.PROJECTS, { keyPath: 'id' })
+			if (db.objectStoreNames.contains(STORES.PROJECTS)) {
+				db.deleteObjectStore(STORES.PROJECTS)
 			}
+			db.createObjectStore(STORES.PROJECTS, { keyPath: 'id' })
 		}
 
 		request.onsuccess = (event) => {
-			const db = (event.target as IDBOpenDBRequest).result
-			seedProjects(db).then(() => resolve(db)).catch(reject)
+			resolve((event.target as IDBOpenDBRequest).result)
 		}
 
 		request.onerror = (event) => {
