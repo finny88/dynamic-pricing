@@ -3,6 +3,22 @@ import { Button, Group, Modal, Select, SimpleGrid, Stack, Text, TextInput, Title
 import { IconChevronDown } from '@tabler/icons-react'
 import { useCreateProjectMutation, type CreateProjectDto } from '@entities/project'
 
+const initialProject: CreateProjectDto = {
+	id: '',
+	name: '',
+	code: null,
+	city: null,
+	address: null,
+	housingClass: null,
+	profileStatus: '',
+	buildingsCount: 0,
+	lotsCount: 0,
+	totalArea: 0,
+	soldArea: 0,
+	planArea: 0,
+	factArea: 0,
+}
+
 const housingClassOptions = [
 	{ value: 'economy', label: 'Эконом' },
 	{ value: 'comfort', label: 'Комфорт' },
@@ -42,6 +58,7 @@ export const CreateProjectModal = ({ opened, onClose }: Props) => {
 		}
 
 		const dto: CreateProjectDto = {
+			...initialProject,
 			id: crypto.randomUUID(),
 			name: name.trim(),
 			code: code.trim() || null,

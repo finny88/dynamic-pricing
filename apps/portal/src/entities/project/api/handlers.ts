@@ -1,6 +1,7 @@
-import { http, HttpResponse } from 'msw'
+import { http, HttpResponse, type PathParams } from 'msw'
 import { addItem, getAll, STORES } from '@shared/lib/db'
 import type { Project } from '../model/project'
+import type { CreateProjectDto } from './projectsApi'
 
 export const projectHandlers = [
 	http.get('/api/projects', async () => {
@@ -8,8 +9,9 @@ export const projectHandlers = [
 		return HttpResponse.json({ projects })
 	}),
 
-	http.post('/api/projects', async ({ request }) => {
-		const project = await request.json() as Project
+	http.post<PathParams, CreateProjectDto>('/api/projects', async ({ request }) => {
+		const body = await request.json()
+		const project: Project = { ...body, updatedAt: new Date().toISOString() }
 		await addItem<Project>(STORES.PROJECTS, project)
 		return HttpResponse.json({ project }, { status: 201 })
 	}),

@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { axiosBaseQuery } from '@shared/api'
 import type { Project } from '../model/project'
 
-export type CreateProjectDto = Pick<Project, 'id' | 'name'> & Partial<Pick<Project, 'code' | 'city' | 'address' | 'housingClass'>>
+export type CreateProjectDto = Omit<Project, 'updatedAt'>
 
 export const projectsApi = createApi({
 	reducerPath: 'projectsApi',

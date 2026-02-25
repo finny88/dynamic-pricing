@@ -11,10 +11,6 @@ const housingClassLabels: Record<string, string> = {
 	elite: 'Элит',
 }
 
-const statusLabels: Record<string, string> = {
-	NEW: 'Новый',
-}
-
 const formatDate = (iso: string) =>
 	new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
@@ -52,26 +48,21 @@ export const ProjectsPage = () => {
 									<Text fw={600} size={'md'} truncate>
 										{project.name}
 									</Text>
-									<Group gap={4} wrap={'nowrap'}>
-										<Badge variant={'outline'} color={'gray'} size={'sm'}>
-											{statusLabels[project.profileStatus] ?? project.profileStatus}
-										</Badge>
-										<Menu position={'bottom-end'} withinPortal>
-											<Menu.Target>
-												<ActionIcon variant={'subtle'} color={'gray'} size={'sm'}>
-													<IconDots size={16} />
-												</ActionIcon>
-											</Menu.Target>
-											<Menu.Dropdown>
-												<Menu.Item leftSection={<IconPencil size={14} />}>
-													Редактировать
-												</Menu.Item>
-												<Menu.Item leftSection={<IconTrash size={14} />} color={'red'}>
-													Удалить
-												</Menu.Item>
-											</Menu.Dropdown>
-										</Menu>
-									</Group>
+									<Menu position={'bottom-end'} withinPortal>
+										<Menu.Target>
+											<ActionIcon variant={'subtle'} color={'gray'} size={'sm'}>
+												<IconDots size={16} />
+											</ActionIcon>
+										</Menu.Target>
+										<Menu.Dropdown>
+											<Menu.Item leftSection={<IconPencil size={14} />}>
+												Редактировать
+											</Menu.Item>
+											<Menu.Item leftSection={<IconTrash size={14} />} color={'red'}>
+												Удалить
+											</Menu.Item>
+										</Menu.Dropdown>
+									</Menu>
 								</Group>
 
 								{(project.city || project.address) && (
