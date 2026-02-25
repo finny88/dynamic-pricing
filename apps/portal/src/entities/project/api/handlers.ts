@@ -1,8 +1,10 @@
 import { http, HttpResponse } from 'msw'
-import projectsData from '@shared/assets/projects.json'
+import { getAll, STORES } from '@shared/lib/db'
+import type { Project } from '../model/project'
 
 export const projectHandlers = [
-	http.get('/api/projects', () => {
-		return HttpResponse.json(projectsData)
+	http.get('/api/projects', async () => {
+		const projects = await getAll<Project>(STORES.PROJECTS)
+		return HttpResponse.json({ projects })
 	}),
 ]
