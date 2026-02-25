@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { Button, Group, Modal, Select, SimpleGrid, Stack, Text, TextInput, Title } from '@mantine/core'
 import { IconChevronDown } from '@tabler/icons-react'
 import { useCreateProjectMutation, type CreateProjectDto } from '@entities/project'
@@ -31,40 +31,29 @@ interface Props {
 	onClose: () => void
 }
 
+type FormValues = Pick<CreateProjectDto, 'name' | 'code' | 'housingClass' | 'city' | 'address'>
+
 export const CreateProjectModal = ({ opened, onClose }: Props) => {
 	const [createProject, { isLoading }] = useCreateProjectMutation()
 
-	const [name, setName] = useState('')
-	const [code, setCode] = useState('')
-	const [housingClass, setHousingClass] = useState<string | null>(null)
-	const [city, setCity] = useState('')
-	const [address, setAddress] = useState('')
-	const [nameError, setNameError] = useState('')
+	const { register, handleSubmit, control, reset, formState: { errors } } = useForm<FormValues>({
+		defaultValues: initialProject,
+	})
 
 	const handleClose = () => {
-		setName('')
-		setCode('')
-		setHousingClass(null)
-		setCity('')
-		setAddress('')
-		setNameError('')
+		reset()
 		onClose()
 	}
 
-	const handleSubmit = async () => {
-		if (!name.trim()) {
-			setNameError('Название обязательно для заполнения')
-			return
-		}
-
+	const onSubmit = async (values: FormValues) => {
 		const dto: CreateProjectDto = {
 			...initialProject,
 			id: crypto.randomUUID(),
-			name: name.trim(),
-			code: code.trim() || null,
-			housingClass: housingClass || null,
-			city: city.trim() || null,
-			address: address.trim() || null,
+			name: values.name.trim(),
+			code: values.code?.trim() || null,
+			housingClass: values.housingClass || null,
+			city: values.city?.trim() || null,
+			address: values.address?.trim() || null,
 		}
 
 		await createProject(dto)
@@ -78,57 +67,58 @@ export const CreateProjectModal = ({ opened, onClose }: Props) => {
 				<Text size={'sm'} c={'dimmed'}>Заполните базовую информацию</Text>
 			</Stack>
 		}>
-			<Stack gap={'md'}>
-				<TextInput
-					label={'Название ЖК'}
-					placeholder={'Введите название'}
-					required
-					value={name}
-					onChange={(e) => {
-						setName(e.currentTarget.value)
-						if (nameError) { setNameError('') }
-					}}
-					error={nameError}
-				/>
-				<SimpleGrid cols={2}>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<Stack gap={'md'}>
 					<TextInput
-						label={'Код проекта'}
-						placeholder={'Введите код'}
-						value={code}
-						onChange={(e) => setCode(e.currentTarget.value)}
+						label={'Название ЖК'}
+						placeholder={'Введите название'}
+						required
+						error={errors.name?.message}
+						{...register('name', { required: 'Название обязательно для заполнения' })}
 					/>
+					<SimpleGrid cols={2}>
+						<TextInput
+							label={'Код проекта'}
+							placeholder={'Введите код'}
+							{...register('code')}
+						/>
+						<TextInput
+							label={'Город'}
+							placeholder={'Введите город'}
+							{...register('city')}
+						/>
+					</SimpleGrid>
 					<TextInput
-						label={'Город'}
-						placeholder={'Введите город'}
-						value={city}
-						onChange={(e) => setCity(e.currentTarget.value)}
+						label={'Адрес'}
+						placeholder={'Введите адрес'}
+						{...register('address')}
 					/>
-				</SimpleGrid>
-				<TextInput
-					label={'Адрес'}
-					placeholder={'Введите адрес'}
-					value={address}
-					onChange={(e) => setAddress(e.currentTarget.value)}
-				/>
-				<Select
-					label={'Класс жилья'}
-					placeholder={'Выберите класс'}
-					data={housingClassOptions}
-					value={housingClass}
-					onChange={setHousingClass}
-					clearable
-					w={'50%'}
-					rightSection={<IconChevronDown size={16} />}
-				/>
-				<Group justify={'flex-end'} mt={'sm'}>
-					<Button variant={'default'} onClick={handleClose}>
-						Отмена
-					</Button>
-					<Button onClick={handleSubmit} loading={isLoading}>
-						Создать
-					</Button>
-				</Group>
-			</Stack>
+					<Controller
+						name={'housingClass'}
+						control={control}
+						render={({ field }) => (
+							<Select
+								label={'Класс жилья'}
+								placeholder={'Выберите класс'}
+								data={housingClassOptions}
+								value={field.value}
+								onChange={field.onChange}
+								clearable
+								w={'50%'}
+								rightSection={<IconChevronDown size={16} />}
+							/>
+						)}
+					/>
+					<Group justify={'flex-end'} mt={'sm'}>
+						<Button variant={'default'} onClick={handleClose}>
+							Отмена
+						</Button>
+						<Button type={'submit'} loading={isLoading}>
+							Создать
+						</Button>
+					</Group>
+				</Stack>
+			</form>
 		</Modal>
 	)
 }
