@@ -18,7 +18,11 @@ export const projectsApi = createApi({
 			query: (data) => ({ url: '/projects', method: 'POST', data }),
 			invalidatesTags: ['Project'],
 		}),
+		updateProject: builder.mutation<Project, CreateProjectDto>({
+			query: ({ id, ...data }) => ({ url: `/projects/${id}`, method: 'PUT', data: { id, ...data } }),
+			invalidatesTags: ['Project'],
+		}),
 	}),
 })
 
-export const { useGetProjectsQuery, useCreateProjectMutation } = projectsApi
+export const { useGetProjectsQuery, useCreateProjectMutation, useUpdateProjectMutation } = projectsApi

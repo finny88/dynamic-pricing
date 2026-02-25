@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { ActionIcon, Badge, Button, Card, Center, Container, Divider, Group, Menu, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { IconDots, IconMapPin, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react'
-import { useGetProjectsQuery } from '@entities/project'
+import { useGetProjectsQuery, type Project } from '@entities/project'
 import { CreateProjectModal } from './CreateProjectModal'
+import { EditProjectModal } from './EditProjectModal'
 
 const housingClassLabels: Record<string, string> = {
 	business: 'Бизнес',
@@ -17,6 +18,7 @@ const formatDate = (iso: string) =>
 export const ProjectsPage = () => {
 	const { data: projects = [] } = useGetProjectsQuery()
 	const [modalOpened, setModalOpened] = useState(false)
+	const [editingProject, setEditingProject] = useState<Project | null>(null)
 
 	return (
 		<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
@@ -55,7 +57,7 @@ export const ProjectsPage = () => {
 											</ActionIcon>
 										</Menu.Target>
 										<Menu.Dropdown>
-											<Menu.Item leftSection={<IconPencil size={14} />}>
+											<Menu.Item leftSection={<IconPencil size={14} />} onClick={() => setEditingProject(project)}>
 												Редактировать
 											</Menu.Item>
 											<Menu.Item leftSection={<IconTrash size={14} />} color={'red'}>
@@ -99,6 +101,13 @@ export const ProjectsPage = () => {
 			)}
 
 			<CreateProjectModal opened={modalOpened} onClose={() => setModalOpened(false)} />
+			{editingProject && (
+				<EditProjectModal
+					opened={!!editingProject}
+					onClose={() => setEditingProject(null)}
+					project={editingProject}
+				/>
+			)}
 		</Container>
 	)
 }
