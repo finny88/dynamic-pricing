@@ -1,9 +1,7 @@
+import { useEffect, useState } from 'react'
 import { ActionIcon, Badge, Card, Container, Divider, Group, Menu, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { IconDots, IconMapPin, IconPencil, IconTrash } from '@tabler/icons-react'
 import type { Project } from '@entities/project'
-import projectsData from '@shared/assets/projects.json'
-
-const projects: Project[] = projectsData.projects
 
 const housingClassLabels: Record<string, string> = {
 	business: 'Бизнес',
@@ -20,6 +18,14 @@ const formatDate = (iso: string) =>
 	new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
 export const ProjectsPage = () => {
+	const [projects, setProjects] = useState<Project[]>([])
+
+	useEffect(() => {
+		fetch('/api/projects')
+			.then((res) => res.json() as Promise<{ projects: Project[] }>)
+			.then((data) => setProjects(data.projects))
+	}, [])
+
 	return (
 		<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
 			<Stack gap={4} mb={'xl'}>
