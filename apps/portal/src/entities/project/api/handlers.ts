@@ -11,6 +11,12 @@ export const projectHandlers = [
 
 	http.post<PathParams, CreateProjectDto>('/api/projects', async ({ request }) => {
 		const body = await request.json()
+		if (body.code) {
+			const projects = await getAll<Project>(STORES.PROJECTS)
+			if (projects.some((p) => p.code === body.code)) {
+				return HttpResponse.json({ error: 'Проект с таким кодом уже существует' }, { status: 409 })
+			}
+		}
 		const project: Project = { ...body, updatedAt: new Date().toISOString() }
 		await addItem<Project>(STORES.PROJECTS, project)
 		return HttpResponse.json({ project }, { status: 201 })

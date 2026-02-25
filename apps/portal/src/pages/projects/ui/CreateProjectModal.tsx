@@ -56,7 +56,8 @@ export const CreateProjectModal = ({ opened, onClose }: Props) => {
 			address: values.address?.trim() || null,
 		}
 
-		await createProject(dto)
+		const result = await createProject(dto)
+		if ('error' in result) { return }
 		handleClose()
 	}
 
