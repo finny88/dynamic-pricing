@@ -1,0 +1,43 @@
+{
+  "projects": [
+      {
+          "id": "cmm1ral63000fvdoaytvmg9ol",
+          "name": "ЖК Академия",
+          "code": "ACAD",
+          "city": "Москва",
+          "address": "ул. Строителей, д.10",
+          "housingClass": "business",
+          "profileStatus": "NEW",
+          "buildings": [],
+          "buildingsCount": 0,
+          "lotsCount": 0,
+          "totalArea": 0,
+          "soldArea": 0,
+          "planArea": 0,
+          "factArea": 0,
+          "updatedAt": "2026-02-25T08:12:11.307Z"
+      },
+      {
+          "id": "cmm1qdvga0001vdoaqgud814p",
+          "name": "ЖК Модернист",
+          "code": "MDR-001",
+          "city": "Москва",
+          "address": "ул. Спартаковская, д. 45",
+          "housingClass": "comfort",
+          "profileStatus": "NEW",
+          "buildings": [
+              {
+                  "id": "cmm1qgrnx0005vdoagdl53q1s",
+                  "name": "Дом 1"
+              }
+          ],
+          "buildingsCount": 1,
+          "lotsCount": 1,
+          "totalArea": 45,
+          "soldArea": 0,
+          "planArea": 0,
+          "factArea": 0,
+          "updatedAt": "2026-02-25T07:46:44.984Z"
+      }
+  ]
+}
