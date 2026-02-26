@@ -14,10 +14,11 @@ import {
 	Box,
 	Skeleton,
 } from '@mantine/core'
-import { IconArrowLeft, IconMapPin, IconBuilding, IconPlus } from '@tabler/icons-react'
+import { IconArrowLeft, IconBuilding, IconPlus } from '@tabler/icons-react'
 import { useGetProjectQuery, housingClassLabels } from '@entities/project'
 import { useGetBuildingsByProjectQuery, type Building } from '@entities/building'
 import { EmptyState } from '@shared/ui/EmptyState'
+import { LocationText } from '@shared/ui/LocationText'
 import { BuildingCard } from './BuildingCard'
 import { CreateBuildingModal, type CreateBuildingModalHandle } from './CreateBuildingModal'
 import { EditBuildingModal } from './EditBuildingModal'
@@ -72,14 +73,7 @@ export const ProjectPage = () => {
 				</ActionIcon>
 				<Stack gap={2}>
 					<Title order={2}>{project.name}</Title>
-					{(project.region || project.area || project.city) && (
-						<Group gap={4} align={'center'}>
-							<IconMapPin size={14} color={'gray'} />
-							<Text size={'sm'} c={'dimmed'}>
-								{[project.region, project.area, project.city].filter(Boolean).join(', ')}
-							</Text>
-						</Group>
-					)}
+					<LocationText locationParts={[project.region, project.area, project.city]} />
 				</Stack>
 				{project.housingClass && (
 					<Badge variant={'outline'} color={'gray'} ml={'auto'}>
@@ -135,7 +129,13 @@ export const ProjectPage = () => {
 			) : (
 				<SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing={'md'}>
 					{buildings.map((building) => (
-						<BuildingCard key={building.id} building={building} onEdit={setEditingBuilding} onDelete={setDeletingBuilding} />
+						<BuildingCard
+							key={building.id}
+							building={building}
+							project={project}
+							onEdit={setEditingBuilding}
+							onDelete={setDeletingBuilding}
+						/>
 					))}
 				</SimpleGrid>
 			)}

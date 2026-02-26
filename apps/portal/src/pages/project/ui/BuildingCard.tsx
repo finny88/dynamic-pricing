@@ -1,18 +1,21 @@
 import { useNavigate } from 'react-router-dom'
 import { ActionIcon, Card, Divider, Group, Menu, Stack, Text } from '@mantine/core'
-import { IconDots, IconMapPin, IconPencil, IconTrash } from '@tabler/icons-react'
+import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react'
 import type { Building } from '@entities/building'
+import type { Project } from '@entities/project'
+import { LocationText } from '@shared/ui/LocationText'
 
 const formatDate = (iso: string) =>
 	new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
 interface Props {
 	building: Building
+	project?: Project | null
 	onEdit: (building: Building) => void
 	onDelete: (building: Building) => void
 }
 
-export const BuildingCard = ({ building, onEdit, onDelete }: Props) => {
+export const BuildingCard = ({ building, project, onEdit, onDelete }: Props) => {
 	const navigate = useNavigate()
 
 	return (
@@ -48,14 +51,10 @@ export const BuildingCard = ({ building, onEdit, onDelete }: Props) => {
 					</div>
 				</Group>
 
-				{building.address && (
-					<Group gap={4} align={'center'}>
-						<IconMapPin size={14} color={'gray'} />
-						<Text size={'sm'} c={'dimmed'} truncate>
-							{building.address}
-						</Text>
-					</Group>
-				)}
+				<LocationText
+					locationParts={[project?.region, project?.area, project?.city, building.address]}
+					lineClamp={2}
+				/>
 
 				<Divider />
 

@@ -1,0 +1,1 @@
+export { LocationText } from './LocationText'
