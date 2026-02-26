@@ -12,12 +12,12 @@ import {
 	Text,
 	Title,
 	Box,
-	Paper,
 	Skeleton,
 } from '@mantine/core'
 import { IconArrowLeft, IconMapPin, IconBuilding, IconPlus } from '@tabler/icons-react'
 import { useGetProjectQuery, housingClassLabels } from '@entities/project'
 import { useGetBuildingsByProjectQuery, type Building } from '@entities/building'
+import { EmptyState } from '@shared/ui/EmptyState'
 import { BuildingCard } from './BuildingCard'
 import { CreateBuildingModal, type CreateBuildingModalHandle } from './CreateBuildingModal'
 import { EditBuildingModal } from './EditBuildingModal'
@@ -118,25 +118,20 @@ export const ProjectPage = () => {
 			</Group>
 
 			{project.buildingsCount === 0 ? (
-				<Paper
-					withBorder
-					style={{ borderStyle: 'dashed', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
-					p={'xl'}
-					mih={240}
-				>
-					<Stack align={'center'} gap={'md'}>
+				<EmptyState
+					iconContent={
 						<Group align={'center'} gap={2}>
 							<IconPlus size={24} color={'gray'} />
 							<Box c={'gray'}>
 								<IconBuilding size={64} stroke={1} />
 							</Box>
 						</Group>
-						<Text size={'lg'} c={'dimmed'}>Корпусов пока нет</Text>
-						<Button variant={'outline'} leftSection={<IconPlus size={16} />} onClick={() => createBuildingModalRef.current?.open()}>
-							Добавить корпус
-						</Button>
-					</Stack>
-				</Paper>
+					}
+					message={'Корпусов пока нет'}
+					buttonLabel={'Добавить корпус'}
+					buttonLeftSection={<IconPlus size={16} />}
+					onButtonClick={() => createBuildingModalRef.current?.open()}
+				/>
 			) : (
 				<SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing={'md'}>
 					{buildings.map((building) => (
