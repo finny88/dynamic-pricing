@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Modal, Stack, Text, Title } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
@@ -7,32 +6,27 @@ import { ProjectFormFields } from './ProjectFormFields'
 import type { ProjectFormValues } from './projectFormConfig'
 
 interface Props {
-	project: Project | null
+	project: Project
 	onClose: () => void
 }
 
 export const EditProjectModal = ({ project, onClose }: Props) => {
 	const [updateProject, { isLoading }] = useUpdateProjectMutation()
-	const [opened, { open, close }] = useDisclosure(false)
+	const [opened, { close }] = useDisclosure(true)
 
-	const { register, handleSubmit, control, reset, formState: { errors } } = useForm<ProjectFormValues>()
-
-	useEffect(() => {
-		if (project) {
-			reset({
-				name: project.name,
-				code: project.code,
-				city: project.city,
-				address: project.address,
-				housingClass: project.housingClass,
-			})
-			open()
-		}
-	}, [project, open, reset])
+	const { register, handleSubmit, control, formState: { errors } } = useForm<ProjectFormValues>({
+		defaultValues: {
+			name: project.name,
+			code: project.code,
+			city: project.city,
+			address: project.address,
+			housingClass: project.housingClass,
+		},
+	})
 
 	const onSubmit = async (values: ProjectFormValues) => {
 		const dto: CreateProjectDto = {
-			...project!,
+			...project,
 			name: values.name.trim(),
 			code: values.code?.trim() || null,
 			housingClass: values.housingClass || null,
@@ -54,7 +48,7 @@ export const EditProjectModal = ({ project, onClose }: Props) => {
 			title={
 				<Stack gap={2}>
 					<Title order={4}>Редактировать ЖК</Title>
-					<Text size={'sm'} c={'dimmed'}>{project?.name}</Text>
+					<Text size={'sm'} c={'dimmed'}>{project.name}</Text>
 				</Stack>
 			}
 		>

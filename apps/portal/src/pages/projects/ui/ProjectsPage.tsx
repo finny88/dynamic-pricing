@@ -97,14 +97,18 @@ export const ProjectsPage = () => {
 			)}
 
 			<CreateProjectModal ref={createModalRef} />
-			<EditProjectModal
-				project={editingProject}
-				onClose={() => setEditingProject(null)}
-			/>
-			<DeleteProjectModal
-				project={deletingProject}
-				onClose={() => setDeletingProject(null)}
-			/>
+			{editingProject && (
+				<EditProjectModal
+					project={editingProject}
+					onClose={() => setEditingProject(null)}
+				/>
+			)}
+			{deletingProject && (
+				<DeleteProjectModal
+					project={deletingProject}
+					onClose={() => setDeletingProject(null)}
+				/>
+			)}
 		</Container>
 	)
 }
