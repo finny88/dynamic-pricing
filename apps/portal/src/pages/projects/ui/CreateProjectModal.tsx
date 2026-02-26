@@ -10,8 +10,9 @@ const initialProject: CreateProjectDto = {
 	id: '',
 	name: '',
 	code: null,
+	region: null,
+	area: null,
 	city: null,
-	address: null,
 	housingClass: null,
 	profileStatus: '',
 	buildingsCount: 0,
@@ -43,8 +44,9 @@ export const CreateProjectModal = ({ ref }: { ref: Ref<CreateProjectModalHandle>
 			name: values.name.trim(),
 			code: values.code?.trim() || null,
 			housingClass: values.housingClass || null,
+			region: values.region?.trim() || null,
+			area: values.area?.trim() || null,
 			city: values.city?.trim() || null,
-			address: values.address?.trim() || null,
 		}
 
 		const result = await createProject(dto)

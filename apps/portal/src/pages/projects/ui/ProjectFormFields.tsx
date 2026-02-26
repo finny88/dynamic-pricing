@@ -28,16 +28,23 @@ export const ProjectFormFields = ({ register, control, errors, isLoading, submit
 				{...register('code')}
 			/>
 			<TextInput
+				label={'Регион'}
+				placeholder={'Введите регион'}
+				{...register('region')}
+			/>
+		</SimpleGrid>
+		<SimpleGrid cols={2}>
+			<TextInput
+				label={'Район'}
+				placeholder={'Введите район'}
+				{...register('area')}
+			/>
+			<TextInput
 				label={'Город'}
 				placeholder={'Введите город'}
 				{...register('city')}
 			/>
 		</SimpleGrid>
-		<TextInput
-			label={'Адрес'}
-			placeholder={'Введите адрес'}
-			{...register('address')}
-		/>
 		<Controller
 			name={'housingClass'}
 			control={control}

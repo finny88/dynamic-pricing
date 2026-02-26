@@ -63,11 +63,11 @@ export const ProjectsPage = () => {
 									</Menu>
 								</Group>
 
-								{(project.city || project.address) && (
+								{(project.region || project.area || project.city) && (
 									<Group gap={4} align={'center'}>
 										<IconMapPin size={14} color={'gray'} />
 										<Text size={'sm'} c={'dimmed'} truncate>
-											{[project.city, project.address].filter(Boolean).join(', ')}
+											{[project.region, project.area, project.city].filter(Boolean).join(', ')}
 										</Text>
 									</Group>
 								)}

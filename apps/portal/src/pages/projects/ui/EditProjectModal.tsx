@@ -18,8 +18,9 @@ export const EditProjectModal = ({ project, onClose }: Props) => {
 		defaultValues: {
 			name: project.name,
 			code: project.code,
+			region: project.region,
+			area: project.area,
 			city: project.city,
-			address: project.address,
 			housingClass: project.housingClass,
 		},
 	})
@@ -30,8 +31,9 @@ export const EditProjectModal = ({ project, onClose }: Props) => {
 			name: values.name.trim(),
 			code: values.code?.trim() || null,
 			housingClass: values.housingClass || null,
+			region: values.region?.trim() || null,
+			area: values.area?.trim() || null,
 			city: values.city?.trim() || null,
-			address: values.address?.trim() || null,
 		}
 
 		const result = await updateProject(dto)

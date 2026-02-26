@@ -1,6 +1,6 @@
 import type { CreateProjectDto } from '@entities/project'
 
-export type ProjectFormValues = Pick<CreateProjectDto, 'name' | 'code' | 'housingClass' | 'city' | 'address'>
+export type ProjectFormValues = Pick<CreateProjectDto, 'name' | 'code' | 'housingClass' | 'city' | 'region' | 'area'>
 
 export const housingClassLabels: Record<string, string> = {
 	economy: 'Эконом',
