@@ -29,7 +29,26 @@ export const buildingsApi = rootApi
 					{ type: PROJECT_TAG, id: projectId },
 				],
 			}),
+			updateBuilding: builder.mutation<Building, CreateBuildingDto>({
+				query: ({ projectId, id, ...data }) => ({ url: `/projects/${projectId}/buildings/${id}`, method: 'PUT', data: { projectId, id, ...data } }),
+				invalidatesTags: (
+					_result, _error, { id, projectId }
+				) => [
+					{ type: BUILDING_TAG, id },
+					{ type: BUILDING_TAG, id: `LIST_${projectId}` },
+				],
+			}),
+			deleteBuilding: builder.mutation<void, { id: string; projectId: string }>({
+				query: ({ projectId, id }) => ({ url: `/projects/${projectId}/buildings/${id}`, method: 'DELETE' }),
+				invalidatesTags: (
+					_result, _error, { id, projectId }
+				) => [
+					{ type: BUILDING_TAG, id },
+					{ type: BUILDING_TAG, id: `LIST_${projectId}` },
+					{ type: PROJECT_TAG, id: projectId },
+				],
+			}),
 		}),
 	})
 
-export const { useGetBuildingsByProjectQuery, useCreateBuildingMutation } = buildingsApi
+export const { useGetBuildingsByProjectQuery, useCreateBuildingMutation, useUpdateBuildingMutation, useDeleteBuildingMutation } = buildingsApi

@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
 	ActionIcon,
@@ -17,9 +17,11 @@ import {
 } from '@mantine/core'
 import { IconArrowLeft, IconMapPin, IconBuilding, IconPlus } from '@tabler/icons-react'
 import { useGetProjectQuery, housingClassLabels } from '@entities/project'
-import { useGetBuildingsByProjectQuery } from '@entities/building'
+import { useGetBuildingsByProjectQuery, type Building } from '@entities/building'
 import { BuildingCard } from './BuildingCard'
 import { CreateBuildingModal, type CreateBuildingModalHandle } from './CreateBuildingModal'
+import { EditBuildingModal } from './EditBuildingModal'
+import { DeleteBuildingModal } from './DeleteBuildingModal'
 
 const formatDate = (iso: string) =>
 	new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
@@ -32,6 +34,8 @@ export const ProjectPage = () => {
 	})
 	const createBuildingModalRef = useRef<CreateBuildingModalHandle>(null)
 	const { data: buildings = [] } = useGetBuildingsByProjectQuery(id!, { skip: !id })
+	const [editingBuilding, setEditingBuilding] = useState<Building | null>(null)
+	const [deletingBuilding, setDeletingBuilding] = useState<Building | null>(null)
 
 	if (isLoading) {
 		return (
@@ -136,12 +140,18 @@ export const ProjectPage = () => {
 			) : (
 				<SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing={'md'}>
 					{buildings.map((building) => (
-						<BuildingCard key={building.id} building={building} />
+						<BuildingCard key={building.id} building={building} onEdit={setEditingBuilding} onDelete={setDeletingBuilding} />
 					))}
 				</SimpleGrid>
 			)}
 
 			<CreateBuildingModal ref={createBuildingModalRef} projectId={id!} />
+			{editingBuilding && (
+				<EditBuildingModal building={editingBuilding} onClose={() => setEditingBuilding(null)} />
+			)}
+			{deletingBuilding && (
+				<DeleteBuildingModal building={deletingBuilding} onClose={() => setDeletingBuilding(null)} />
+			)}
 		</Container>
 	)
 }

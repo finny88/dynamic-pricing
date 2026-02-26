@@ -1,5 +1,5 @@
 import { http, HttpResponse, type PathParams } from 'msw'
-import { addItem, getAllByIndex, getById, updateItem, STORES } from '@shared/lib/db'
+import { addItem, deleteItem, getAllByIndex, getById, updateItem, STORES } from '@shared/lib/db'
 import type { Building } from '../model/building'
 import type { CreateBuildingDto } from './buildingsApi'
 
@@ -23,5 +23,23 @@ export const buildingHandlers = [
 		}
 
 		return HttpResponse.json({ building }, { status: 201 })
+	}),
+
+	http.put<{ projectId: string; buildingId: string }, CreateBuildingDto>('/api/projects/:projectId/buildings/:buildingId', async ({ request }) => {
+		const body = await request.json()
+		const building: Building = { ...body, updatedAt: new Date().toISOString() }
+		await updateItem<Building>(STORES.BUILDINGS, building)
+		return HttpResponse.json({ building })
+	}),
+
+	http.delete<{ projectId: string; buildingId: string }>('/api/projects/:projectId/buildings/:buildingId', async ({ params }) => {
+		await deleteItem(STORES.BUILDINGS, params.buildingId)
+
+		const project = await getById<{ id: string; buildingsCount: number; updatedAt: string } & Record<string, unknown>>(STORES.PROJECTS, params.projectId)
+		if (project) {
+			await updateItem(STORES.PROJECTS, { ...project, buildingsCount: project.buildingsCount - 1, updatedAt: new Date().toISOString() })
+		}
+
+		return new HttpResponse(null, { status: 204 })
 	}),
 ]
