@@ -67,7 +67,7 @@ export const CreateProjectModal = ({ ref }: { ref: Ref<CreateProjectModalHandle>
 				</Stack>
 			}
 		>
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form onSubmit={handleSubmit(onSubmit)} noValidate>
 				<ProjectFormFields
 					register={register}
 					control={control}

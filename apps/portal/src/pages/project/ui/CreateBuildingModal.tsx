@@ -45,7 +45,7 @@ export const CreateBuildingModal = ({ ref, projectId }: { ref: Ref<CreateBuildin
 				</Stack>
 			}
 		>
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form onSubmit={handleSubmit(onSubmit)} noValidate>
 				<BuildingFormFields
 					register={register}
 					errors={errors}

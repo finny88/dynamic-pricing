@@ -54,7 +54,7 @@ export const EditProjectModal = ({ project, onClose }: Props) => {
 				</Stack>
 			}
 		>
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form onSubmit={handleSubmit(onSubmit)} noValidate>
 				<ProjectFormFields
 					register={register}
 					control={control}
