@@ -59,6 +59,19 @@ export const updateItem = async <T>(storeName: string, item: T): Promise<void> =
 	})
 }
 
+export const deleteItem = async (storeName: string, id: string): Promise<void> => {
+	const db = await openDB()
+	return new Promise((resolve, reject) => {
+		const request = db
+			.transaction(storeName, 'readwrite')
+			.objectStore(storeName)
+			.delete(id)
+
+		request.onsuccess = () => resolve()
+		request.onerror = () => reject(request.error)
+	})
+}
+
 export const getAll = async <T>(storeName: string): Promise<T[]> => {
 	const db = await openDB()
 	return new Promise((resolve, reject) => {

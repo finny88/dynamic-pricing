@@ -3,6 +3,7 @@ import { ActionIcon, Badge, Button, Card, Center, Container, Divider, Group, Men
 import { IconDots, IconMapPin, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react'
 import { useGetProjectsQuery, type Project } from '@entities/project'
 import { CreateProjectModal, type CreateProjectModalHandle } from './CreateProjectModal'
+import { DeleteProjectModal } from './DeleteProjectModal'
 import { EditProjectModal } from './EditProjectModal'
 import { housingClassLabels } from './projectFormConfig'
 
@@ -13,6 +14,7 @@ export const ProjectsPage = () => {
 	const { data: projects = [] } = useGetProjectsQuery()
 	const createModalRef = useRef<CreateProjectModalHandle>(null)
 	const [editingProject, setEditingProject] = useState<Project | null>(null)
+	const [deletingProject, setDeletingProject] = useState<Project | null>(null)
 
 	return (
 		<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
@@ -54,7 +56,7 @@ export const ProjectsPage = () => {
 											<Menu.Item leftSection={<IconPencil size={14} />} onClick={() => setEditingProject(project)}>
 												Редактировать
 											</Menu.Item>
-											<Menu.Item leftSection={<IconTrash size={14} />} color={'red'}>
+											<Menu.Item leftSection={<IconTrash size={14} />} color={'red'} onClick={() => setDeletingProject(project)}>
 												Удалить
 											</Menu.Item>
 										</Menu.Dropdown>
@@ -98,6 +100,10 @@ export const ProjectsPage = () => {
 			<EditProjectModal
 				project={editingProject}
 				onClose={() => setEditingProject(null)}
+			/>
+			<DeleteProjectModal
+				project={deletingProject}
+				onClose={() => setDeletingProject(null)}
 			/>
 		</Container>
 	)

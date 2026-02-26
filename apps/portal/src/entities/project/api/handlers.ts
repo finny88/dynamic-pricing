@@ -1,5 +1,5 @@
 import { http, HttpResponse, type PathParams } from 'msw'
-import { addItem, getAll, updateItem, STORES } from '@shared/lib/db'
+import { addItem, deleteItem, getAll, updateItem, STORES } from '@shared/lib/db'
 import type { Project } from '../model/project'
 import type { CreateProjectDto } from './projectsApi'
 
@@ -33,5 +33,10 @@ export const projectHandlers = [
 		const project: Project = { ...body, id: params.id, updatedAt: new Date().toISOString() }
 		await updateItem<Project>(STORES.PROJECTS, project)
 		return HttpResponse.json({ project })
+	}),
+
+	http.delete<{ id: string }>('/api/projects/:id', async ({ params }) => {
+		await deleteItem(STORES.PROJECTS, params.id)
+		return new HttpResponse(null, { status: 204 })
 	}),
 ]
