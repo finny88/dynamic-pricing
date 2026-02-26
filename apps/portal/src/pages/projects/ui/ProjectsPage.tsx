@@ -1,17 +1,18 @@
 import { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ActionIcon, Badge, Button, Card, Center, Container, Divider, Group, Menu, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { IconDots, IconMapPin, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react'
-import { useGetProjectsQuery, type Project } from '@entities/project'
+import { useGetProjectsQuery, housingClassLabels, type Project } from '@entities/project'
 import { CreateProjectModal, type CreateProjectModalHandle } from './CreateProjectModal'
 import { DeleteProjectModal } from './DeleteProjectModal'
 import { EditProjectModal } from './EditProjectModal'
-import { housingClassLabels } from './projectFormConfig'
 
 const formatDate = (iso: string) =>
 	new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
 export const ProjectsPage = () => {
 	const { data: projects = [] } = useGetProjectsQuery()
+	const navigate = useNavigate()
 	const createModalRef = useRef<CreateProjectModalHandle>(null)
 	const [editingProject, setEditingProject] = useState<Project | null>(null)
 	const [deletingProject, setDeletingProject] = useState<Project | null>(null)
@@ -40,27 +41,29 @@ export const ProjectsPage = () => {
 			) : (
 				<SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing={'md'}>
 					{projects.map((project) => (
-						<Card key={project.id} shadow={'sm'} padding={'lg'} radius={'md'} withBorder>
+						<Card key={project.id} shadow={'sm'} padding={'lg'} radius={'md'} withBorder style={{ cursor: 'pointer' }} onClick={() => navigate(`/projects/${project.id}`)}>
 							<Stack gap={'sm'}>
 								<Group justify={'space-between'} align={'center'} wrap={'nowrap'}>
 									<Text fw={600} size={'md'} truncate>
 										{project.name}
 									</Text>
-									<Menu position={'bottom-end'} withinPortal>
-										<Menu.Target>
-											<ActionIcon variant={'subtle'} color={'gray'} size={'sm'}>
-												<IconDots size={16} />
-											</ActionIcon>
-										</Menu.Target>
-										<Menu.Dropdown>
-											<Menu.Item leftSection={<IconPencil size={14} />} onClick={() => setEditingProject(project)}>
-												Редактировать
-											</Menu.Item>
-											<Menu.Item leftSection={<IconTrash size={14} />} color={'red'} onClick={() => setDeletingProject(project)}>
-												Удалить
-											</Menu.Item>
-										</Menu.Dropdown>
-									</Menu>
+									<div onClick={(e) => e.stopPropagation()}>
+										<Menu position={'bottom-end'} withinPortal>
+											<Menu.Target>
+												<ActionIcon variant={'subtle'} color={'gray'} size={'sm'}>
+													<IconDots size={16} />
+												</ActionIcon>
+											</Menu.Target>
+											<Menu.Dropdown>
+												<Menu.Item leftSection={<IconPencil size={14} />} onClick={() => setEditingProject(project)}>
+													Редактировать
+												</Menu.Item>
+												<Menu.Item leftSection={<IconTrash size={14} />} color={'red'} onClick={() => setDeletingProject(project)}>
+													Удалить
+												</Menu.Item>
+											</Menu.Dropdown>
+										</Menu>
+									</div>
 								</Group>
 
 								{(project.region || project.area || project.city) && (

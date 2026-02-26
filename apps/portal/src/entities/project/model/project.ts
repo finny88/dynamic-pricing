@@ -1,3 +1,10 @@
+export const housingClassLabels: Record<string, string> = {
+	economy: 'Эконом',
+	comfort: 'Комфорт',
+	business: 'Бизнес',
+	elite: 'Элит',
+}
+
 export interface Project {
 	id: string
 	name: string
