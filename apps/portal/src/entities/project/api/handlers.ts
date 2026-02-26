@@ -1,5 +1,5 @@
 import { http, HttpResponse, type PathParams } from 'msw'
-import { addItem, deleteItem, getAll, updateItem, STORES } from '@shared/lib/db'
+import { addItem, deleteItem, getAll, getById, updateItem, STORES } from '@shared/lib/db'
 import type { Project } from '../model/project'
 import type { CreateProjectDto } from './projectsApi'
 
@@ -7,6 +7,14 @@ export const projectHandlers = [
 	http.get('/api/projects', async () => {
 		const projects = await getAll<Project>(STORES.PROJECTS)
 		return HttpResponse.json({ projects })
+	}),
+
+	http.get<{ id: string }>('/api/projects/:id', async ({ params }) => {
+		const project = await getById<Project>(STORES.PROJECTS, params.id)
+		if (!project) {
+			return new HttpResponse(null, { status: 404 })
+		}
+		return HttpResponse.json({ project })
 	}),
 
 	http.post<PathParams, CreateProjectDto>('/api/projects', async ({ request }) => {

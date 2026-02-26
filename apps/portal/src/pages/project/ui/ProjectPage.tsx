@@ -1,7 +1,21 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { ActionIcon, Badge, Button, Container, Divider, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
-import { IconArrowLeft, IconMapPin } from '@tabler/icons-react'
-import { useGetProjectsQuery, housingClassLabels } from '@entities/project'
+import {
+	ActionIcon,
+	Badge,
+	Button,
+	Container,
+	Divider,
+	Group,
+	SimpleGrid,
+	Stack,
+	Text,
+	Title,
+	Box,
+	Paper,
+	Skeleton,
+} from '@mantine/core'
+import { IconArrowLeft, IconMapPin, IconBuilding, IconPlus } from '@tabler/icons-react'
+import { useGetProjectQuery, housingClassLabels } from '@entities/project'
 
 const formatDate = (iso: string) =>
 	new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
@@ -9,10 +23,25 @@ const formatDate = (iso: string) =>
 export const ProjectPage = () => {
 	const { id } = useParams<{ id: string }>()
 	const navigate = useNavigate()
-	const { data: projects = [] } = useGetProjectsQuery()
-	const project = projects.find((p) => p.id === id)
+	const { data: project, isLoading, error } = useGetProjectQuery(id!, {
+		skip: !id,
+	})
 
-	if (!project) {
+	if (isLoading) {
+		return (
+			<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+				<Stack gap={'lg'}>
+					<Skeleton h={32} w={200} />
+					<Skeleton h={200} />
+					<Divider />
+					<Skeleton h={32} w={150} />
+					<Skeleton h={240} />
+				</Stack>
+			</Container>
+		)
+	}
+
+	if (error || !project) {
 		return (
 			<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
 				<Stack align={'center'} pt={'xl'} gap={8}>
@@ -69,6 +98,38 @@ export const ProjectPage = () => {
 					<Text fw={600} size={'lg'}>{formatDate(project.updatedAt)}</Text>
 				</Stack>
 			</SimpleGrid>
+
+			<Divider my={'xl'} />
+
+			{/* Buildings Section */}
+			<Group justify={'space-between'} mb={'md'}>
+				<Title order={4}>Корпуса</Title>
+				<Button size={'sm'} leftSection={<IconPlus size={16} />}>Добавить корпус</Button>
+			</Group>
+
+			{project.buildingsCount === 0 ? (
+				<Paper
+					withBorder
+					style={{ borderStyle: 'dashed', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
+					p={'xl'}
+					mih={240}
+				>
+					<Stack align={'center'} gap={'md'}>
+						<Group align={'center'} gap={2}>
+							<IconPlus size={24} color={'gray'} />
+							<Box c={'gray'}>
+								<IconBuilding size={64} stroke={1} />
+							</Box>
+						</Group>
+						<Text size={'lg'} c={'dimmed'}>Корпусов пока нет</Text>
+						<Button variant={'outline'} leftSection={<IconPlus size={16} />}>
+							Добавить корпус
+						</Button>
+					</Stack>
+				</Paper>
+			) : (
+				<Text c={'dimmed'}>Список корпусов будет здесь</Text>
+			)}
 		</Container>
 	)
 }

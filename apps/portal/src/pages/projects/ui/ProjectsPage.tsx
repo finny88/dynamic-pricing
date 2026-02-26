@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ActionIcon, Badge, Button, Card, Center, Container, Divider, Group, Menu, SimpleGrid, Stack, Text, Title } from '@mantine/core'
-import { IconDots, IconMapPin, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react'
+import { ActionIcon, Badge, Box, Button, Card, Container, Divider, Group, Menu, Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core'
+import { IconDots, IconMapPin, IconPencil, IconPlus, IconTrash, IconBuildingSkyscraper } from '@tabler/icons-react'
 import { useGetProjectsQuery, housingClassLabels, type Project } from '@entities/project'
 import { CreateProjectModal, type CreateProjectModalHandle } from './CreateProjectModal'
 import { DeleteProjectModal } from './DeleteProjectModal'
@@ -32,12 +32,22 @@ export const ProjectsPage = () => {
 			</Group>
 
 			{projects.length === 0 ? (
-				<Center py={'xl'}>
-					<Stack align={'center'} gap={8}>
-						<Title order={3} c={'dimmed'}>Проектов пока нет</Title>
-						<Text size={'sm'} c={'dimmed'}>Создайте первый ЖК</Text>
+				<Paper
+					withBorder
+					style={{ borderStyle: 'dashed', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
+					p={'xl'}
+					mih={240}
+				>
+					<Stack align={'center'} gap={'md'}>
+						<Box c={'gray'} h={64} w={64}>
+							<IconBuildingSkyscraper size={64} stroke={1} />
+						</Box>
+						<Text size={'lg'} c={'dimmed'}>Проектов пока нет</Text>
+						<Button variant={'outline'} leftSection={<IconPlus size={16} />} onClick={() => createModalRef.current?.open()}>
+							Создать ЖК
+						</Button>
 					</Stack>
-				</Center>
+				</Paper>
 			) : (
 				<SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing={'md'}>
 					{projects.map((project) => (

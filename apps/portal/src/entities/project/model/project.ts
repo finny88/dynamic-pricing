@@ -5,8 +5,9 @@ export const housingClassLabels: Record<string, string> = {
 	elite: 'Элит',
 }
 
-export interface Project {
-	id: string
+import type { BaseEntity } from '@shared/lib/entity'
+
+export interface Project extends BaseEntity {
 	name: string
 	developer: string | null
 	region: string | null
@@ -20,5 +21,4 @@ export interface Project {
 	soldArea: number
 	planArea: number
 	factArea: number
-	updatedAt: string
 }
