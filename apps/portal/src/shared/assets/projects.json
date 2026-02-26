@@ -3,7 +3,7 @@
       {
           "id": "cmm1ral63000fvdoaytvmg9ol",
           "name": "ЖК Академия",
-          "code": "ACAD",
+          "developer": "ACAD",
           "city": "Москва",
           "address": "ул. Строителей, д.10",
           "housingClass": "business",
@@ -20,7 +20,7 @@
       {
           "id": "cmm1qdvga0001vdoaqgud814p",
           "name": "ЖК Модернист",
-          "code": "MDR-001",
+          "developer": "MDR-001",
           "city": "Москва",
           "address": "ул. Спартаковская, д. 45",
           "housingClass": "comfort",

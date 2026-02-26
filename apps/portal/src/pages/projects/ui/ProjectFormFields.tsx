@@ -23,9 +23,9 @@ export const ProjectFormFields = ({ register, control, errors, isLoading, submit
 		/>
 		<SimpleGrid cols={2}>
 			<TextInput
-				label={'Код проекта'}
-				placeholder={'Введите код'}
-				{...register('code')}
+				label={'Застройщик'}
+				placeholder={'Введите застройщика'}
+				{...register('developer')}
 			/>
 			<TextInput
 				label={'Регион'}

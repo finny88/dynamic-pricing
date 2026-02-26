@@ -8,7 +8,7 @@ export const housingClassLabels: Record<string, string> = {
 export interface Project {
 	id: string
 	name: string
-	code: string | null
+	developer: string | null
 	region: string | null
 	area: string | null
 	city: string | null

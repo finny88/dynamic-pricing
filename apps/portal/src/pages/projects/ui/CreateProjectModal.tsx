@@ -9,7 +9,7 @@ import type { ProjectFormValues } from './projectFormConfig'
 const initialProject: CreateProjectDto = {
 	id: '',
 	name: '',
-	code: null,
+	developer: null,
 	region: null,
 	area: null,
 	city: null,
@@ -42,7 +42,7 @@ export const CreateProjectModal = ({ ref }: { ref: Ref<CreateProjectModalHandle>
 			...initialProject,
 			id: crypto.randomUUID(),
 			name: values.name.trim(),
-			code: values.code?.trim() || null,
+			developer: values.developer?.trim() || null,
 			housingClass: values.housingClass || null,
 			region: values.region?.trim() || null,
 			area: values.area?.trim() || null,

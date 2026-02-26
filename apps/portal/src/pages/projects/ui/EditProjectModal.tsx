@@ -17,7 +17,7 @@ export const EditProjectModal = ({ project, onClose }: Props) => {
 	const { register, handleSubmit, control, formState: { errors } } = useForm<ProjectFormValues>({
 		defaultValues: {
 			name: project.name,
-			code: project.code,
+			developer: project.developer,
 			region: project.region,
 			area: project.area,
 			city: project.city,
@@ -29,7 +29,7 @@ export const EditProjectModal = ({ project, onClose }: Props) => {
 		const dto: CreateProjectDto = {
 			...project,
 			name: values.name.trim(),
-			code: values.code?.trim() || null,
+			developer: values.developer?.trim() || null,
 			housingClass: values.housingClass || null,
 			region: values.region?.trim() || null,
 			area: values.area?.trim() || null,
