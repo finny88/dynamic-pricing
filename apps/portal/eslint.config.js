@@ -14,6 +14,8 @@ const require = createRequire(import.meta.url)
 const { layersLib } = require('@feature-sliced/eslint-config/utils')
 
 const getFsdElements = () => [
+	// @x cross-import files must be listed first to take precedence over layer elements
+	{ type: 'entities_x', pattern: 'src/entities/*/@x/*', mode: 'file' },
 	...layersLib.FS_LAYERS.map((layer) => ({
 		type: layer,
 		pattern: `src/${layer}/!(_*){,/*}`,
@@ -33,6 +35,9 @@ const getFsdBoundaryRules = () => [
 		from: layer,
 		allow: layersLib.getLowerLayers(layer),
 	})),
+	// @x notation: entities may import cross-import files, and @x files may re-export from their own entity
+	{ from: 'entities', allow: 'entities_x' },
+	{ from: 'entities_x', allow: 'entities' },
 	{ from: 'shared', allow: 'shared' },
 	{ from: 'app', allow: 'app' },
 	...layersLib.FS_LAYERS.map((layer) => ({

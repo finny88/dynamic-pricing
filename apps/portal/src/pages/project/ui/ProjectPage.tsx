@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
 	ActionIcon,
@@ -16,6 +17,9 @@ import {
 } from '@mantine/core'
 import { IconArrowLeft, IconMapPin, IconBuilding, IconPlus } from '@tabler/icons-react'
 import { useGetProjectQuery, housingClassLabels } from '@entities/project'
+import { useGetBuildingsByProjectQuery } from '@entities/building'
+import { BuildingCard } from './BuildingCard'
+import { CreateBuildingModal, type CreateBuildingModalHandle } from './CreateBuildingModal'
 
 const formatDate = (iso: string) =>
 	new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
@@ -26,6 +30,8 @@ export const ProjectPage = () => {
 	const { data: project, isLoading, error } = useGetProjectQuery(id!, {
 		skip: !id,
 	})
+	const createBuildingModalRef = useRef<CreateBuildingModalHandle>(null)
+	const { data: buildings = [] } = useGetBuildingsByProjectQuery(id!, { skip: !id })
 
 	if (isLoading) {
 		return (
@@ -104,7 +110,7 @@ export const ProjectPage = () => {
 			{/* Buildings Section */}
 			<Group justify={'space-between'} mb={'md'}>
 				<Title order={4}>Корпуса</Title>
-				<Button size={'sm'} leftSection={<IconPlus size={16} />}>Добавить корпус</Button>
+				<Button size={'sm'} leftSection={<IconPlus size={16} />} onClick={() => createBuildingModalRef.current?.open()}>Добавить корпус</Button>
 			</Group>
 
 			{project.buildingsCount === 0 ? (
@@ -122,14 +128,20 @@ export const ProjectPage = () => {
 							</Box>
 						</Group>
 						<Text size={'lg'} c={'dimmed'}>Корпусов пока нет</Text>
-						<Button variant={'outline'} leftSection={<IconPlus size={16} />}>
+						<Button variant={'outline'} leftSection={<IconPlus size={16} />} onClick={() => createBuildingModalRef.current?.open()}>
 							Добавить корпус
 						</Button>
 					</Stack>
 				</Paper>
 			) : (
-				<Text c={'dimmed'}>Список корпусов будет здесь</Text>
+				<SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing={'md'}>
+					{buildings.map((building) => (
+						<BuildingCard key={building.id} building={building} />
+					))}
+				</SimpleGrid>
 			)}
+
+			<CreateBuildingModal ref={createBuildingModalRef} projectId={id!} />
 		</Container>
 	)
 }
