@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { Button, Container, Divider, Skeleton, Stack, Title } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
-import { useGetBuildingByIdQuery, useUpdateBuildingMutation, BuildingPageHeader } from '@entities/building'
+import { useGetBuildingByIdQuery, useUpdateBuildingMutation, BuildingPageHeader, type BuildingPageInitialState } from '@entities/building'
 import { useGetProjectQuery } from '@entities/project'
 import type { Unit } from '@entities/unit'
 import { ExcelUpload } from '@features/excel-upload'
@@ -44,7 +44,7 @@ export const BuildingExportPage = () => {
 	const handleSuccess = async (units: Unit[]) => {
 		const { updatedAt: _, ...buildingDto } = building
 		await updateBuilding({ ...buildingDto, units })
-		navigate(`/projects/${projectId}/buildings/${buildingId}`)
+		navigate(`/projects/${projectId}/buildings/${buildingId}`, { state: { showViewer: true } satisfies BuildingPageInitialState })
 	}
 
 	return (
@@ -55,7 +55,7 @@ export const BuildingExportPage = () => {
 				projectName={project?.name ?? ''}
 				buildingLink={`/projects/${projectId}/buildings/${buildingId}`}
 			/>
-			<ExcelUpload onSuccess={(units) => { void handleSuccess(units) }} />
+			<ExcelUpload onSuccess={(units) => handleSuccess(units)} />
 		</Container>
 	)
 }

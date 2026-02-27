@@ -7,3 +7,7 @@ export interface Building extends BaseEntity, WithTotalArea {
 	address: string | null
 	units: Unit[]
 }
+
+export interface BuildingPageInitialState {
+	showViewer: boolean
+}

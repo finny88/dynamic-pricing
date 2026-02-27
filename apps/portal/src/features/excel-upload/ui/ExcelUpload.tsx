@@ -12,7 +12,7 @@ import { FilePreviewTable } from './FilePreviewTable'
 const ACCEPT = '.xls,.xlsx,.csv'
 
 interface Props {
-	onSuccess: (units: Unit[], mappedRawKeys: Set<string>) => void
+	onSuccess: (units: Unit[]) => void
 }
 
 export const ExcelUpload = ({ onSuccess }: Props) => {
@@ -35,7 +35,6 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 			return
 		}
 		setLoading(true)
-		await new Promise((res) => setTimeout(res, 5000)) // for better UX, to show loading state
 		try {
 			const parsed = await parseFile(
 				file, mapping, schema
@@ -43,10 +42,12 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 			if (parsed.errors.length > 0) {
 				setInvalid(parsed.errors)
 				setErrorsModalOpen(true)
+				setLoading(false)
 			} else {
-				onSuccess(parsed.data, new Set(Object.keys(mapping)))
+				onSuccess(parsed.data)
+				// loading stays true — component is about to unmount
 			}
-		} finally {
+		} catch {
 			setLoading(false)
 		}
 	}

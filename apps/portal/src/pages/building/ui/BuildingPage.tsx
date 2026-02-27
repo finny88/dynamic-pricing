@@ -1,5 +1,5 @@
 import { Activity, useState, useTransition } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation, type Location } from 'react-router-dom'
 import {
 	Button,
 	Container,
@@ -13,7 +13,7 @@ import {
 	Tooltip,
 } from '@mantine/core'
 import { IconArrowLeft, IconEye, IconEyeOff, IconFileUpload } from '@tabler/icons-react'
-import { useGetBuildingByIdQuery, BuildingPageHeader } from '@entities/building'
+import { useGetBuildingByIdQuery, BuildingPageHeader, type BuildingPageInitialState } from '@entities/building'
 import { useGetProjectQuery } from '@entities/project'
 import { BuildingViewer } from '@widgets/BuildingViewer'
 
@@ -23,16 +23,12 @@ const formatDate = (iso: string) =>
 export const BuildingPage = () => {
 	const { projectId, buildingId } = useParams<{ projectId: string; buildingId: string }>()
 	const navigate = useNavigate()
-	const [showViewer, setShowViewer] = useState(false)
+	const { state }: Location<BuildingPageInitialState | null> = useLocation()
+	const [showViewer, setShowViewer] = useState(state?.showViewer === true)
 	const [isPending, startTransition] = useTransition()
 
 	const { data: building = null, isLoading, error } = useGetBuildingByIdQuery({ projectId: projectId!, buildingId: buildingId! }, { skip: !projectId || !buildingId })
 	const { data: project } = useGetProjectQuery(projectId!, { skip: !projectId })
-
-	// const handleSuccess = (units: Unit[], mappedRawKeys: Set<string>) => {
-	// 	// TODO: save units to building via updateBuilding mutation
-	// 	navigate(`/projects/${projectId}/buildings/${buildingId}/viewer`)
-	// }
 
 	if (isLoading) {
 		return (
