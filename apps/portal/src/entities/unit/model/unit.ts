@@ -3,7 +3,7 @@ export interface Unit {
 	address: string
 	classType: string
 	building: string
-	section: string
+	section: number
 	salesStartDate: string
 	salesEndDate: string
 	commissioningDate: string
