@@ -1,28 +1,31 @@
-import { useNavigate } from 'react-router-dom'
-import { ActionIcon, Divider, Group, Stack, Title } from '@mantine/core'
-import { IconArrowLeft } from '@tabler/icons-react'
+import { Link } from 'react-router-dom'
+import { Anchor, Breadcrumbs, Divider, Stack, Text, Title } from '@mantine/core'
 import { LocationText } from '@shared/ui/LocationText'
 import type { Building } from '../model/building'
 
 interface Props {
 	building: Building
 	projectId: string
+	projectName: string
+	buildingLink?: string
 }
 
-export const BuildingPageHeader = ({ building, projectId }: Props) => {
-	const navigate = useNavigate()
+export const BuildingPageHeader = ({ building, projectId, projectName, buildingLink }: Props) => {
+	const buildingItem = buildingLink
+		? <Anchor component={Link} to={buildingLink} size={'sm'}>{building.name}</Anchor>
+		: <Text size={'sm'}>{building.name}</Text>
 
 	return (
 		<>
-			<Group mb={'xl'} gap={'sm'}>
-				<ActionIcon variant={'subtle'} color={'gray'} onClick={() => navigate(`/projects/${projectId}`)}>
-					<IconArrowLeft size={18} />
-				</ActionIcon>
-				<Stack gap={2}>
-					<Title order={2}>{building.name}</Title>
-					<LocationText locationParts={[building.address]} />
-				</Stack>
-			</Group>
+			<Breadcrumbs mb={'sm'}>
+				<Anchor component={Link} to={'/projects'} size={'sm'}>Все ЖК</Anchor>
+				<Anchor component={Link} to={`/projects/${projectId}`} size={'sm'}>{projectName}</Anchor>
+				{buildingItem}
+			</Breadcrumbs>
+			<Stack gap={2} mb={'xl'}>
+				<Title order={2}>{building.name}</Title>
+				<LocationText locationParts={[building.address]} />
+			</Stack>
 			<Divider mb={'xl'} />
 		</>
 	)

@@ -14,6 +14,7 @@ import {
 } from '@mantine/core'
 import { IconArrowLeft, IconEye, IconEyeOff, IconFileUpload } from '@tabler/icons-react'
 import { useGetBuildingByIdQuery, BuildingPageHeader } from '@entities/building'
+import { useGetProjectQuery } from '@entities/project'
 import { BuildingViewer } from '@widgets/BuildingViewer'
 
 const formatDate = (iso: string) =>
@@ -26,6 +27,7 @@ export const BuildingPage = () => {
 	const [isPending, startTransition] = useTransition()
 
 	const { data: building = null, isLoading, error } = useGetBuildingByIdQuery({ projectId: projectId!, buildingId: buildingId! }, { skip: !projectId || !buildingId })
+	const { data: project } = useGetProjectQuery(projectId!, { skip: !projectId })
 
 	// const handleSuccess = (units: Unit[], mappedRawKeys: Set<string>) => {
 	// 	// TODO: save units to building via updateBuilding mutation
@@ -60,7 +62,7 @@ export const BuildingPage = () => {
 
 	return (
 		<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
-			<BuildingPageHeader building={building} projectId={projectId!} />
+			<BuildingPageHeader building={building} projectId={projectId!} projectName={project?.name ?? ''} />
 
 			<Group justify={'space-between'} align={'flex-end'}>
 				<SimpleGrid cols={{ base: 2, sm: 4 }} spacing={'md'}>

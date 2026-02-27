@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import {
-	ActionIcon,
+	Anchor,
 	Badge,
+	Breadcrumbs,
 	Button,
 	Container,
 	Divider,
@@ -67,20 +68,23 @@ export const ProjectPage = () => {
 
 	return (
 		<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
-			<Group mb={'xl'} gap={'sm'}>
-				<ActionIcon variant={'subtle'} color={'gray'} onClick={() => navigate('/projects')}>
-					<IconArrowLeft size={18} />
-				</ActionIcon>
-				<Stack gap={2}>
-					<Title order={2}>{project.name}</Title>
-					<LocationText locationParts={[project.region, project.area, project.city]} />
-				</Stack>
-				{project.housingClass && (
-					<Badge variant={'outline'} color={'gray'} ml={'auto'}>
-						{housingClassLabels[project.housingClass] ?? project.housingClass}
-					</Badge>
-				)}
-			</Group>
+			<Stack mb={'xl'} gap={'xs'}>
+				<Breadcrumbs>
+					<Anchor component={Link} to={'/projects'} size={'sm'}>Все ЖК</Anchor>
+					<Text size={'sm'}>{project.name}</Text>
+				</Breadcrumbs>
+				<Group gap={'sm'} align={'center'}>
+					<Stack gap={2}>
+						<Title order={2}>{project.name}</Title>
+						<LocationText locationParts={[project.region, project.area, project.city]} />
+					</Stack>
+					{project.housingClass && (
+						<Badge variant={'outline'} color={'gray'} ml={'auto'}>
+							{housingClassLabels[project.housingClass] ?? project.housingClass}
+						</Badge>
+					)}
+				</Group>
+			</Stack>
 
 			<Divider mb={'xl'} />
 
