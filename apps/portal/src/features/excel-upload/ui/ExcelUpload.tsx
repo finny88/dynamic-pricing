@@ -195,43 +195,40 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 						e.target.value = ''
 					}}
 				/>
-				<TextInput
-					label={<Title order={3}>Загрузить файл</Title>}
-					styles={{ label: { display: 'block', width: 'fit-content', marginInline: 'auto', marginBottom: 4 } }}
-					value={file?.name ?? ''}
-					readOnly
-					disabled={loading}
-					leftSection={file ? <IconFile size={16} /> : null}
-					rightSection={
-						<Group gap={4} wrap={'nowrap'}>
-							{file && (
-								<Button
-									size={'sm'}
-									color={'red'}
-									disabled={loading}
-									leftSection={<IconTrash size={16} />}
-									onClick={() => {
-										setFile(null)
-										setPreview(null)
-										setInvalid(null)
-									}}
-								>
-									Удалить
-								</Button>
-							)}
-							<Button
-								size={'sm'}
-								variant={'filled'}
-								disabled={loading}
-								leftSection={<IconFolder size={16} />}
-								onClick={() => inputRef.current?.click()}
-							>
-								Выбрать ...
-							</Button>
-						</Group>
-					}
-					rightSectionPointerEvents={'auto'}
-				/>
+				<Group align={'flex-end'} wrap={'nowrap'} gap={'xs'}>
+					<TextInput
+						label={<Title order={3}>Загрузить файл</Title>}
+						styles={{ label: { display: 'block', width: 'fit-content', marginInline: 'auto', marginBottom: 4 }, root: { flex: 1 } }}
+						value={file?.name ?? ''}
+						readOnly
+						disabled={loading}
+						leftSection={file ? <IconFile size={16} /> : null}
+					/>
+					{file && (
+						<Button
+							size={'sm'}
+							color={'red'}
+							disabled={loading}
+							leftSection={<IconTrash size={16} />}
+							onClick={() => {
+								setFile(null)
+								setPreview(null)
+								setInvalid(null)
+							}}
+						>
+							Удалить
+						</Button>
+					)}
+					<Button
+						size={'sm'}
+						variant={'filled'}
+						disabled={loading}
+						leftSection={<IconFolder size={16} />}
+						onClick={() => inputRef.current?.click()}
+					>
+						Выбрать ...
+					</Button>
+				</Group>
 				{preview && (
 					<div style={{ flex: '0 1 auto', overflow: 'auto', paddingInline: 'var(--mantine-spacing-md)', paddingBottom: 'var(--mantine-spacing-sm)' }}>
 						<FilePreviewTable preview={preview} loading={loading} onParse={(mapping, schema) => { void handleParse(mapping, schema) }} />
