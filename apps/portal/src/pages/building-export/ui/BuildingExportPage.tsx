@@ -48,14 +48,16 @@ export const BuildingExportPage = () => {
 	}
 
 	return (
-		<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
-			<BuildingPageHeader
-				building={building}
-				projectId={projectId!}
-				projectName={project?.name ?? ''}
-				buildingLink={`/projects/${projectId}/buildings/${buildingId}`}
-			/>
+		<>
+			<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+				<BuildingPageHeader
+					building={building}
+					projectId={projectId!}
+					projectName={project?.name ?? ''}
+					buildingLink={`/projects/${projectId}/buildings/${buildingId}`}
+				/>
+			</Container>
 			<ExcelUpload onSuccess={(units) => handleSuccess(units)} />
-		</Container>
+		</>
 	)
 }

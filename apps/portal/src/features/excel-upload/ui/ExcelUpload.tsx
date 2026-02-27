@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { ActionIcon, Box, Button, Group, LoadingOverlay, Modal, ScrollArea, Table, Text, TextInput, Title, Tooltip } from '@mantine/core'
+import { ActionIcon, Box, Button, Container, Group, LoadingOverlay, Modal, ScrollArea, Table, Text, TextInput, Title, Tooltip } from '@mantine/core'
 import { IconCopy, IconFile, IconFileSpreadsheet, IconFolder, IconHighlight, IconTrash } from '@tabler/icons-react'
 import * as XLSX from 'xlsx'
 import ExcelJS from 'exceljs'
@@ -184,55 +184,57 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 			</Modal>
 			<Box pos={'relative'}>
 				<LoadingOverlay visible={loading} />
-				<input
-					ref={inputRef}
-					type={'file'}
-					accept={ACCEPT}
-					style={{ display: 'none' }}
-					onChange={(e) => {
-						const selected = e.target.files?.[0]
-						if (selected) { void handleFileChange(selected) }
-						e.target.value = ''
-					}}
-				/>
-				<Group align={'flex-end'} wrap={'nowrap'} gap={'xs'}>
-					<TextInput
-						label={<Title order={3}>Загрузить файл</Title>}
-						styles={{ label: { display: 'block', width: 'fit-content', marginInline: 'auto', marginBottom: 4 }, root: { flex: 1 } }}
-						value={file?.name ?? ''}
-						readOnly
-						disabled={loading}
-						leftSection={file ? <IconFile size={16} /> : null}
+				<Container size={'xl'} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+					<input
+						ref={inputRef}
+						type={'file'}
+						accept={ACCEPT}
+						style={{ display: 'none' }}
+						onChange={(e) => {
+							const selected = e.target.files?.[0]
+							if (selected) { void handleFileChange(selected) }
+							e.target.value = ''
+						}}
 					/>
-					{file && (
+					<Group align={'flex-end'} wrap={'nowrap'} gap={'xs'}>
+						<TextInput
+							label={<Title order={3}>Загрузить файл</Title>}
+							styles={{ label: { display: 'block', width: 'fit-content', marginInline: 'auto', marginBottom: 4 }, root: { flex: 1 } }}
+							value={file?.name ?? ''}
+							readOnly
+							disabled={loading}
+							leftSection={file ? <IconFile size={16} /> : null}
+						/>
+						{file && (
+							<Button
+								size={'sm'}
+								color={'red'}
+								disabled={loading}
+								leftSection={<IconTrash size={16} />}
+								onClick={() => {
+									setFile(null)
+									setPreview(null)
+									setInvalid(null)
+								}}
+							>
+								Удалить
+							</Button>
+						)}
 						<Button
 							size={'sm'}
-							color={'red'}
+							variant={'filled'}
 							disabled={loading}
-							leftSection={<IconTrash size={16} />}
-							onClick={() => {
-								setFile(null)
-								setPreview(null)
-								setInvalid(null)
-							}}
+							leftSection={<IconFolder size={16} />}
+							onClick={() => inputRef.current?.click()}
 						>
-							Удалить
+							Выбрать ...
 						</Button>
-					)}
-					<Button
-						size={'sm'}
-						variant={'filled'}
-						disabled={loading}
-						leftSection={<IconFolder size={16} />}
-						onClick={() => inputRef.current?.click()}
-					>
-						Выбрать ...
-					</Button>
-				</Group>
+					</Group>
+				</Container>
 				{preview && (
-					<div style={{ flex: '0 1 auto', overflow: 'auto', paddingInline: 'var(--mantine-spacing-md)', paddingBottom: 'var(--mantine-spacing-sm)' }}>
+					<Container fluid px={{ base: 'md', sm: 'lg' }} mt={'md'}>
 						<FilePreviewTable preview={preview} loading={loading} onParse={(mapping, schema) => { void handleParse(mapping, schema) }} />
-					</div>
+					</Container>
 				)}
 			</Box>
 		</>
