@@ -71,6 +71,10 @@ export const BuildingPage = () => {
 						<Text fw={600} size={'lg'}>{building.units.length}</Text>
 					</Stack>
 					<Stack gap={4}>
+						<Text size={'xs'} c={'dimmed'}>Площадь</Text>
+						<Text fw={600} size={'lg'}>{building.totalArea} м²</Text>
+					</Stack>
+					<Stack gap={4}>
 						<Text size={'xs'} c={'dimmed'}>Обновлено</Text>
 						<Text fw={600} size={'lg'}>{formatDate(building.updatedAt)}</Text>
 					</Stack>

@@ -43,6 +43,7 @@ export const buildingsApi = rootApi
 				) => [
 					{ type: BUILDING_TAG, id },
 					{ type: BUILDING_TAG, id: `LIST_${projectId}` },
+					{ type: PROJECT_TAG, id: projectId },
 				],
 			}),
 			deleteBuilding: builder.mutation<void, { id: string; projectId: string }>({

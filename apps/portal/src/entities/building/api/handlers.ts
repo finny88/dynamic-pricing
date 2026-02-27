@@ -31,10 +31,34 @@ export const buildingHandlers = [
 		return HttpResponse.json({ building }, { status: 201 })
 	}),
 
-	http.put<{ projectId: string; buildingId: string }, CreateBuildingDto>('/api/projects/:projectId/buildings/:buildingId', async ({ request }) => {
+	http.put<{ projectId: string; buildingId: string }, CreateBuildingDto>('/api/projects/:projectId/buildings/:buildingId', async ({ params, request }) => {
 		const body = await request.json()
-		const building: Building = { ...body, updatedAt: new Date().toISOString() }
+		const totalArea = Math.round(body.units.reduce((sum, unit) => sum + Number(unit.totalAreaSqm), 0))
+		const building: Building = { ...body, totalArea, updatedAt: new Date().toISOString() }
 		await updateItem<Building>(STORES.BUILDINGS, building)
+
+		const buildings = await getAllByIndex<Building>(
+			STORES.BUILDINGS, 'projectId', params.projectId
+		)
+		const lotsCount = buildings.reduce((sum, b) => sum + b.units.length, 0)
+		const buildingsTotalArea = buildings.reduce((sum, b) => sum + b.totalArea, 0)
+
+		const project = await getById<{
+			id: string
+			buildingsCount: number
+			lotsCount: number
+			totalArea: number
+			updatedAt: string
+		} & Record<string, unknown>>(STORES.PROJECTS, params.projectId)
+		if (project) {
+			await updateItem(STORES.PROJECTS, {
+				...project,
+				lotsCount,
+				totalArea: buildingsTotalArea,
+				updatedAt: new Date().toISOString(),
+			})
+		}
+
 		return HttpResponse.json({ building })
 	}),
 

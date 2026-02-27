@@ -1,5 +1,6 @@
 import { http, HttpResponse, type PathParams } from 'msw'
-import { addItem, deleteItem, getAll, getById, updateItem, STORES } from '@shared/lib/db'
+import { addItem, deleteItem, getAll, getAllByIndex, getById, updateItem, STORES } from '@shared/lib/db'
+import type { Building } from '@entities/building/@x/building'
 import type { Project } from '../model/project'
 import type { CreateProjectDto } from './projectsApi'
 
@@ -32,6 +33,12 @@ export const projectHandlers = [
 	}),
 
 	http.delete<{ id: string }>('/api/projects/:id', async ({ params }) => {
+		const buildings = await getAllByIndex<Building>(
+			STORES.BUILDINGS, 'projectId', params.id
+		)
+		for (const building of buildings) {
+			await deleteItem(STORES.BUILDINGS, building.id)
+		}
 		await deleteItem(STORES.PROJECTS, params.id)
 		return new HttpResponse(null, { status: 204 })
 	}),

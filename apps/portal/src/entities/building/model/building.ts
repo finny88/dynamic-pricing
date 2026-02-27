@@ -5,5 +5,6 @@ export interface Building extends BaseEntity {
 	projectId: string
 	name: string
 	address: string | null
+	totalArea: number
 	units: Unit[]
 }
