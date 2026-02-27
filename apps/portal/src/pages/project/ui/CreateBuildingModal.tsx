@@ -26,6 +26,7 @@ export const CreateBuildingModal = ({ ref, projectId }: { ref: Ref<CreateBuildin
 			projectId,
 			name: values.name.trim(),
 			address: values.address?.trim() || null,
+			units: [],
 		}
 
 		const result = await createBuilding(dto)

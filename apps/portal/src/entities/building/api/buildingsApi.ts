@@ -10,6 +10,13 @@ export const buildingsApi = rootApi
 	.enhanceEndpoints({ addTagTypes: [BUILDING_TAG, PROJECT_TAG] })
 	.injectEndpoints({
 		endpoints: (builder) => ({
+			getBuildingById: builder.query<Building, { projectId: string; buildingId: string }>({
+				query: ({ projectId, buildingId }) => ({ url: `/projects/${projectId}/buildings/${buildingId}` }),
+				transformResponse: (response: { building: Building }) => response.building,
+				providesTags: (
+					_result, _error, { buildingId }
+				) => [{ type: BUILDING_TAG, id: buildingId }],
+			}),
 			getBuildingsByProject: builder.query<Building[], string>({
 				query: (projectId) => ({ url: `/projects/${projectId}/buildings` }),
 				transformResponse: (response: { buildings: Building[] }) => response.buildings,
@@ -51,4 +58,4 @@ export const buildingsApi = rootApi
 		}),
 	})
 
-export const { useGetBuildingsByProjectQuery, useCreateBuildingMutation, useUpdateBuildingMutation, useDeleteBuildingMutation } = buildingsApi
+export const { useGetBuildingByIdQuery, useGetBuildingsByProjectQuery, useCreateBuildingMutation, useUpdateBuildingMutation, useDeleteBuildingMutation } = buildingsApi

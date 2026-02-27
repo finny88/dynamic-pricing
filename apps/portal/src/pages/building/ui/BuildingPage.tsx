@@ -1,38 +1,100 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { LoadingOverlay } from '@mantine/core'
-import { notifications } from '@mantine/notifications'
-import { ExcelUpload } from '@features/excel-upload'
-import { useUnits } from '@entities/unit'
-import type { Unit } from '@entities/unit'
+import { Activity, useState, useTransition } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import {
+	Button,
+	Container,
+	Divider,
+	Group,
+	SimpleGrid,
+	Skeleton,
+	Stack,
+	Text,
+	Title,
+	Tooltip,
+} from '@mantine/core'
+import { IconArrowLeft, IconEye, IconEyeOff, IconFileUpload } from '@tabler/icons-react'
+import { useGetBuildingByIdQuery, BuildingPageHeader } from '@entities/building'
+import { BuildingViewer } from '@widgets/BuildingViewer'
 
-const NAVIGATE_DELAY = 800
+const formatDate = (iso: string) =>
+	new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
 export const BuildingPage = () => {
+	const { projectId, buildingId } = useParams<{ projectId: string; buildingId: string }>()
 	const navigate = useNavigate()
-	const { setUnits } = useUnits()
-	const [navigating, setNavigating] = useState(false)
+	const [showViewer, setShowViewer] = useState(false)
+	const [isPending, startTransition] = useTransition()
 
-	const handleSuccess = (units: Unit[], mappedRawKeys: Set<string>) => {
-		setUnits(units, mappedRawKeys)
-		notifications.show({
-			title: 'Файл обработан',
-			message: `Загружено ${units.length} помещений`,
-			color: 'green',
-		})
-		setNavigating(true)
-		setTimeout(() => {
-			navigate('/viewer')
-		}, NAVIGATE_DELAY)
+	const { data: building = null, isLoading, error } = useGetBuildingByIdQuery({ projectId: projectId!, buildingId: buildingId! }, { skip: !projectId || !buildingId })
+
+	// const handleSuccess = (units: Unit[], mappedRawKeys: Set<string>) => {
+	// 	// TODO: save units to building via updateBuilding mutation
+	// 	navigate(`/projects/${projectId}/buildings/${buildingId}/viewer`)
+	// }
+
+	if (isLoading) {
+		return (
+			<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+				<Stack gap={'lg'}>
+					<Skeleton h={32} w={200} />
+					<Skeleton h={80} />
+					<Divider />
+					<Skeleton h={400} />
+				</Stack>
+			</Container>
+		)
+	}
+
+	if (error || !building) {
+		return (
+			<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+				<Stack align={'center'} pt={'xl'} gap={8}>
+					<Title order={3} c={'dimmed'}>Корпус не найден</Title>
+					<Button variant={'subtle'} leftSection={<IconArrowLeft size={16} />} onClick={() => navigate(`/projects/${projectId}`)}>
+						Вернуться к проекту
+					</Button>
+				</Stack>
+			</Container>
+		)
 	}
 
 	return (
-		<>
-			<LoadingOverlay
-				visible={navigating}
-				loaderProps={{ type: 'dots' }}
-			/>
-			<ExcelUpload onSuccess={handleSuccess} />
-		</>
+		<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+			<BuildingPageHeader building={building} projectId={projectId!} />
+
+			<Group justify={'space-between'} align={'flex-end'}>
+				<SimpleGrid cols={{ base: 2, sm: 4 }} spacing={'md'}>
+					<Stack gap={4}>
+						<Text size={'xs'} c={'dimmed'}>Квартир</Text>
+						<Text fw={600} size={'lg'}>{building.units.length}</Text>
+					</Stack>
+					<Stack gap={4}>
+						<Text size={'xs'} c={'dimmed'}>Обновлено</Text>
+						<Text fw={600} size={'lg'}>{formatDate(building.updatedAt)}</Text>
+					</Stack>
+				</SimpleGrid>
+				<Group>
+					<Button variant={'default'} leftSection={<IconFileUpload size={16} />} onClick={() => navigate(`/projects/${projectId}/buildings/${buildingId}/export`)}>
+						Обновить из файла
+					</Button>
+					<Tooltip label={'Загрузите данные из файла'} disabled={building.units.length > 0}>
+						<Button
+							leftSection={showViewer ? <IconEyeOff size={16} /> : <IconEye size={16} />}
+							disabled={building.units.length === 0}
+							loading={isPending}
+							onClick={() => startTransition(() => setShowViewer(v => !v))}
+						>
+							Посмотреть объект
+						</Button>
+					</Tooltip>
+				</Group>
+			</Group>
+
+			<Divider my={'xl'} />
+
+			<Activity mode={showViewer ? 'visible' : 'hidden'}>
+				<BuildingViewer units={building.units} />
+			</Activity>
+		</Container>
 	)
 }

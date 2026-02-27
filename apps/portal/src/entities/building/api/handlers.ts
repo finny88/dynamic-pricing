@@ -11,6 +11,12 @@ export const buildingHandlers = [
 		return HttpResponse.json({ buildings })
 	}),
 
+	http.get<{ projectId: string; buildingId: string }>('/api/projects/:projectId/buildings/:buildingId', async ({ params }) => {
+		const building = await getById<Building>(STORES.BUILDINGS, params.buildingId)
+		if (!building) { return new HttpResponse(null, { status: 404 }) }
+		return HttpResponse.json({ building })
+	}),
+
 	http.post<PathParams, CreateBuildingDto>('/api/projects/:projectId/buildings', async ({ params, request }) => {
 		const projectId = params['projectId'] as string
 		const body = await request.json()

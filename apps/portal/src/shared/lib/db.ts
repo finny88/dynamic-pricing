@@ -1,5 +1,5 @@
 const DB_NAME = 'dynamic-price'
-const DB_VERSION = 3
+const DB_VERSION = 4
 
 export const STORES = {
 	PROJECTS: 'projects',

@@ -1,15 +1,14 @@
 import { useMemo } from 'react'
 import { ActionIcon, Group, Title, Tooltip } from '@mantine/core'
 import { IconArrowBack } from '@tabler/icons-react'
-import { useUnits } from '@entities/unit'
 import type { Unit } from '@entities/unit'
 
 interface BuildingTitleProps {
 	units: Unit[]
+	onBack: () => void
 }
 
-export const BuildingTitle = ({ units }: BuildingTitleProps) => {
-	const { clearUnits } = useUnits()
+export const BuildingTitle = ({ units, onBack }: BuildingTitleProps) => {
 	const firstAddress = useMemo(() => {
 		if (!units || units.length === 0) { return 'Адрес не указан' }
 		return units.find(unit => unit.address)?.address || 'Адрес не указан'
@@ -17,12 +16,12 @@ export const BuildingTitle = ({ units }: BuildingTitleProps) => {
 
 	return (
 		<Group mb={'lg'} pos={'relative'} justify={'center'}>
-			<Tooltip label={'Распарсить новый документ'}>
+			<Tooltip label={'Вернуться к корпусу'}>
 				<ActionIcon
 					variant={'subtle'}
 					radius={'xl'}
 					style={{ border: '1px solid black' }}
-					onClick={clearUnits}
+					onClick={onBack}
 				>
 					<IconArrowBack color={'black'} style={{ transform: 'scaleY(-1)' }} />
 				</ActionIcon>

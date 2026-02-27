@@ -11,7 +11,7 @@ import {
 } from '@tanstack/react-table'
 import { Box, Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Table, Text } from '@mantine/core'
 import { IconArrowDown, IconArrowUp, IconArrowsSort, IconCheck } from '@tabler/icons-react'
-import { type Unit, useUnits, rawUnitSchema } from '@entities/unit'
+import { type Unit, rawUnitSchema } from '@entities/unit'
 import { getUnitColors } from './FloorSectionGrid/lib/colors'
 import { formatPrice } from './FloorSectionGrid/lib/formats'
 import type { FilterOptions } from './FloorSectionGrid/model/filters'
@@ -93,12 +93,7 @@ interface Props {
 }
 
 export const UnitsTable = ({ units, activeFilters }: Props) => {
-	const { mappedRawKeys } = useUnits()
-
-	const filteredColumns = useMemo(() => {
-		if (!mappedRawKeys) { return COLUMNS }
-		return COLUMNS.filter((col) => mappedRawKeys.has(col.header as string))
-	}, [mappedRawKeys])
+	const filteredColumns = COLUMNS
 
 	const filteredUnits = useMemo(() =>
 		units.filter(unit => !isUnitDisabled(unit, activeFilters)),
