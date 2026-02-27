@@ -36,6 +36,7 @@ export const BuildingViewer = ({ units }: Props) => {
 	const allSections = useMemo(() => computeAvailableSections(units), [units])
 	const { availableRoomsCounts } = useMemo(() => computeGridData(units, units), [units])
 
+	const [selectedTab, setSelectedTab] = useState<BuildingViewerTabs>(tabsKeys.GRID)
 	const [activeTab, setActiveTab] = useState<BuildingViewerTabs>(tabsKeys.GRID)
 	const [tabsRootElement, setTabsRootElement] = useState<HTMLDivElement | null>(null)
 	const [unitTableLegendElement, setUnitTableLegendElement] = useState<HTMLDivElement | null>(null)
@@ -73,8 +74,12 @@ export const BuildingViewer = ({ units }: Props) => {
 						onFilterChange={handleFilterChange}
 					/>
 					<Tabs
-						value={activeTab}
-						onChange={(value) => setActiveTab(value as BuildingViewerTabs)}
+						value={selectedTab}
+						onChange={(value) => {
+							const tab = value as BuildingViewerTabs
+							setSelectedTab(tab)
+							startTransition(() => setActiveTab(tab))
+						}}
 						ref={setTabsRootElement}
 					>
 						<Tabs.List mb={'md'}>
