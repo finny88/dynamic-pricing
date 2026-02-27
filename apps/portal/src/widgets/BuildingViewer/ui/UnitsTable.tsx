@@ -16,6 +16,7 @@ import { getUnitColors } from './FloorSectionGrid/lib/colors'
 import { formatPrice } from './FloorSectionGrid/lib/formats'
 import type { FilterOptions } from './FloorSectionGrid/model/filters'
 import { isUnitDisabled } from './FloorSectionGrid/lib/unit'
+import { createPortal } from 'react-dom'
 
 const columnHelper = createColumnHelper<Unit>()
 
@@ -90,9 +91,10 @@ const PAGE_SIZE = 10
 interface Props {
 	units: Unit[]
 	activeFilters: FilterOptions
+	unitTableLegendElement: HTMLDivElement | null
 }
 
-export const UnitsTable = ({ units, activeFilters }: Props) => {
+export const UnitsTable = ({ units, activeFilters, unitTableLegendElement }: Props) => {
 	const filteredColumns = COLUMNS
 
 	const filteredUnits = useMemo(() =>
@@ -155,9 +157,10 @@ export const UnitsTable = ({ units, activeFilters }: Props) => {
 				</SimpleGrid>
 			</Modal>
 
-			<Button variant={'outline'} mb={'sm'} onClick={() => setModalOpen(true)}>
+			{unitTableLegendElement && createPortal(<Button variant={'outline'} mb={'sm'} onClick={() => setModalOpen(true)}>
 				Поля для отображения
-			</Button>
+			</Button>, unitTableLegendElement)
+			}
 
 			<Table striped withTableBorder withColumnBorders>
 				<Table.Thead>
@@ -195,7 +198,7 @@ export const UnitsTable = ({ units, activeFilters }: Props) => {
 			</Table>
 
 			{filteredUnits.length > 0 && (
-				<Group justify={'space-between'} mt={'md'}>
+				<Group justify={'space-between'} mt={'md'} ml={'auto'}>
 					<Text size={'sm'} c={'dimmed'}>
 						{from}–{to} из {filteredUnits.length}
 					</Text>

@@ -57,46 +57,47 @@ export const BuildingPage = () => {
 	}
 
 	return (
-		<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
-			<BuildingPageHeader building={building} projectId={projectId!} projectName={project?.name ?? ''} />
+		<>
+			<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+				<BuildingPageHeader building={building} projectId={projectId!} projectName={project?.name ?? ''} />
 
-			<Group justify={'space-between'} align={'flex-end'}>
-				<SimpleGrid cols={{ base: 2, sm: 4 }} spacing={'md'}>
-					<Stack gap={4}>
-						<Text size={'xs'} c={'dimmed'}>Квартир</Text>
-						<Text fw={600} size={'lg'}>{building.units.length}</Text>
-					</Stack>
-					<Stack gap={4}>
-						<Text size={'xs'} c={'dimmed'}>Площадь</Text>
-						<Text fw={600} size={'lg'}>{building.totalArea} м²</Text>
-					</Stack>
-					<Stack gap={4}>
-						<Text size={'xs'} c={'dimmed'}>Обновлено</Text>
-						<Text fw={600} size={'lg'}>{formatDate(building.updatedAt)}</Text>
-					</Stack>
-				</SimpleGrid>
-				<Group>
-					<Button variant={'default'} leftSection={<IconFileUpload size={16} />} onClick={() => navigate(`/projects/${projectId}/buildings/${buildingId}/export`)}>
-						Обновить из файла
-					</Button>
-					<Tooltip label={'Загрузите данные из файла'} disabled={building.units.length > 0}>
-						<Button
-							leftSection={showViewer ? <IconEyeOff size={16} /> : <IconEye size={16} />}
-							disabled={building.units.length === 0}
-							loading={isPending}
-							onClick={() => startTransition(() => setShowViewer(v => !v))}
-						>
-							Посмотреть объект
+				<Group justify={'space-between'} align={'flex-end'}>
+					<SimpleGrid cols={{ base: 2, sm: 4 }} spacing={'md'}>
+						<Stack gap={4}>
+							<Text size={'xs'} c={'dimmed'}>Квартир</Text>
+							<Text fw={600} size={'lg'}>{building.units.length}</Text>
+						</Stack>
+						<Stack gap={4}>
+							<Text size={'xs'} c={'dimmed'}>Площадь</Text>
+							<Text fw={600} size={'lg'}>{building.totalArea} м²</Text>
+						</Stack>
+						<Stack gap={4}>
+							<Text size={'xs'} c={'dimmed'}>Обновлено</Text>
+							<Text fw={600} size={'lg'}>{formatDate(building.updatedAt)}</Text>
+						</Stack>
+					</SimpleGrid>
+					<Group>
+						<Button variant={'default'} leftSection={<IconFileUpload size={16} />} onClick={() => navigate(`/projects/${projectId}/buildings/${buildingId}/export`)}>
+							Обновить из файла
 						</Button>
-					</Tooltip>
+						<Tooltip label={'Загрузите данные из файла'} disabled={building.units.length > 0}>
+							<Button
+								leftSection={showViewer ? <IconEyeOff size={16} /> : <IconEye size={16} />}
+								disabled={building.units.length === 0}
+								loading={isPending}
+								onClick={() => startTransition(() => setShowViewer(v => !v))}
+							>
+								Посмотреть объект
+							</Button>
+						</Tooltip>
+					</Group>
 				</Group>
-			</Group>
 
-			<Divider my={'xl'} />
-
+				<Divider my={'xl'} />
+			</Container>
 			<Activity mode={showViewer ? 'visible' : 'hidden'}>
 				<BuildingViewer units={building.units} />
 			</Activity>
-		</Container>
+		</>
 	)
 }

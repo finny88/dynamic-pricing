@@ -6,6 +6,7 @@ import classes from './TabsLayout.module.css'
 export interface TabConfig {
 	label: string
 	content: ReactNode
+	legend?: ReactNode
 	icon?: ReactNode
 }
 

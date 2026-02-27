@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import { useMemo } from 'react'
 import { Box, Stack } from '@mantine/core'
-import { StatusLegend, FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
+import { FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
 import classes from './FloorSectionGrid.module.css'
 import type { GridVariant } from './model/variants'
 import type { Unit } from '@entities/unit'
@@ -37,10 +37,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 	const gridClassName = `${classes.grid} ${variant === 'detailed' ? classes.gridDetailed : classes.gridCompact}`
 
 	return (
-		<Stack gap={'lg'}>
-			{/* Legend */}
-			<StatusLegend />
-
+		<Stack gap={'lg'} style={{ overflowX: 'auto' }}>
 			{/* Grid */}
 			<Box
 				className={classes.gridContainer}
