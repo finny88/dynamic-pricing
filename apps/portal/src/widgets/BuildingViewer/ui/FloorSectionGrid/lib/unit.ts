@@ -7,10 +7,8 @@ const applyPriceRubFilter = (
 ): Unit[] => {
 	if (!units || (min === undefined && max === undefined)) { return units || [] }
 	return units.filter(unit => {
-		const price = parseFloat((unit.actualTotalPriceRub || '').replace(/,/g, ''))
-		if (isNaN(price)) { return true }
-		if (min !== undefined && price < min) { return false }
-		if (max !== undefined && price > max) { return false }
+		if (min !== undefined && unit.actualTotalPriceRub < min) { return false }
+		if (max !== undefined && unit.actualTotalPriceRub > max) { return false }
 		return true
 	})
 }
@@ -20,10 +18,8 @@ const applyPricePerSqmRubFilter = (
 ): Unit[] => {
 	if (!units || (min === undefined && max === undefined)) { return units || [] }
 	return units.filter(unit => {
-		const price = parseFloat((unit.actualPricePerSqmRub || '').replace(/,/g, ''))
-		if (isNaN(price)) { return true }
-		if (min !== undefined && price < min) { return false }
-		if (max !== undefined && price > max) { return false }
+		if (min !== undefined && unit.actualPricePerSqmRub < min) { return false }
+		if (max !== undefined && unit.actualPricePerSqmRub > max) { return false }
 		return true
 	})
 }
@@ -33,10 +29,8 @@ const applyTotalAreaSqmFilter = (
 ): Unit[] => {
 	if (!units || (min === undefined && max === undefined)) { return units || [] }
 	return units.filter(unit => {
-		const area = parseFloat((unit.totalAreaSqm || '').replace(/,/g, ''))
-		if (isNaN(area)) { return true }
-		if (min !== undefined && area < min) { return false }
-		if (max !== undefined && area > max) { return false }
+		if (min !== undefined && unit.totalAreaSqm < min) { return false }
+		if (max !== undefined && unit.totalAreaSqm > max) { return false }
 		return true
 	})
 }
@@ -127,8 +121,8 @@ const matchesSearchFilter = (unit: Unit, searchQuery: string): boolean => {
 	const query = searchQuery.toLowerCase()
 	return (
 		(unit.unitNumber || '').toLowerCase().includes(query) ||
-		(unit.floor || '').toLowerCase().includes(query) ||
-		(unit.section || '').toLowerCase().includes(query)
+		String(unit.floor).includes(query) ||
+		String(unit.section).toLowerCase().includes(query)
 	)
 }
 
@@ -153,7 +147,7 @@ export const isUnitDisabled = (unit: Unit, activeFilters: FilterOptions): boolea
 	if (!unit || !activeFilters) { return false }
 
 	if (activeFilters.searchQuery && !matchesSearchFilter(unit, activeFilters.searchQuery)) { return true }
-	if (isExcludedByArrayFilter(Number(unit.floor), activeFilters.floors)) { return true }
+	if (isExcludedByArrayFilter(unit.floor, activeFilters.floors)) { return true }
 	if (isExcludedByArrayFilter(Number(unit.section), activeFilters.sections)) { return true }
 	if (isExcludedByArrayFilter(getUnitStatus(unit), activeFilters.statuses)) { return true }
 	if (isExcludedByArrayFilter(unit.roomsCount, activeFilters.roomsCount)) { return true }

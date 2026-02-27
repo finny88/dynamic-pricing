@@ -8,39 +8,39 @@ export interface Unit {
 	salesEndDate: string
 	commissioningDate: string
 	unitNumber: string
-	floor: string
-	roomsCount: string
-	totalAreaSqm: string
-	livingAreaSqm: string
+	floor: number
+	roomsCount: number
+	totalAreaSqm: number
+	livingAreaSqm: number
 	layoutType: string
 	apartmentConfiguration: string
-	unitsPerFloor: string
+	unitsPerFloor: number
 	balconyOrLoggia: string
 	verandaOrTerrace: string
-	ceilingHeightM: string
+	ceilingHeightM: number
 	finishing: string
-	finishingCostPerSqmRub: string
+	finishingCostPerSqmRub: number
 	masterBedroom: string
 	walkInCloset: string
-	bathroomsCount: string
+	bathroomsCount: number
 	bathroomType: string
 	kitchenType: string
-	kitchenAreaSqm: string
+	kitchenAreaSqm: number
 	elevatorProximity: string
 	viewType: string
-	plannedConstructionCostRub: string
+	plannedConstructionCostRub: number
 	actualStatus: string
 	saleDate: string
-	actualPricePerSqmRub: string
-	actualTotalPriceRub: string
+	actualPricePerSqmRub: number
+	actualTotalPriceRub: number
 	buyerType: string
-	buyersCount: string
+	buyersCount: number
 	dealType: string
-	initialPricePerSqmRub: string
-	initialTotalPriceRub: string
+	initialPricePerSqmRub: number
+	initialTotalPriceRub: number
 	paymentMethod: string
 	contractRegistrationDate: string
-	discountAmountRub: string
+	discountAmountRub: number
 	specialProgramInfo: string
 	specialProgramDetails: string
 	fileGeneratedDate: string

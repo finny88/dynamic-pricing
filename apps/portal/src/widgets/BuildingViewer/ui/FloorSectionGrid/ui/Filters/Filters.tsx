@@ -14,7 +14,7 @@ import type { FilterOptions } from '../../model/filters'
 interface FiltersProps {
 	availableFloors: number[]
 	availableSections: number[]
-	availableRoomsCounts: string[]
+	availableRoomsCounts: number[]
 	activeFilters: FilterOptions
 	onFilterChange: (filters: FilterOptions) => void
 }

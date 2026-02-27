@@ -2,19 +2,11 @@ import type { FC } from 'react'
 import { Box, Text, Stack, Group } from '@mantine/core'
 import classes from './UnitTooltipContent.module.css'
 import type { Unit } from '@entities/unit'
+import { formatPrice } from '../../lib/formats'
 
 interface UnitTooltipContentProps {
 	unit: Unit
 	backgroundColor: string
-}
-
-const formatPrice = (price: string): string => {
-	const cleanPrice = price.replace(/,/g, '')
-	const num = parseFloat(cleanPrice)
-	if (isNaN(num)) {
-		return price
-	}
-	return Math.round(num).toLocaleString('ru-RU').replace(/,/g, ' ')
 }
 
 export const UnitTooltipContent: FC<UnitTooltipContentProps> = ({ unit, backgroundColor }) => {

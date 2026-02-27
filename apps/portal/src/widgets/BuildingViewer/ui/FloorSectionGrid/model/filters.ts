@@ -7,7 +7,7 @@ export interface FilterOptions {
 	floors?: number[]
 	sections?: number[]
 	statuses?: UnitStatus[]
-	roomsCount?: string[]
+	roomsCount?: number[]
 	searchQuery?: string
 	priceRubMin?: number
 	priceRubMax?: number
