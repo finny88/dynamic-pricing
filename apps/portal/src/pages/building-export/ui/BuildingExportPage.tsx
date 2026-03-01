@@ -41,10 +41,10 @@ export const BuildingExportPage = () => {
 		)
 	}
 
-	const handleSuccess = async (units: Unit[]) => {
+	const handleSuccess = async (units: Unit[], mappedHeaders: string[]) => {
 		const { updatedAt: _, ...buildingDto } = building
 		await updateBuilding({ ...buildingDto, units })
-		navigate(`/projects/${projectId}/buildings/${buildingId}`, { state: { showViewer: true } satisfies BuildingPageInitialState })
+		navigate(`/projects/${projectId}/buildings/${buildingId}`, { state: { showViewer: true, mappedHeaders } satisfies BuildingPageInitialState })
 	}
 
 	return (
@@ -57,7 +57,7 @@ export const BuildingExportPage = () => {
 					buildingLink={`/projects/${projectId}/buildings/${buildingId}`}
 				/>
 			</Container>
-			<ExcelUpload onSuccess={(units) => handleSuccess(units)} />
+			<ExcelUpload onSuccess={(units, mappedHeaders) => { void handleSuccess(units, mappedHeaders) }} />
 		</>
 	)
 }

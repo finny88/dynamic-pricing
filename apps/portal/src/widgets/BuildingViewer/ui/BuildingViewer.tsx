@@ -20,9 +20,10 @@ const tabsKeys = {
 
 interface Props {
 	units: Unit[]
+	mappedHeaders?: string[]
 }
 
-export const BuildingViewer = ({ units }: Props) => {
+export const BuildingViewer = ({ units, mappedHeaders }: Props) => {
 	const [activeFilters, setActiveFilters] = useState<FilterOptions>({})
 	const [isPending, startTransition] = useTransition()
 
@@ -58,7 +59,7 @@ export const BuildingViewer = ({ units }: Props) => {
 			label: 'Помещения',
 			icon: <IconList size={16} />,
 			legend: <div ref={setUnitTableLegendElement} />,
-			content: <UnitsTable units={units} activeFilters={activeFilters} unitTableLegendElement={unitTableLegendElement} />
+			content: <UnitsTable units={units} activeFilters={activeFilters} unitTableLegendElement={unitTableLegendElement} mappedHeaders={mappedHeaders} />
 		}
 	}
 

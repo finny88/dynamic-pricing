@@ -25,6 +25,7 @@ export const BuildingPage = () => {
 	const navigate = useNavigate()
 	const { state }: Location<BuildingPageInitialState | null> = useLocation()
 	const [showViewer, setShowViewer] = useState(state?.showViewer === true)
+	const mappedHeaders = state?.mappedHeaders
 	const [isPending, startTransition] = useTransition()
 
 	const { data: building = null, isLoading, error } = useGetBuildingByIdQuery({ projectId: projectId!, buildingId: buildingId! }, { skip: !projectId || !buildingId })
@@ -96,7 +97,7 @@ export const BuildingPage = () => {
 				<Divider my={'xl'} />
 			</Container>
 			<Activity mode={showViewer ? 'visible' : 'hidden'}>
-				<BuildingViewer units={building.units} />
+				<BuildingViewer units={building.units} mappedHeaders={mappedHeaders} />
 			</Activity>
 		</>
 	)

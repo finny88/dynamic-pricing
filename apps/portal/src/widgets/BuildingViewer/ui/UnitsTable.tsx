@@ -92,10 +92,13 @@ interface Props {
 	units: Unit[]
 	activeFilters: FilterOptions
 	unitTableLegendElement: HTMLDivElement | null
+	mappedHeaders?: string[]
 }
 
-export const UnitsTable = ({ units, activeFilters, unitTableLegendElement }: Props) => {
-	const filteredColumns = COLUMNS
+export const UnitsTable = ({ units, activeFilters, unitTableLegendElement, mappedHeaders }: Props) => {
+	const filteredColumns = mappedHeaders
+		? COLUMNS.filter(col => mappedHeaders.includes(col.header as string))
+		: COLUMNS
 
 	const filteredUnits = useMemo(() =>
 		units.filter(unit => !isUnitDisabled(unit, activeFilters)),
