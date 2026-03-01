@@ -16,7 +16,6 @@ import { getUnitColors } from './FloorSectionGrid/lib/colors'
 import { formatPrice } from './FloorSectionGrid/lib/formats'
 import type { FilterOptions } from './FloorSectionGrid/model/filters'
 import { isUnitDisabled } from './FloorSectionGrid/lib/unit'
-import { createPortal } from 'react-dom'
 
 const columnHelper = createColumnHelper<Unit>()
 
@@ -91,11 +90,12 @@ const PAGE_SIZE = 10
 interface Props {
 	units: Unit[]
 	activeFilters: FilterOptions
-	unitTableLegendElement: HTMLDivElement | null
 	mappedHeaders?: string[]
+	modalOpen: boolean
+	onModalClose: () => void
 }
 
-export const UnitsTable = ({ units, activeFilters, unitTableLegendElement, mappedHeaders }: Props) => {
+export const UnitsTable = ({ units, activeFilters, mappedHeaders, modalOpen, onModalClose }: Props) => {
 	const filteredColumns = mappedHeaders
 		? COLUMNS.filter(col => mappedHeaders.includes(col.header as string))
 		: COLUMNS
@@ -107,7 +107,6 @@ export const UnitsTable = ({ units, activeFilters, unitTableLegendElement, mappe
 	const initialVisibility: VisibilityState = Object.fromEntries(filteredColumns.map((col) => [col.id, DEFAULT_VISIBLE_IDS.has(col.id as string)]))
 	const [columnVisibility, setColumnVisibility] = useState(initialVisibility)
 	const [sorting, setSorting] = useState<SortingState>([])
-	const [modalOpen, setModalOpen] = useState(false)
 
 	const table = useReactTable({
 		data: filteredUnits,
@@ -133,7 +132,7 @@ export const UnitsTable = ({ units, activeFilters, unitTableLegendElement, mappe
 		<>
 			<Modal
 				opened={modalOpen}
-				onClose={() => setModalOpen(false)}
+				onClose={onModalClose}
 				title={'Поля для отображения'}
 				size={'lg'}
 				scrollAreaComponent={ScrollArea.Autosize}
@@ -159,11 +158,6 @@ export const UnitsTable = ({ units, activeFilters, unitTableLegendElement, mappe
 					})}
 				</SimpleGrid>
 			</Modal>
-
-			{unitTableLegendElement && createPortal(<Button variant={'outline'} mb={'sm'} onClick={() => setModalOpen(true)}>
-				Поля для отображения
-			</Button>, unitTableLegendElement)
-			}
 
 			<Table striped withTableBorder withColumnBorders>
 				<Table.Thead>
@@ -201,7 +195,7 @@ export const UnitsTable = ({ units, activeFilters, unitTableLegendElement, mappe
 			</Table>
 
 			{filteredUnits.length > 0 && (
-				<Group justify={'space-between'} mt={'md'} ml={'auto'}>
+				<Group justify={'space-between'} mt={'md'}>
 					<Text size={'sm'} c={'dimmed'}>
 						{from}–{to} из {filteredUnits.length}
 					</Text>

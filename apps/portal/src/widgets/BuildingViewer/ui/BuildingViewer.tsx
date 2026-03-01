@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState, useTransition } from 'react'
 import { IconGridDots, IconLayoutGrid, IconList } from '@tabler/icons-react'
-import { Center, Container, Group, Stack, Tabs } from '@mantine/core'
+import { Box, Button, Center, Container, Stack, Tabs } from '@mantine/core'
+import { useElementSize, useId } from '@mantine/hooks'
 import { type TabConfig } from '@shared/ui/TabsLayout'
 import type { Unit } from '@entities/unit'
 import type { FilterOptions } from './FloorSectionGrid/model/filters'
@@ -39,8 +40,9 @@ export const BuildingViewer = ({ units, mappedHeaders }: Props) => {
 
 	const [selectedTab, setSelectedTab] = useState<BuildingViewerTabs>(tabsKeys.GRID)
 	const [activeTab, setActiveTab] = useState<BuildingViewerTabs>(tabsKeys.GRID)
-	const [tabsRootElement, setTabsRootElement] = useState<HTMLDivElement | null>(null)
-	const [unitTableLegendElement, setUnitTableLegendElement] = useState<HTMLDivElement | null>(null)
+	const { ref: tabsRef, width: tabsWidth } = useElementSize()
+	const tabsBaseId = useId()
+	const [columnModalOpen, setColumnModalOpen] = useState(false)
 
 	const buildingViewerTabsConfigs: Record<BuildingViewerTabs, TabConfig> = {
 		[tabsKeys.GRID]: {
@@ -58,8 +60,14 @@ export const BuildingViewer = ({ units, mappedHeaders }: Props) => {
 		[tabsKeys.ROOMS]: {
 			label: 'Помещения',
 			icon: <IconList size={16} />,
-			legend: <div ref={setUnitTableLegendElement} />,
-			content: <UnitsTable units={units} activeFilters={activeFilters} unitTableLegendElement={unitTableLegendElement} mappedHeaders={mappedHeaders} />
+			legend: <Button variant={'outline'} style={{ alignSelf: 'flex-start' }} onClick={() => setColumnModalOpen(true)}>Поля для отображения</Button>,
+			content: <UnitsTable
+				units={units}
+				activeFilters={activeFilters}
+				mappedHeaders={mappedHeaders}
+				modalOpen={columnModalOpen}
+				onModalClose={() => setColumnModalOpen(false)}
+			/>
 		}
 	}
 
@@ -81,11 +89,11 @@ export const BuildingViewer = ({ units, mappedHeaders }: Props) => {
 							setSelectedTab(tab)
 							startTransition(() => setActiveTab(tab))
 						}}
-						ref={setTabsRootElement}
+						ref={tabsRef}
 					>
 						<Tabs.List mb={'md'}>
 							{Object.entries<TabConfig>(buildingViewerTabsConfigs).map(([key, { label, icon }]) => (
-								<Tabs.Tab key={key} value={key} leftSection={icon}>
+								<Tabs.Tab key={key} value={key} id={`${tabsBaseId}-tab-${key}`} leftSection={icon}>
 									{label}
 								</Tabs.Tab>
 							))}
@@ -96,13 +104,15 @@ export const BuildingViewer = ({ units, mappedHeaders }: Props) => {
 			</Container>
 			<Container fluid pb={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg' }} mt={'md'}>
 				<Center>
-					<Group preventGrowOverflow styles={{
-						root: {
-							minWidth: tabsRootElement?.clientWidth,
-						},
-					}}>
+					<Box
+						role={'tabpanel'}
+						id={`${tabsBaseId}-panel-${activeTab}`}
+						aria-labelledby={`${tabsBaseId}-tab-${activeTab}`}
+						tabIndex={0}
+						style={{ minWidth: tabsWidth }}
+					>
 						{buildingViewerTabsConfigs[activeTab].content}
-					</Group>
+					</Box>
 				</Center>
 			</Container>
 		</>

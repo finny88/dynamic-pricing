@@ -37,11 +37,12 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 	const gridClassName = `${classes.grid} ${variant === 'detailed' ? classes.gridDetailed : classes.gridCompact}`
 
 	return (
-		<Stack gap={'lg'} style={{ overflowX: 'auto' }}>
+		<Stack gap={'lg'}>
 			{/* Grid */}
 			<Box
 				className={classes.gridContainer}
 				style={{
+					overflowX: 'auto',
 					opacity: isPending ? 0.6 : 1,
 					transition: 'opacity 150ms',
 				}}

@@ -232,7 +232,7 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 					</Group>
 				</Container>
 				{preview && (
-					<Container fluid px={{ base: 'md', sm: 'lg' }} mt={'md'}>
+					<Container fluid px={{ base: 'md', sm: 'lg', md: 'xl' }} mt={'md'}>
 						<FilePreviewTable preview={preview} loading={loading} onParse={(mapping, schema) => { void handleParse(mapping, schema) }} />
 					</Container>
 				)}
