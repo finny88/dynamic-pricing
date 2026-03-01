@@ -21,10 +21,9 @@ const tabsKeys = {
 
 interface Props {
 	units: Unit[]
-	mappedHeaders?: string[]
 }
 
-export const BuildingViewer = ({ units, mappedHeaders }: Props) => {
+export const BuildingViewer = ({ units }: Props) => {
 	const [activeFilters, setActiveFilters] = useState<FilterOptions>({})
 	const [isPending, startTransition] = useTransition()
 
@@ -64,7 +63,6 @@ export const BuildingViewer = ({ units, mappedHeaders }: Props) => {
 			content: <UnitsTable
 				units={units}
 				activeFilters={activeFilters}
-				mappedHeaders={mappedHeaders}
 				modalOpen={columnModalOpen}
 				onModalClose={() => setColumnModalOpen(false)}
 			/>

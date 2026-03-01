@@ -90,15 +90,12 @@ const PAGE_SIZE = 10
 interface Props {
 	units: Unit[]
 	activeFilters: FilterOptions
-	mappedHeaders?: string[]
 	modalOpen: boolean
 	onModalClose: () => void
 }
 
-export const UnitsTable = ({ units, activeFilters, mappedHeaders, modalOpen, onModalClose }: Props) => {
-	const filteredColumns = mappedHeaders
-		? COLUMNS.filter(col => mappedHeaders.includes(col.header as string))
-		: COLUMNS
+export const UnitsTable = ({ units, activeFilters, modalOpen, onModalClose }: Props) => {
+	const filteredColumns = COLUMNS
 
 	const filteredUnits = useMemo(() =>
 		units.filter(unit => !isUnitDisabled(unit, activeFilters)),

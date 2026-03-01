@@ -10,5 +10,4 @@ export interface Building extends BaseEntity, WithTotalArea {
 
 export interface BuildingPageInitialState {
 	showViewer: boolean
-	mappedHeaders?: string[]
 }
