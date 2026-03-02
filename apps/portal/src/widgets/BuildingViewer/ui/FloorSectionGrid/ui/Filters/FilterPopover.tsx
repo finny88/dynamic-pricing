@@ -43,7 +43,7 @@ export const FilterPopover: FC<FilterPopoverProps> = ({ id, label, active = fals
 					size={'sm'}
 					rightSection={opened ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />}
 					onClick={() => opened ? close() : handleOpen()}
-					onKeyDown={() => { if (opened) { close() } }}
+					onKeyDown={(e) => { if (opened) { e.preventDefault(); close() } }}
 				>
 					{label}
 				</Button>

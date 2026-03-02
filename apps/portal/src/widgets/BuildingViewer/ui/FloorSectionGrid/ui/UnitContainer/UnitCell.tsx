@@ -2,7 +2,7 @@ import { UnstyledButton, Tooltip } from '@mantine/core'
 import { clsx } from 'clsx'
 import type { FC } from 'react'
 import type { Unit } from '@entities/unit'
-import { ARIA_LABELS } from '../../lib/mappers'
+import { ARIA_LABELS } from '../../lib/aria'
 import classes from './UnitCell.module.css'
 import { UnitTooltipContent } from './UnitTooltipContent'
 
@@ -11,7 +11,6 @@ interface UnitCellProps {
 	colors: {
 		background: string
 		text: string
-		hoverBackground: string
 	}
 	status: string
 	disabled: boolean
@@ -31,16 +30,6 @@ export const UnitCell: FC<UnitCellProps> = ({ unit, colors, status, disabled }) 
 				className={clsx(classes.unitButton, disabled && classes.disabled)}
 				style={{
 					backgroundColor: colors.background,
-				}}
-				onMouseEnter={(e) => {
-					if (!disabled && colors.hoverBackground) {
-						e.currentTarget.style.backgroundColor = colors.hoverBackground
-					}
-				}}
-				onMouseLeave={(e) => {
-					if (!disabled) {
-						e.currentTarget.style.backgroundColor = colors.background
-					}
 				}}
 			>
 				{unit.roomsCount}

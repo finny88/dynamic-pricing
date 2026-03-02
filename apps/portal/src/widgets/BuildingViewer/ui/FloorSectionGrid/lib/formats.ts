@@ -1,4 +1,4 @@
 export const formatPrice = (price: number): string => {
-	if (!price) { return '' }
+	if (!isFinite(price)) { return '' }
 	return Math.round(price).toLocaleString('ru-RU')
 }

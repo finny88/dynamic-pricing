@@ -6,7 +6,7 @@ import type { Unit } from '@entities/unit'
 import { type TabConfig } from '@shared/ui/TabsLayout'
 import classes from './BuildingViewer.module.css'
 import { FloorSectionGrid } from './FloorSectionGrid'
-import { computeAvailableFloors, computeAvailableSections, computeGridData } from './FloorSectionGrid/lib/unit'
+import { computeAvailableFloors, computeAvailableRoomsCounts, computeAvailableSections } from './FloorSectionGrid/lib/unit'
 import type { FilterOptions } from './FloorSectionGrid/model/filters'
 import { StatusLegend } from './FloorSectionGrid/ui'
 import { Filters } from './FloorSectionGrid/ui/Filters'
@@ -39,7 +39,7 @@ export const BuildingViewer = ({ units }: Props) => {
 
 	const allFloors = useMemo(() => computeAvailableFloors(units), [units])
 	const allSections = useMemo(() => computeAvailableSections(units), [units])
-	const { availableRoomsCounts } = useMemo(() => computeGridData(units, units), [units])
+	const availableRoomsCounts = useMemo(() => computeAvailableRoomsCounts(units), [units])
 
 	const [selectedTab, setSelectedTab] = useState<BuildingViewerTabs>(tabsKeys.GRID)
 	const [activeTab, setActiveTab] = useState<BuildingViewerTabs>(tabsKeys.GRID)

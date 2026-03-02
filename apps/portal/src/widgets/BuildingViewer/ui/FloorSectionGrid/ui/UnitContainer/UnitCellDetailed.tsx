@@ -10,9 +10,7 @@ interface UnitCellDetailedProps {
 	colors: {
 		background: string
 		text: string
-		hoverBackground: string
 	}
-	status: string
 	disabled: boolean
 }
 
@@ -23,20 +21,6 @@ export const UnitCellDetailed: FC<UnitCellDetailedProps> = ({ unit, colors, disa
 			style={{
 				backgroundColor: colors.background,
 				borderColor: colors.background,
-			}}
-			onMouseEnter={(e) => {
-				if (!disabled && colors.hoverBackground) {
-					e.currentTarget.style.backgroundColor = colors.hoverBackground
-					e.currentTarget.style.borderColor = colors.background
-					e.currentTarget.style.transform = 'scale(1.02)'
-				}
-			}}
-			onMouseLeave={(e) => {
-				if (!disabled) {
-					e.currentTarget.style.backgroundColor = colors.background
-					e.currentTarget.style.borderColor = colors.background
-					e.currentTarget.style.transform = 'scale(1)'
-				}
 			}}
 		>
 			<Stack gap={4} className={classes.content}>

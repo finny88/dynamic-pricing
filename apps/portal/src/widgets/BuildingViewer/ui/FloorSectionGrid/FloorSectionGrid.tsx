@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import type { FC } from 'react'
 import type { Unit } from '@entities/unit'
 import classes from './FloorSectionGrid.module.css'
-import { ARIA_LABELS } from './lib/mappers'
+import { ARIA_LABELS } from './lib/aria'
 import { computeGridData } from './lib/unit'
 import type { FilterOptions } from './model/filters'
 import type { GridVariant } from './model/variants'
@@ -30,7 +30,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 }) => {
 
 	const { sections, floors, matrix } = useMemo(() => {
-		return computeGridData(units, units)
+		return computeGridData(units)
 	}, [units])
 
 	const { cellMinWidth } = VARIANT_CONFIG[variant]
