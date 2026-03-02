@@ -1,3 +1,5 @@
+import classes from './createColumnDragImage.module.css'
+
 export interface ColumnGhost {
 	update: (clientX: number, clientY: number) => void
 	destroy: () => void
@@ -16,8 +18,7 @@ export const createColumnGhost = (
 	const rows = Array.from(table.querySelectorAll('tr')).slice(1)
 
 	const ghost = document.createElement('table')
-	ghost.style.cssText =
-		'position:fixed;pointer-events:none;z-index:9999;opacity:0.85;border-collapse:collapse;font-size:inherit;'
+	ghost.classList.add(classes.ghost)
 
 	for (const row of rows) {
 		// colIndex + 1 because the first cell in each row is the line-number cell
@@ -26,8 +27,7 @@ export const createColumnGhost = (
 		if (cell) {
 			const clone = cell.cloneNode(true)
 			if (!(clone instanceof HTMLElement)) { continue }
-			clone.style.cssText =
-				'padding:4px 8px;border:1px solid var(--mantine-color-gray-3);background:var(--mantine-primary-color-light);white-space:nowrap;'
+			clone.classList.add(classes.ghostCell)
 			const tr = document.createElement('tr')
 			tr.appendChild(clone)
 			ghost.appendChild(tr)

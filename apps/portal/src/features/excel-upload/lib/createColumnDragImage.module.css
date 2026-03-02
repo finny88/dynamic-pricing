@@ -1,0 +1,15 @@
+.ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.85;
+  border-collapse: collapse;
+  font-size: inherit;
+}
+
+.ghostCell {
+  padding: 4px 8px;
+  border: 1px solid var(--mantine-color-gray-3);
+  background: var(--mantine-primary-color-light);
+  white-space: nowrap;
+}
