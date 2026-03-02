@@ -2,9 +2,14 @@ import type { Unit } from '@entities/unit'
 import type { FilterOptions } from '../model/filters'
 import type { UnitStatus } from '../model/unitStatus'
 
-const applyRangeFilter = (
-	units: Unit[], field: keyof Unit, min?: number, max?: number
-): Unit[] => {
+interface ApplyRangeFilterParams {
+	units: Unit[]
+	field: keyof Unit
+	min?: number
+	max?: number
+}
+
+const applyRangeFilter = ({ units, field, min, max }: ApplyRangeFilterParams,): Unit[] => {
 	if (min === undefined && max === undefined) { return units }
 	return units.filter(unit => {
 		const value = unit[field] as number
@@ -93,15 +98,24 @@ const isExcludedByArrayFilter = <T>(value: T, filter: T[] | undefined): boolean 
 	!!filter && filter.length > 0 && !filter.includes(value)
 
 const isExcludedByPriceFilters = (unit: Unit, activeFilters: FilterOptions): boolean =>
-	!applyRangeFilter(
-		[unit], 'actualTotalPriceRub', activeFilters.priceRubMin, activeFilters.priceRubMax
-	)[0] ||
-	!applyRangeFilter(
-		[unit], 'actualPricePerSqmRub', activeFilters.pricePerSqmRubMin, activeFilters.pricePerSqmRubMax
-	)[0] ||
-	!applyRangeFilter(
-		[unit], 'totalAreaSqm', activeFilters.totalAreaSqmMin, activeFilters.totalAreaSqmMax
-	)[0]
+	!applyRangeFilter({
+		units: [unit],
+		field: 'actualTotalPriceRub',
+		min: activeFilters.priceRubMin,
+		max: activeFilters.priceRubMax,
+	})[0] ||
+	!applyRangeFilter({
+		units: [unit],
+		field: 'actualPricePerSqmRub',
+		min: activeFilters.pricePerSqmRubMin,
+		max: activeFilters.pricePerSqmRubMax,
+	})[0] ||
+	!applyRangeFilter({
+		units: [unit],
+		field: 'totalAreaSqm',
+		min: activeFilters.totalAreaSqmMin,
+		max: activeFilters.totalAreaSqmMax,
+	})[0]
 
 /**
  * Helper function to check if a unit should be disabled based on active filters

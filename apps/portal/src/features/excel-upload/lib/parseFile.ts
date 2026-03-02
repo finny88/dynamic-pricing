@@ -13,10 +13,14 @@ export interface RowValidationError {
 const isIndexable = (value: unknown): value is Record<string | number, unknown> =>
 	value !== null && typeof value === 'object'
 
+interface ValidateRowParams<T extends ZodType> {
+	schema: T
+	raw: Record<string, unknown>
+	rowIndex: number
+}
+
 const validateRow = <T extends ZodType>(
-	schema: T,
-	raw: Record<string, unknown>,
-	rowIndex: number,
+	{ schema, raw, rowIndex }: ValidateRowParams<T>,
 ): { success: true; data: ZodInfer<T> } | { success: false; errors: RowValidationError[] } => {
 	const result = schema.safeParse(raw)
 
@@ -62,11 +66,13 @@ const mapToRawUnitUnchecked = (row: Record<string, unknown>, mapping: Record<str
 
 const isRawUnit = (value: unknown): value is RawUnit => rawUnitSchema.safeParse(value).success
 
-export const parseFile = async (
-	file: File,
-	columnMapping: Record<string, string>,
-	schema: ZodType,
-): Promise<{ data: Unit[]; errors: RowValidationError[] }> => {
+interface ParseFileParams {
+	file: File
+	columnMapping: Record<string, string>
+	schema: ZodType
+}
+
+export const parseFile = async ({ file, columnMapping, schema }: ParseFileParams,): Promise<{ data: Unit[]; errors: RowValidationError[] }> => {
 	const buffer = await file.arrayBuffer()
 	const workbook = XLSX.read(buffer)
 	const firstSheet = workbook.Sheets[workbook.SheetNames[0]]
@@ -77,11 +83,7 @@ export const parseFile = async (
 
 	rawRows.forEach((row, index) => {
 		const rowNumber = index + 2
-		const result = validateRow(
-			schema,
-			row,
-			rowNumber,
-		)
+		const result = validateRow({ schema, raw: row, rowIndex: rowNumber })
 
 		if (result.success) {
 			if (isIndexable(result.data)) {

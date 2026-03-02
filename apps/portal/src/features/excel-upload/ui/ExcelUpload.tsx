@@ -31,9 +31,7 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 		}
 		setLoading(true)
 		try {
-			const parsed = await parseFile(
-				file, mapping, schema
-			)
+			const parsed = await parseFile({ file, columnMapping: mapping, schema })
 			if (parsed.errors.length > 0) {
 				setErrors(parsed.errors)
 				setLoading(false)

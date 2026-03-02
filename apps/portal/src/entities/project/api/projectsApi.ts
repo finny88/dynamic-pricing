@@ -20,6 +20,7 @@ export const projectsApi = rootApi
 			getProject: builder.query<Project | undefined, string>({
 				query: (id) => ({ url: `/projects/${id}` }),
 				transformResponse: (response: { project?: Project }) => response.project,
+				// eslint-disable-next-line max-params
 				providesTags: (
 					_result, _error, id
 				) => [{ type: PROJECT_TAG, id }],
@@ -30,6 +31,7 @@ export const projectsApi = rootApi
 			}),
 			updateProject: builder.mutation<Project, CreateProjectDto>({
 				query: ({ id, ...data }) => ({ url: `/projects/${id}`, method: 'PUT', data: { id, ...data } }),
+				// eslint-disable-next-line max-params
 				invalidatesTags: (
 					_result, _error, { id }
 				) => [
@@ -39,6 +41,7 @@ export const projectsApi = rootApi
 			}),
 			deleteProject: builder.mutation<void, string>({
 				query: (id) => ({ url: `/projects/${id}`, method: 'DELETE' }),
+				// eslint-disable-next-line max-params
 				invalidatesTags: (
 					_result, _error, id
 				) => [

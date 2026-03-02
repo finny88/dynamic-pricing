@@ -33,9 +33,11 @@ export const projectHandlers = [
 	}),
 
 	http.delete<{ id: string }>('/api/projects/:id', async ({ params }) => {
-		const buildings = await getAllByIndex<Building>(
-			STORES.BUILDINGS, 'projectId', params.id
-		)
+		const buildings = await getAllByIndex<Building>({
+			storeName: STORES.BUILDINGS,
+			indexName: 'projectId',
+			value: params.id,
+		})
 		for (const building of buildings) {
 			await deleteItem(STORES.BUILDINGS, building.id)
 		}

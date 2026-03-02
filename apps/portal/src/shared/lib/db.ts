@@ -109,7 +109,13 @@ export const getAll = async <T>(storeName: string): Promise<T[]> => {
 	})
 }
 
-export const getAllByIndex = async <T>(storeName: string, indexName: string, value: string): Promise<T[]> => {
+interface GetAllByIndexParams {
+	storeName: string
+	indexName: string
+	value: string
+}
+
+export const getAllByIndex = async <T>({ storeName, indexName, value }: GetAllByIndexParams): Promise<T[]> => {
 	const db = await openDB()
 	return new Promise((resolve, reject) => {
 		const request: IDBRequest<T[]> = db

@@ -55,9 +55,12 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 				setDraggingCol(colIndex)
 				document.documentElement.classList.add('column-dragging')
 				if (tableRef.current) {
-					ghostRef.current = createColumnGhost(
-						tableRef.current, colIndex, startX, startY,
-					)
+					ghostRef.current = createColumnGhost({
+						table: tableRef.current,
+						colIndex,
+						startX,
+						startY,
+					})
 				}
 			}
 

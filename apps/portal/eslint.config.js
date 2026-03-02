@@ -86,6 +86,9 @@ export default defineConfig([
 			'react/jsx-curly-brace-presence': ['error', { props: 'always' }],
 			'react/no-children-prop': 'warn',
 
+			/* Function complexity */
+			'max-params': ['warn', 2],
+
 			/* Typescript */
 			'@typescript-eslint/no-non-null-assertion': 'error',
 			'@typescript-eslint/consistent-type-definitions': ['error', 'interface'],

@@ -5,16 +5,18 @@ export interface ColumnGhost {
 	destroy: () => void
 }
 
+interface CreateColumnGhostParams {
+	table: HTMLTableElement
+	colIndex: number
+	startX: number
+	startY: number
+}
+
 /**
  * Creates a custom drag ghost that follows the cursor via mouse events.
  * Returns helpers to update position and remove the ghost.
  */
-export const createColumnGhost = (
-	table: HTMLTableElement,
-	colIndex: number,
-	startX: number,
-	startY: number,
-): ColumnGhost => {
+export const createColumnGhost = ({ table, colIndex, startX, startY }: CreateColumnGhostParams): ColumnGhost => {
 	const rows = Array.from(table.querySelectorAll('tr')).slice(1)
 
 	const ghost = document.createElement('table')

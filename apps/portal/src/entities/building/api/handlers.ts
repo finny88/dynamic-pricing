@@ -5,9 +5,11 @@ import type { CreateBuildingDto } from './buildingsApi'
 
 export const buildingHandlers = [
 	http.get<{ projectId: string }>('/api/projects/:projectId/buildings', async ({ params }) => {
-		const buildings = await getAllByIndex<Building>(
-			STORES.BUILDINGS, 'projectId', params.projectId
-		)
+		const buildings = await getAllByIndex<Building>({
+			storeName: STORES.BUILDINGS,
+			indexName: 'projectId',
+			value: params.projectId,
+		})
 		return HttpResponse.json({ buildings })
 	}),
 
@@ -37,9 +39,11 @@ export const buildingHandlers = [
 		const building: Building = { ...body, totalArea, updatedAt: new Date().toISOString() }
 		await updateItem<Building>(STORES.BUILDINGS, building)
 
-		const buildings = await getAllByIndex<Building>(
-			STORES.BUILDINGS, 'projectId', params.projectId
-		)
+		const buildings = await getAllByIndex<Building>({
+			storeName: STORES.BUILDINGS,
+			indexName: 'projectId',
+			value: params.projectId,
+		})
 		const lotsCount = buildings.reduce((sum, b) => sum + b.units.length, 0)
 		const buildingsTotalArea = buildings.reduce((sum, b) => sum + b.totalArea, 0)
 

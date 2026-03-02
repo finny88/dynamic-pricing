@@ -13,6 +13,7 @@ export const buildingsApi = rootApi
 			getBuildingById: builder.query<Building, { projectId: string; buildingId: string }>({
 				query: ({ projectId, buildingId }) => ({ url: `/projects/${projectId}/buildings/${buildingId}` }),
 				transformResponse: (response: { building: Building }) => response.building,
+				// eslint-disable-next-line max-params
 				providesTags: (
 					_result, _error, { buildingId }
 				) => [{ type: BUILDING_TAG, id: buildingId }],
@@ -20,6 +21,7 @@ export const buildingsApi = rootApi
 			getBuildingsByProject: builder.query<Building[], string>({
 				query: (projectId) => ({ url: `/projects/${projectId}/buildings` }),
 				transformResponse: (response: { buildings: Building[] }) => response.buildings,
+				// eslint-disable-next-line max-params
 				providesTags: (
 					result, _error, projectId
 				) =>
@@ -29,6 +31,7 @@ export const buildingsApi = rootApi
 			}),
 			createBuilding: builder.mutation<Building, CreateBuildingDto>({
 				query: ({ projectId, ...data }) => ({ url: `/projects/${projectId}/buildings`, method: 'POST', data: { projectId, ...data } }),
+				// eslint-disable-next-line max-params
 				invalidatesTags: (
 					_result, _error, { projectId }
 				) => [
@@ -38,6 +41,7 @@ export const buildingsApi = rootApi
 			}),
 			updateBuilding: builder.mutation<Building, CreateBuildingDto>({
 				query: ({ projectId, id, ...data }) => ({ url: `/projects/${projectId}/buildings/${id}`, method: 'PUT', data: { projectId, id, ...data } }),
+				// eslint-disable-next-line max-params
 				invalidatesTags: (
 					_result, _error, { id, projectId }
 				) => [
@@ -48,6 +52,7 @@ export const buildingsApi = rootApi
 			}),
 			deleteBuilding: builder.mutation<void, { id: string; projectId: string }>({
 				query: ({ projectId, id }) => ({ url: `/projects/${projectId}/buildings/${id}`, method: 'DELETE' }),
+				// eslint-disable-next-line max-params
 				invalidatesTags: (
 					_result, _error, { id, projectId }
 				) => [
