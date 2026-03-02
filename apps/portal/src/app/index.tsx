@@ -3,8 +3,8 @@ import { createRoot } from 'react-dom/client'
 import App from './App'
 
 const enableMocking = async () => {
-	const { worker } = await import('./mocks/browser')
-	return worker.start({ onUnhandledRequest: 'bypass' })
+	const { worker, workerOptions } = await import('./mocks/browser')
+	return worker.start(workerOptions)
 }
 
 enableMocking().then(() => {
