@@ -3,6 +3,7 @@ import { IconArrowsMove } from '@tabler/icons-react'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { clsx } from 'clsx'
 import { useMemo, useState } from 'react'
+import type { MouseEvent as ReactMouseEvent, RefObject } from 'react'
 import styles from './PreviewTable.module.css'
 
 const columnHelper = createColumnHelper<unknown[]>()
@@ -23,8 +24,8 @@ interface Props {
 	rows: unknown[][]
 	mappedHeaders: Set<string>
 	draggingCol: number | null
-	tableRef: React.RefObject<HTMLTableElement | null>
-	onColumnMouseDown: (e: React.MouseEvent, colIndex: number) => void
+	tableRef: RefObject<HTMLTableElement | null>
+	onColumnMouseDown: (e: ReactMouseEvent, colIndex: number) => void
 }
 
 export const PreviewTable = ({ header, rows, mappedHeaders, draggingCol, tableRef, onColumnMouseDown }: Props) => {
@@ -53,7 +54,7 @@ export const PreviewTable = ({ header, rows, mappedHeaders, draggingCol, tableRe
 
 	const columnDragProps = (colIndex: number) => ({
 		style: { cursor: 'move' as const },
-		onMouseDown: (e: React.MouseEvent) => onColumnMouseDown(e, colIndex),
+		onMouseDown: (e: ReactMouseEvent) => onColumnMouseDown(e, colIndex),
 	})
 
 	const columnMouseProps = (colIndex: number) => ({

@@ -1,5 +1,6 @@
 import { Button } from '@mantine/core'
 import { useMemo, useRef, useState } from 'react'
+import type { MouseEvent as ReactMouseEvent } from 'react'
 import type { ZodType } from 'zod'
 import { buildSchema } from '../lib/buildSchema'
 import { createColumnGhost, type ColumnGhost } from '../lib/createColumnDragImage'
@@ -38,7 +39,7 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 		})
 	}
 
-	const handleColumnMouseDown = (e: React.MouseEvent, colIndex: number) => {
+	const handleColumnMouseDown = (e: ReactMouseEvent, colIndex: number) => {
 		e.preventDefault()
 		const startX = e.clientX
 		const startY = e.clientY
