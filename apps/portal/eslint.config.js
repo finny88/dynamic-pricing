@@ -86,6 +86,7 @@ export default defineConfig([
 			'react/no-children-prop': 'warn',
 
 			/* Typescript */
+			'@typescript-eslint/no-non-null-assertion': 'error',
 			'@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
 			'@typescript-eslint/no-unused-vars': [
 				'error',

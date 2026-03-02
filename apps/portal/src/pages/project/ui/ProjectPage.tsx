@@ -31,11 +31,11 @@ const formatDate = (iso: string) =>
 export const ProjectPage = () => {
 	const { id } = useParams<{ id: string }>()
 	const navigate = useNavigate()
-	const { data: project, isLoading, error } = useGetProjectQuery(id!, {
+	const { data: project, isLoading, error } = useGetProjectQuery(id ?? '', {
 		skip: !id,
 	})
 	const createBuildingModalRef = useRef<CreateBuildingModalHandle>(null)
-	const { data: buildings = [] } = useGetBuildingsByProjectQuery(id!, { skip: !id })
+	const { data: buildings = [] } = useGetBuildingsByProjectQuery(id ?? '', { skip: !id })
 	const [editingBuilding, setEditingBuilding] = useState<Building | null>(null)
 	const [deletingBuilding, setDeletingBuilding] = useState<Building | null>(null)
 
@@ -144,7 +144,7 @@ export const ProjectPage = () => {
 				</SimpleGrid>
 			)}
 
-			<CreateBuildingModal ref={createBuildingModalRef} projectId={id!} />
+			<CreateBuildingModal ref={createBuildingModalRef} projectId={id ?? ''} />
 			{editingBuilding && (
 				<EditBuildingModal building={editingBuilding} onClose={() => setEditingBuilding(null)} />
 			)}

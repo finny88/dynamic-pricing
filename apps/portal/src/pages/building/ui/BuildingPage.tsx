@@ -27,8 +27,8 @@ export const BuildingPage = () => {
 	const [showViewer, setShowViewer] = useState(state?.showViewer === true)
 	const [isPending, startTransition] = useTransition()
 
-	const { data: building = null, isLoading, error } = useGetBuildingByIdQuery({ projectId: projectId!, buildingId: buildingId! }, { skip: !projectId || !buildingId })
-	const { data: project } = useGetProjectQuery(projectId!, { skip: !projectId })
+	const { data: building = null, isLoading, error } = useGetBuildingByIdQuery({ projectId: projectId ?? '', buildingId: buildingId ?? '' }, { skip: !projectId || !buildingId })
+	const { data: project } = useGetProjectQuery(projectId ?? '', { skip: !projectId })
 
 	if (isLoading) {
 		return (
@@ -59,7 +59,7 @@ export const BuildingPage = () => {
 	return (
 		<>
 			<Container size={'xl'} pt={{ base: 'sm', sm: 'md', md: 'lg' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
-				<BuildingPageHeader building={building} projectId={projectId!} projectName={project?.name ?? ''} />
+				<BuildingPageHeader building={building} projectId={projectId ?? ''} projectName={project?.name ?? ''} />
 
 				<Group justify={'space-between'} align={'flex-end'}>
 					<SimpleGrid cols={{ base: 2, sm: 4 }} spacing={'md'}>

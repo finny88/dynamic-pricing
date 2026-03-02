@@ -12,7 +12,7 @@ export const DeleteProjectModal = ({ project, onClose }: Props) => {
 	const [opened, { close }] = useDisclosure(true)
 
 	const handleConfirm = async () => {
-		const result = await deleteProject(project!.id)
+		const result = await deleteProject(project.id)
 		if ('error' in result) { return }
 		close()
 	}

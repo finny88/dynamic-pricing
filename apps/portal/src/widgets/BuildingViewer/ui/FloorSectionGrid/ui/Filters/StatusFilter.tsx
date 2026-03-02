@@ -32,7 +32,7 @@ export const StatusFilter: FC<StatusFilterProps> = ({ applied, onApply }) => {
 	return (
 		<FilterPopover
 			id={'status'}
-			label={isActive ? `Статус (${applied!.length})` : 'Статус'}
+			label={isActive ? `Статус (${applied?.length})` : 'Статус'}
 			active={isActive}
 			onOpen={handleOpen}
 			onApply={handleApply}

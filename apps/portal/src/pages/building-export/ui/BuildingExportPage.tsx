@@ -10,10 +10,10 @@ export const BuildingExportPage = () => {
 	const { projectId, buildingId } = useParams<{ projectId: string; buildingId: string }>()
 	const navigate = useNavigate()
 
-	const { data: building = null, isLoading, error } = useGetBuildingByIdQuery({ projectId: projectId!, buildingId: buildingId! },
+	const { data: building = null, isLoading, error } = useGetBuildingByIdQuery({ projectId: projectId ?? '', buildingId: buildingId ?? '' },
 		{ skip: !projectId || !buildingId },)
 	const [updateBuilding] = useUpdateBuildingMutation()
-	const { data: project } = useGetProjectQuery(projectId!, { skip: !projectId })
+	const { data: project } = useGetProjectQuery(projectId ?? '', { skip: !projectId })
 
 	if (isLoading) {
 		return (
@@ -52,7 +52,7 @@ export const BuildingExportPage = () => {
 			<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
 				<BuildingPageHeader
 					building={building}
-					projectId={projectId!}
+					projectId={projectId ?? ''}
 					projectName={project?.name ?? ''}
 					buildingLink={`/projects/${projectId}/buildings/${buildingId}`}
 				/>

@@ -59,6 +59,7 @@ Configured via `eslint-plugin-boundaries` + `@feature-sliced/eslint-config`. Vio
 
 ### TypeScript & code quality rules
 Key rules to respect when generating code:
+- No non-null assertion operator `!` (`@typescript-eslint/no-non-null-assertion`) — use `?? ''`, `?? []`, optional chaining, or an explicit null guard instead
 - `interface` not `type` for object shapes (`@typescript-eslint/consistent-type-definitions`)
 - `import type` for type-only imports (`@typescript-eslint/consistent-type-imports`)
 - Arrow function expressions only — no `function` declarations (`func-style`)
