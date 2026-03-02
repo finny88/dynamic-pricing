@@ -6,10 +6,11 @@ import {
 	getPaginationRowModel,
 	getSortedRowModel,
 	useReactTable,
+	type Column,
 	type SortingState,
 	type VisibilityState,
 } from '@tanstack/react-table'
-import { Box, Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Table, Text } from '@mantine/core'
+import { Accordion, Box, Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Stack, Table, Text } from '@mantine/core'
 import { IconArrowDown, IconArrowUp, IconArrowsSort, IconCheck } from '@tabler/icons-react'
 import { type Unit, rawUnitSchema } from '@entities/unit'
 import { getUnitColors } from './FloorSectionGrid/lib/colors'
@@ -94,6 +95,24 @@ interface Props {
 	onModalClose: () => void
 }
 
+const ColumnToggleButton = ({ column }: { column: Column<Unit> }) => {
+	const isVisible = column.getIsVisible()
+	return (
+		<Button
+			key={column.id}
+			variant={isVisible ? 'filled' : 'default'}
+			color={isVisible ? 'blue' : undefined}
+			rightSection={isVisible ? <IconCheck size={14} /> : null}
+			justify={'space-between'}
+			fullWidth
+			size={'sm'}
+			onClick={column.getToggleVisibilityHandler()}
+		>
+			{column.columnDef.header as string}
+		</Button>
+	)
+}
+
 export const UnitsTable = ({ units, activeFilters, modalOpen, onModalClose }: Props) => {
 	const filteredColumns = COLUMNS
 
@@ -125,6 +144,9 @@ export const UnitsTable = ({ units, activeFilters, modalOpen, onModalClose }: Pr
 	const from = (pageIndex * PAGE_SIZE) + 1
 	const to = Math.min((pageIndex + 1) * PAGE_SIZE, filteredUnits.length)
 
+	const requiredColumns = table.getAllLeafColumns().filter(col => DEFAULT_VISIBLE_IDS.has(col.id))
+	const extraColumns = table.getAllLeafColumns().filter(col => !DEFAULT_VISIBLE_IDS.has(col.id))
+
 	return (
 		<>
 			<Modal
@@ -135,25 +157,21 @@ export const UnitsTable = ({ units, activeFilters, modalOpen, onModalClose }: Pr
 				scrollAreaComponent={ScrollArea.Autosize}
 				centered
 			>
-				<SimpleGrid cols={3} spacing={'xs'}>
-					{table.getAllLeafColumns().map((column) => {
-						const isVisible = column.getIsVisible()
-						return (
-							<Button
-								key={column.id}
-								variant={isVisible ? 'filled' : 'default'}
-								color={isVisible ? 'blue' : undefined}
-								rightSection={isVisible ? <IconCheck size={14} /> : null}
-								justify={'space-between'}
-								fullWidth
-								size={'sm'}
-								onClick={column.getToggleVisibilityHandler()}
-							>
-								{column.columnDef.header as string}
-							</Button>
-						)
-					})}
-				</SimpleGrid>
+				<Stack gap={'xs'}>
+					<SimpleGrid cols={3} spacing={'xs'}>
+						{requiredColumns.map(column => <ColumnToggleButton key={column.id} column={column} />)}
+					</SimpleGrid>
+					<Accordion variant={'separated'}>
+						<Accordion.Item value={'extra'}>
+							<Accordion.Control>Дополнительные поля</Accordion.Control>
+							<Accordion.Panel>
+								<SimpleGrid cols={3} spacing={'xs'}>
+									{extraColumns.map(column => <ColumnToggleButton key={column.id} column={column} />)}
+								</SimpleGrid>
+							</Accordion.Panel>
+						</Accordion.Item>
+					</Accordion>
+				</Stack>
 			</Modal>
 
 			<Table striped withTableBorder withColumnBorders>
