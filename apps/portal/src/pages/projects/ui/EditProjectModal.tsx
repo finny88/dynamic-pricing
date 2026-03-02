@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { Modal, Stack, Text, Title } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useUpdateProjectMutation, type CreateProjectDto, type Project } from '@entities/project'
+import { isObjectOfTypeWithProperty } from '@shared/lib/typeGuards'
 import { ProjectFormFields } from './ProjectFormFields'
 import type { ProjectFormValues } from './projectFormConfig'
 
@@ -37,7 +38,7 @@ export const EditProjectModal = ({ project, onClose }: Props) => {
 		}
 
 		const result = await updateProject(dto)
-		if ('error' in result) { return }
+		if (isObjectOfTypeWithProperty(result, 'error')) { return }
 		close()
 	}
 

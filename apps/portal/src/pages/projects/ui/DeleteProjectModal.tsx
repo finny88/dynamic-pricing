@@ -1,6 +1,7 @@
 import { Button, Group, Modal, Stack, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useDeleteProjectMutation, type Project } from '@entities/project'
+import { isObjectOfTypeWithProperty } from '@shared/lib/typeGuards'
 
 interface Props {
 	project: Project
@@ -13,7 +14,7 @@ export const DeleteProjectModal = ({ project, onClose }: Props) => {
 
 	const handleConfirm = async () => {
 		const result = await deleteProject(project.id)
-		if ('error' in result) { return }
+		if (isObjectOfTypeWithProperty(result, 'error')) { return }
 		close()
 	}
 

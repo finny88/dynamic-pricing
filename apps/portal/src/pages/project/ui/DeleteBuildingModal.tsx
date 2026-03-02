@@ -1,6 +1,7 @@
 import { Button, Group, Modal, Stack, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useDeleteBuildingMutation, type Building } from '@entities/building'
+import { isObjectOfTypeWithProperty } from '@shared/lib/typeGuards'
 
 interface Props {
 	building: Building
@@ -13,7 +14,7 @@ export const DeleteBuildingModal = ({ building, onClose }: Props) => {
 
 	const handleConfirm = async () => {
 		const result = await deleteBuilding({ id: building.id, projectId: building.projectId })
-		if ('error' in result) { return }
+		if (isObjectOfTypeWithProperty(result, 'error')) { return }
 		close()
 	}
 

@@ -60,6 +60,7 @@ Configured via `eslint-plugin-boundaries` + `@feature-sliced/eslint-config`. Vio
 ### TypeScript & code quality rules
 Key rules to respect when generating code:
 - No non-null assertion operator `!` (`@typescript-eslint/no-non-null-assertion`) — use `?? ''`, `?? []`, optional chaining, or an explicit null guard instead
+- Never use the `in` operator for type guards or property checks — use `isObjectOfTypeWithProperty` from `@shared/lib/typeGuards` instead. The `in` operator reads from the prototype chain; `hasOwnProperty` is precise. Example: `isObjectOfTypeWithProperty(result, 'error')` instead of `'error' in result`
 - Avoid `as` type assertions — prefer type guards (`instanceof`, `typeof`, custom `is` predicates), typed variable declarations (`const req: IDBRequest<T> = ...`), or structural transformations (`.filter(isX)`, `.map(cell => ...)`) instead. `as const` is always fine. Justified exceptions: third-party APIs with unavoidably loose types (e.g. `cloneNode` returning `Node`, Mantine generic `onChange`)
 - `interface` not `type` for object shapes (`@typescript-eslint/consistent-type-definitions`)
 - `import type` for type-only imports (`@typescript-eslint/consistent-type-imports`)

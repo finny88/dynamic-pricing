@@ -8,6 +8,7 @@ import { rawUnitSchema } from '@entities/unit'
 import { REQUIRED_KEYS } from '../lib/requiredKeys'
 import { ExpectedFormatTable } from './ExpectedFormatTable'
 import { createColumnGhost, type ColumnGhost } from '../lib/createColumnDragImage'
+import { isObjectOfTypeWithProperty } from '@shared/lib/typeGuards'
 import styles from './FilePreviewTable.module.css'
 
 const columnHelper = createColumnHelper<unknown[]>()
@@ -15,7 +16,7 @@ const columnHelper = createColumnHelper<unknown[]>()
 const DRAG_THRESHOLD = 5
 
 const isRawUnitSchemaKey = (key: string): key is keyof typeof rawUnitSchema.shape =>
-	key in rawUnitSchema.shape
+	isObjectOfTypeWithProperty(rawUnitSchema.shape, key)
 
 const toColumnLetter = (index: number): string => {
 	let result = ''

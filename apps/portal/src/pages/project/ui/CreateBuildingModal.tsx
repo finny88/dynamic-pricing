@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { Modal, Stack, Text, Title } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useCreateBuildingMutation, type CreateBuildingDto } from '@entities/building'
+import { isObjectOfTypeWithProperty } from '@shared/lib/typeGuards'
 import { BuildingFormFields } from './BuildingFormFields'
 import type { BuildingFormValues } from './buildingFormConfig'
 
@@ -31,7 +32,7 @@ export const CreateBuildingModal = ({ ref, projectId }: { ref: Ref<CreateBuildin
 		}
 
 		const result = await createBuilding(dto)
-		if ('error' in result) { return }
+		if (isObjectOfTypeWithProperty(result, 'error')) { return }
 		close()
 	}
 

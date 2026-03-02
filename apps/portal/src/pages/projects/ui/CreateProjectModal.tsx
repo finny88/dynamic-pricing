@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { Modal, Stack, Text, Title } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useCreateProjectMutation, type CreateProjectDto } from '@entities/project'
+import { isObjectOfTypeWithProperty } from '@shared/lib/typeGuards'
 import { ProjectFormFields } from './ProjectFormFields'
 import type { ProjectFormValues } from './projectFormConfig'
 
@@ -50,7 +51,7 @@ export const CreateProjectModal = ({ ref }: { ref: Ref<CreateProjectModalHandle>
 		}
 
 		const result = await createProject(dto)
-		if ('error' in result) { return }
+		if (isObjectOfTypeWithProperty(result, 'error')) { return }
 		close()
 	}
 
