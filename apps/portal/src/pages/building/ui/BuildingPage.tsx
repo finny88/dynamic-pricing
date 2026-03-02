@@ -32,7 +32,7 @@ export const BuildingPage = () => {
 
 	if (isLoading) {
 		return (
-			<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+			<Container size={'xl'} pt={{ base: 'sm', sm: 'md', md: 'lg' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
 				<Stack gap={'lg'}>
 					<Skeleton h={32} w={200} />
 					<Skeleton h={80} />
@@ -45,7 +45,7 @@ export const BuildingPage = () => {
 
 	if (error || !building) {
 		return (
-			<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+			<Container size={'xl'} pt={{ base: 'sm', sm: 'md', md: 'lg' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
 				<Stack align={'center'} pt={'xl'} gap={8}>
 					<Title order={3} c={'dimmed'}>Корпус не найден</Title>
 					<Button variant={'subtle'} leftSection={<IconArrowLeft size={16} />} onClick={() => navigate(`/projects/${projectId}`)}>
@@ -58,7 +58,7 @@ export const BuildingPage = () => {
 
 	return (
 		<>
-			<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+			<Container size={'xl'} pt={{ base: 'sm', sm: 'md', md: 'lg' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
 				<BuildingPageHeader building={building} projectId={projectId!} projectName={project?.name ?? ''} />
 
 				<Group justify={'space-between'} align={'flex-end'}>
@@ -93,7 +93,7 @@ export const BuildingPage = () => {
 					</Group>
 				</Group>
 
-				<Divider my={'xl'} />
+				<Divider my={'md'} />
 			</Container>
 			<Activity mode={showViewer ? 'visible' : 'hidden'}>
 				<BuildingViewer units={building.units} />

@@ -41,7 +41,7 @@ export const ProjectPage = () => {
 
 	if (isLoading) {
 		return (
-			<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+			<Container size={'xl'} pt={{ base: 'sm', sm: 'md', md: 'lg' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
 				<Stack gap={'lg'}>
 					<Skeleton h={32} w={200} />
 					<Skeleton h={200} />
@@ -55,7 +55,7 @@ export const ProjectPage = () => {
 
 	if (error || !project) {
 		return (
-			<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+			<Container size={'xl'} pt={{ base: 'sm', sm: 'md', md: 'lg' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
 				<Stack align={'center'} pt={'xl'} gap={8}>
 					<Title order={3} c={'dimmed'}>Проект не найден</Title>
 					<Button variant={'subtle'} leftSection={<IconArrowLeft size={16} />} onClick={() => navigate('/projects')}>
@@ -67,8 +67,8 @@ export const ProjectPage = () => {
 	}
 
 	return (
-		<Container size={'xl'} pt={{ base: 'md', sm: 'lg', md: 'xl' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
-			<Stack mb={'xl'} gap={'xs'}>
+		<Container size={'xl'} pt={{ base: 'sm', sm: 'md', md: 'lg' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
+			<Stack mb={'md'} gap={'xs'}>
 				<Breadcrumbs>
 					<Anchor component={Link} to={'/projects'} size={'sm'}>Все ЖК</Anchor>
 					<Text size={'sm'}>{project.name}</Text>
@@ -86,7 +86,7 @@ export const ProjectPage = () => {
 				</Group>
 			</Stack>
 
-			<Divider mb={'xl'} />
+			<Divider mb={'md'} />
 
 			<SimpleGrid cols={{ base: 2, sm: 4 }} spacing={'md'}>
 				<Stack gap={4}>
@@ -107,7 +107,7 @@ export const ProjectPage = () => {
 				</Stack>
 			</SimpleGrid>
 
-			<Divider my={'xl'} />
+			<Divider my={'md'} />
 
 			{/* Buildings Section */}
 			<Group justify={'space-between'} mb={'md'}>

@@ -22,11 +22,11 @@ export const BuildingPageHeader = ({ building, projectId, projectName, buildingL
 				<Anchor component={Link} to={`/projects/${projectId}`} size={'sm'}>{projectName}</Anchor>
 				{buildingItem}
 			</Breadcrumbs>
-			<Stack gap={2} mb={'xl'}>
+			<Stack gap={2} mb={'md'}>
 				<Title order={2}>{building.name}</Title>
 				<LocationText locationParts={[building.address]} />
 			</Stack>
-			<Divider mb={'xl'} />
+			<Divider mb={'md'} />
 		</>
 	)
 }
