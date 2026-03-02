@@ -1,5 +1,5 @@
-import { type FieldErrors, type UseFormRegister } from 'react-hook-form'
 import { Button, Group, Stack, TextInput } from '@mantine/core'
+import { type FieldErrors, type UseFormRegister } from 'react-hook-form'
 import type { BuildingFormValues } from './buildingFormConfig'
 
 interface Props {

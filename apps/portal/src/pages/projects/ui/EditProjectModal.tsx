@@ -1,10 +1,10 @@
-import { useForm } from 'react-hook-form'
 import { Modal, Stack, Text, Title } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { useForm } from 'react-hook-form'
 import { useUpdateProjectMutation, type CreateProjectDto, type Project } from '@entities/project'
 import { isObjectOfTypeWithProperty } from '@shared/lib/typeGuards'
-import { ProjectFormFields } from './ProjectFormFields'
 import type { ProjectFormValues } from './projectFormConfig'
+import { ProjectFormFields } from './ProjectFormFields'
 
 interface Props {
 	project: Project

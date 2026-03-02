@@ -1,10 +1,10 @@
-import { useForm } from 'react-hook-form'
 import { Modal, Stack, Text, Title } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { useForm } from 'react-hook-form'
 import { useUpdateBuildingMutation, type Building, type CreateBuildingDto } from '@entities/building'
 import { isObjectOfTypeWithProperty } from '@shared/lib/typeGuards'
-import { BuildingFormFields } from './BuildingFormFields'
 import type { BuildingFormValues } from './buildingFormConfig'
+import { BuildingFormFields } from './BuildingFormFields'
 
 interface Props {
 	building: Building

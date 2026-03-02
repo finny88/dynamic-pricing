@@ -1,6 +1,6 @@
 import { Button, Popover, Stack } from '@mantine/core'
-import { useContext, type FC, type ReactNode } from 'react'
 import { IconChevronDown, IconChevronUp } from '@tabler/icons-react'
+import { useContext, type FC, type ReactNode } from 'react'
 import { FilterGroupContext } from './FilterGroupContext'
 
 interface FilterPopoverProps {

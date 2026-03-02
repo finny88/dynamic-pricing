@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
 import { Anchor, Breadcrumbs, Divider, Stack, Text, Title } from '@mantine/core'
+import { Link } from 'react-router-dom'
 import { LocationText } from '@shared/ui/LocationText'
 import type { Building } from '../model/building'
 

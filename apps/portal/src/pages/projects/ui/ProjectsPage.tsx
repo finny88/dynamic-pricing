@@ -1,12 +1,12 @@
-import { useRef, useState } from 'react'
 import { Button, Container, Group, SimpleGrid, Stack, Text, Title } from '@mantine/core'
 import { IconPlus, IconBuildingSkyscraper } from '@tabler/icons-react'
+import { useRef, useState } from 'react'
 import { useGetProjectsQuery, type Project } from '@entities/project'
 import { EmptyState } from '@shared/ui/EmptyState'
-import { ProjectCard } from './ProjectCard'
 import { CreateProjectModal, type CreateProjectModalHandle } from './CreateProjectModal'
 import { DeleteProjectModal } from './DeleteProjectModal'
 import { EditProjectModal } from './EditProjectModal'
+import { ProjectCard } from './ProjectCard'
 
 export const ProjectsPage = () => {
 	const { data: projects = [] } = useGetProjectsQuery()

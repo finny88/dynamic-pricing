@@ -1,5 +1,5 @@
-import type { BaseEntity, WithTotalArea } from '@shared/lib/entity'
 import type { Unit } from '@entities/unit/@x/building'
+import type { BaseEntity, WithTotalArea } from '@shared/lib/entity'
 
 export interface Building extends BaseEntity, WithTotalArea {
 	projectId: string

@@ -1,14 +1,15 @@
 import { createRequire } from 'module'
 import js from '@eslint/js'
-import globals from 'globals'
+import stylistic from '@stylistic/eslint-plugin'
+import { defineConfig, globalIgnores } from 'eslint/config'
+import prettierConfig from 'eslint-config-prettier'
+import boundaries from 'eslint-plugin-boundaries'
+import importPlugin from 'eslint-plugin-import'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import globals from 'globals'
 import tseslint from 'typescript-eslint'
-import prettierConfig from 'eslint-config-prettier'
-import stylistic from '@stylistic/eslint-plugin'
-import boundaries from 'eslint-plugin-boundaries'
-import { defineConfig, globalIgnores } from 'eslint/config'
 
 const require = createRequire(import.meta.url)
 const { layersLib } = require('@feature-sliced/eslint-config/utils')
@@ -47,8 +48,8 @@ const getFsdBoundaryRules = () => [
 ]
 
 export default defineConfig([
-	// Ignore build output
-	globalIgnores(['dist']),
+	// Ignore build output and config files
+	globalIgnores(['dist', 'eslint.config.js']),
 
 	{
 		files: ['**/*.{js,jsx,ts,tsx}'],
@@ -141,6 +142,29 @@ export default defineConfig([
 			'@stylistic/object-curly-spacing': ['error', 'always'],
 			'@stylistic/no-multi-spaces': 'error'
 		}
+	},
+
+	// Import order and hygiene
+	{
+		files: ['**/*.{js,jsx,ts,tsx}'],
+		plugins: { import: importPlugin },
+		settings: {
+			'import/resolver': {
+				typescript: { project: './tsconfig.app.json' },
+			},
+			'import/internal-regex': '^@(app|entities|features|pages|shared|widgets)/',
+		},
+		rules: {
+			'import/order': [
+				'warn', {
+					groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+					alphabetize: { order: 'asc', caseInsensitive: true },
+					'newlines-between': 'never',
+				}
+			],
+			'import/no-duplicates': 'error',
+			'import/newline-after-import': 'error',
+		},
 	},
 
 	// FSD layer boundary enforcement (@feature-sliced/eslint-config)

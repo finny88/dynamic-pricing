@@ -1,15 +1,15 @@
+import { Box } from '@mantine/core'
+import { clsx } from 'clsx'
 import type { FC } from 'react'
 import { memo } from 'react'
-import { Box } from '@mantine/core'
+import type { Unit } from '@entities/unit'
+import { getUnitColors } from '../../lib/colors'
+import { getUnitStatus, isUnitDisabled } from '../../lib/unit'
+import type { FilterOptions } from '../../model/filters'
+import type { GridVariant } from '../../model/variants'
 import { UnitCell } from './UnitCell'
 import { UnitCellDetailed } from './UnitCellDetailed'
 import classes from './UnitContainer.module.css'
-import { clsx } from 'clsx'
-import type { Unit } from '@entities/unit'
-import type { FilterOptions } from '../../model/filters'
-import type { GridVariant } from '../../model/variants'
-import { getUnitColors } from '../../lib/colors'
-import { getUnitStatus, isUnitDisabled } from '../../lib/unit'
 
 interface UnitContainerProps {
 	items: Unit[]

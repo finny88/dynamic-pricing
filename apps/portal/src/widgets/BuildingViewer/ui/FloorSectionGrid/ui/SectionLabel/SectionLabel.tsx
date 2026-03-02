@@ -1,5 +1,5 @@
-import type { FC } from 'react'
 import { Text } from '@mantine/core'
+import type { FC } from 'react'
 import classes from './SectionLabel.module.css'
 
 interface SectionLabelProps {

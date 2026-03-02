@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom'
 import { ActionIcon, Card, Divider, Group, Menu, Stack, Text } from '@mantine/core'
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react'
+import { useNavigate } from 'react-router-dom'
 import type { Building } from '@entities/building'
 import type { Project } from '@entities/project'
 import { LocationText } from '@shared/ui/LocationText'

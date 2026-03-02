@@ -1,5 +1,3 @@
-import { useRef, useState } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
 import {
 	Anchor,
 	Badge,
@@ -16,14 +14,16 @@ import {
 	Skeleton,
 } from '@mantine/core'
 import { IconArrowLeft, IconBuilding, IconPlus } from '@tabler/icons-react'
-import { useGetProjectQuery, housingClassLabels } from '@entities/project'
+import { useRef, useState } from 'react'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useGetBuildingsByProjectQuery, type Building } from '@entities/building'
+import { useGetProjectQuery, housingClassLabels } from '@entities/project'
 import { EmptyState } from '@shared/ui/EmptyState'
 import { LocationText } from '@shared/ui/LocationText'
 import { BuildingCard } from './BuildingCard'
 import { CreateBuildingModal, type CreateBuildingModalHandle } from './CreateBuildingModal'
-import { EditBuildingModal } from './EditBuildingModal'
 import { DeleteBuildingModal } from './DeleteBuildingModal'
+import { EditBuildingModal } from './EditBuildingModal'
 
 const formatDate = (iso: string) =>
 	new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })

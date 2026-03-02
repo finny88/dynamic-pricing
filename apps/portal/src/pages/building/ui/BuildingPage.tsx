@@ -1,5 +1,3 @@
-import { Activity, useState, useTransition } from 'react'
-import { useParams, useNavigate, useLocation, type Location } from 'react-router-dom'
 import {
 	Button,
 	Container,
@@ -13,6 +11,8 @@ import {
 	Tooltip,
 } from '@mantine/core'
 import { IconArrowLeft, IconEye, IconEyeOff, IconFileUpload } from '@tabler/icons-react'
+import { Activity, useState, useTransition } from 'react'
+import { useParams, useNavigate, useLocation, type Location } from 'react-router-dom'
 import { useGetBuildingByIdQuery, BuildingPageHeader, type BuildingPageInitialState } from '@entities/building'
 import { useGetProjectQuery } from '@entities/project'
 import { BuildingViewer } from '@widgets/BuildingViewer'

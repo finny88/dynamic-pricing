@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom'
 import { ActionIcon, Badge, Card, Divider, Group, Menu, Stack, Text } from '@mantine/core'
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react'
+import { useNavigate } from 'react-router-dom'
 import { housingClassLabels, type Project } from '@entities/project'
 import { LocationText } from '@shared/ui/LocationText'
 import classes from './ProjectCard.module.css'

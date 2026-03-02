@@ -1,6 +1,6 @@
-import { type Control, Controller, type FieldErrors, type UseFormRegister } from 'react-hook-form'
 import { Button, Group, Select, SimpleGrid, Stack, TextInput } from '@mantine/core'
 import { IconChevronDown } from '@tabler/icons-react'
+import { type Control, Controller, type FieldErrors, type UseFormRegister } from 'react-hook-form'
 import { housingClassOptions, type ProjectFormValues } from './projectFormConfig'
 
 interface Props {

@@ -1,6 +1,6 @@
 import { http, HttpResponse, type PathParams } from 'msw'
-import { addItem, deleteItem, getAll, getAllByIndex, getById, updateItem, STORES } from '@shared/lib/db'
 import type { Building } from '@entities/building/@x/building'
+import { addItem, deleteItem, getAll, getAllByIndex, getById, updateItem, STORES } from '@shared/lib/db'
 import type { Project } from '../model/project'
 import type { CreateProjectDto } from './projectsApi'
 

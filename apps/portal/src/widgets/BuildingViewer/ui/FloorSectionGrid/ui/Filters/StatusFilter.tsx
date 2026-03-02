@@ -1,10 +1,10 @@
-import type { FC } from 'react'
-import { useState } from 'react'
 import type { ChipProps } from '@mantine/core'
 import { Chip, Group } from '@mantine/core'
-import { FilterPopover } from './FilterPopover'
-import type { UnitStatus } from '../../model/unitStatus'
+import type { FC } from 'react'
+import { useState } from 'react'
 import { DEFAULT_COLOR_SCHEMES } from '../../lib/colors'
+import type { UnitStatus } from '../../model/unitStatus'
+import { FilterPopover } from './FilterPopover'
 
 const isUnitStatus = (value: string): value is UnitStatus =>
 	value === 'available' || value === 'reserved' || value === 'sold' || value === 'unknown'

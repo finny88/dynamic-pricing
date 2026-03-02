@@ -1,10 +1,10 @@
-import type { FC } from 'react'
 import { UnstyledButton, Tooltip } from '@mantine/core'
-import { UnitTooltipContent } from './UnitTooltipContent'
 import { clsx } from 'clsx'
-import classes from './UnitCell.module.css'
-import { ARIA_LABELS } from '../../lib/mappers'
+import type { FC } from 'react'
 import type { Unit } from '@entities/unit'
+import { ARIA_LABELS } from '../../lib/mappers'
+import classes from './UnitCell.module.css'
+import { UnitTooltipContent } from './UnitTooltipContent'
 
 interface UnitCellProps {
 	unit: Unit

@@ -1,6 +1,6 @@
-import { useParams, useNavigate } from 'react-router-dom'
 import { Button, Container, Divider, Skeleton, Stack, Title } from '@mantine/core'
 import { IconArrowLeft } from '@tabler/icons-react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useGetBuildingByIdQuery, useUpdateBuildingMutation, BuildingPageHeader, type BuildingPageInitialState } from '@entities/building'
 import { useGetProjectQuery } from '@entities/project'
 import type { Unit } from '@entities/unit'

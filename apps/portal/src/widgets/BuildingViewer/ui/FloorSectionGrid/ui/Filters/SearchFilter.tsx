@@ -1,7 +1,7 @@
-import type { FC } from 'react'
-import { useState } from 'react'
 import { TextInput } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
+import type { FC } from 'react'
+import { useState } from 'react'
 import { FilterPopover } from './FilterPopover'
 
 interface SearchFilterProps {

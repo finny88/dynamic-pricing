@@ -1,8 +1,8 @@
 import { Navigate } from 'react-router-dom'
 import { BuildingPage } from '@pages/building'
 import { BuildingExportPage } from '@pages/building-export'
-import { ProjectsPage } from '@pages/projects'
 import { ProjectPage } from '@pages/project'
+import { ProjectsPage } from '@pages/projects'
 
 export const routes = [
 	{ path: '/projects', element: <ProjectsPage /> },

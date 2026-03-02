@@ -1,5 +1,5 @@
-import { rootApi } from '@shared/api'
 import { PROJECT_TAG } from '@entities/project/@x/building'
+import { rootApi } from '@shared/api'
 import type { Building } from '../model/building'
 
 export type CreateBuildingDto = Omit<Building, 'updatedAt'>

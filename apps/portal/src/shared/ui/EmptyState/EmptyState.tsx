@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
 import { Box, Button, Paper, Stack, Text } from '@mantine/core'
+import type { ReactNode } from 'react'
 import classes from './EmptyState.module.css'
 
 interface EmptyStateProps {

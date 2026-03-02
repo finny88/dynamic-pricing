@@ -1,14 +1,14 @@
-import type { FC } from 'react'
-import { useMemo } from 'react'
 import { Box, Stack } from '@mantine/core'
-import { FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
 import { clsx } from 'clsx'
-import classes from './FloorSectionGrid.module.css'
-import type { GridVariant } from './model/variants'
+import { useMemo } from 'react'
+import type { FC } from 'react'
 import type { Unit } from '@entities/unit'
-import type { FilterOptions } from './model/filters'
-import { computeGridData } from './lib/unit'
+import classes from './FloorSectionGrid.module.css'
 import { ARIA_LABELS } from './lib/mappers'
+import { computeGridData } from './lib/unit'
+import type { FilterOptions } from './model/filters'
+import type { GridVariant } from './model/variants'
+import { FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
 
 const VARIANT_CONFIG: Record<GridVariant, { cellMinWidth: number }> = {
 	compact: { cellMinWidth: 28 },

@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { Accordion, Box, Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Stack, Table, Text } from '@mantine/core'
+import { IconArrowDown, IconArrowUp, IconArrowsSort, IconCheck } from '@tabler/icons-react'
 import {
 	createColumnHelper,
 	flexRender,
@@ -10,14 +11,13 @@ import {
 	type SortingState,
 	type VisibilityState,
 } from '@tanstack/react-table'
-import { Accordion, Box, Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Stack, Table, Text } from '@mantine/core'
-import { IconArrowDown, IconArrowUp, IconArrowsSort, IconCheck } from '@tabler/icons-react'
+import { useMemo, useState } from 'react'
 import { type Unit, rawUnitSchema } from '@entities/unit'
-import classes from './UnitsTable.module.css'
 import { getUnitColors } from './FloorSectionGrid/lib/colors'
 import { formatPrice } from './FloorSectionGrid/lib/formats'
-import type { FilterOptions } from './FloorSectionGrid/model/filters'
 import { isUnitDisabled } from './FloorSectionGrid/lib/unit'
+import type { FilterOptions } from './FloorSectionGrid/model/filters'
+import classes from './UnitsTable.module.css'
 
 const columnHelper = createColumnHelper<Unit>()
 

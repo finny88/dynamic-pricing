@@ -1,6 +1,6 @@
+import { Group, NumberInput } from '@mantine/core'
 import type { FC } from 'react'
 import { useState } from 'react'
-import { Group, NumberInput } from '@mantine/core'
 import { FilterPopover } from './FilterPopover'
 
 interface PriceFilterProps {

@@ -1,5 +1,5 @@
-import type { Unit } from '../model/unit'
 import type { RawUnit } from '../model/rawUnit'
+import type { Unit } from '../model/unit'
 
 const str = (value: string | null | undefined): string => value ?? ''
 const num = (value: string | null | undefined): number => parseFloat(value ?? '') || 0

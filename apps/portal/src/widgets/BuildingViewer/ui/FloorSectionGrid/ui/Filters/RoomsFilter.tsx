@@ -1,6 +1,6 @@
+import { Chip, Group } from '@mantine/core'
 import type { FC } from 'react'
 import { useState } from 'react'
-import { Chip, Group } from '@mantine/core'
 import { FilterPopover } from './FilterPopover'
 
 interface RoomsFilterProps {

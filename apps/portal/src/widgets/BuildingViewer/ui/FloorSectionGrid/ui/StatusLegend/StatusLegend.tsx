@@ -1,6 +1,6 @@
-import type { FC } from 'react'
 import { Box, Text, Group } from '@mantine/core'
 import { clsx } from 'clsx'
+import type { FC } from 'react'
 import classes from './StatusLegend.module.css'
 
 export const StatusLegend: FC = () => {

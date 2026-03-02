@@ -1,9 +1,9 @@
-import type { FC } from 'react'
 import { UnstyledButton, Text, Stack, Group } from '@mantine/core'
 import { clsx } from 'clsx'
-import classes from './UnitCellDetailed.module.css'
-import { formatPrice } from '../../lib/formats'
+import type { FC } from 'react'
 import type { Unit } from '@entities/unit'
+import { formatPrice } from '../../lib/formats'
+import classes from './UnitCellDetailed.module.css'
 
 interface UnitCellDetailedProps {
 	unit: Unit

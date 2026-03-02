@@ -1,7 +1,7 @@
 import { CloseButton, Table, Text } from '@mantine/core'
+import { clsx } from 'clsx'
 import { RAW_UNIT_KEYS } from '@entities/unit'
 import { REQUIRED_KEYS } from '../lib/requiredKeys'
-import { clsx } from 'clsx'
 import styles from './FilePreviewTable.module.css'
 
 const boldCloseIcon = (
