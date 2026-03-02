@@ -24,7 +24,7 @@ export const UnitTooltipContent: FC<UnitTooltipContentProps> = ({ unit, backgrou
 				<Text size={'xs'} c={'dark'}>
 					Квартира
 				</Text>
-				<Text size={'xs'} c={'dark'} fw={700} style={{ marginLeft: 4 }}>
+				<Text size={'xs'} c={'dark'} fw={700} className={classes.unitNumber}>
 					{`№${unit.unitNumber}`}
 				</Text>
 			</Group>

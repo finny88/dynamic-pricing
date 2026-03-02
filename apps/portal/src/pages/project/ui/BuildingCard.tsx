@@ -4,6 +4,7 @@ import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react'
 import type { Building } from '@entities/building'
 import type { Project } from '@entities/project'
 import { LocationText } from '@shared/ui/LocationText'
+import classes from './BuildingCard.module.css'
 
 const formatDate = (iso: string) =>
 	new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
@@ -24,7 +25,7 @@ export const BuildingCard = ({ building, project, onEdit, onDelete }: Props) => 
 			padding={'lg'}
 			radius={'md'}
 			withBorder
-			style={{ cursor: 'pointer' }}
+			className={classes.card}
 			onClick={() => navigate(`/projects/${building.projectId}/buildings/${building.id}`)}
 		>
 			<Stack gap={'sm'}>

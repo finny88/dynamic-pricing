@@ -67,6 +67,7 @@ Key rules to respect when generating code:
 - Arrow function expressions only — no `function` declarations (`func-style`)
 - No `console.*` calls (`no-console`)
 - No nested ternaries (`no-nested-ternary`)
+- Prefer CSS module classes over inline `style={{}}` — only use inline styles for values that are truly dynamic at runtime (e.g. computed colors, grid positions from props). Static values always belong in a `.module.css` file alongside the component.
 - Tabs for indentation, single quotes, no semicolons
 - Files must not exceed 300 lines (`max-lines`)
 - Nesting must not exceed 4 levels (`max-depth`)

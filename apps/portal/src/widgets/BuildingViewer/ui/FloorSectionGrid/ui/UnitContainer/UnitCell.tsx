@@ -38,8 +38,6 @@ export const UnitCell: FC<UnitCellProps> = ({ unit, colors, status, disabled }) 
 				className={`${classes.unitButton} ${disabled ? classes.disabled : ''}`}
 				style={{
 					backgroundColor: colors.background,
-					opacity: disabled ? 0.3 : 1,
-					cursor: disabled ? 'not-allowed' : 'pointer',
 				}}
 				onMouseEnter={(e) => {
 					if (!disabled && colors.hoverBackground) {

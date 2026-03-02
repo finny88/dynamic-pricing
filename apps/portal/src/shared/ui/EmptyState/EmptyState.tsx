@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Box, Button, Paper, Stack, Text } from '@mantine/core'
+import classes from './EmptyState.module.css'
 
 interface EmptyStateProps {
 	/** Icon to display in the empty state */
@@ -21,7 +22,7 @@ interface EmptyStateProps {
 export const EmptyState = ({ icon, iconContent, message, buttonLabel, onButtonClick, buttonLeftSection, mih = 240 }: EmptyStateProps) => (
 	<Paper
 		withBorder
-		style={{ borderStyle: 'dashed', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
+		className={classes.paper}
 		p={'xl'}
 		mih={mih}
 	>

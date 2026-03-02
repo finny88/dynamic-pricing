@@ -227,7 +227,7 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 			/>
 			<Button
 				variant={'filled'}
-				style={{ width: 'fit-content', flexShrink: 0, marginTop: 12 }}
+				className={styles.parseButton}
 				disabled={!allRequiredMapped}
 				loading={loading}
 				onClick={onParseClick}

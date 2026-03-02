@@ -1,5 +1,6 @@
 .gridContainer {
   overflow-x: auto;
+  transition: opacity 150ms;
 }
 
 .grid {

@@ -42,9 +42,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 			<Box
 				className={classes.gridContainer}
 				style={{
-					overflowX: 'auto',
 					opacity: isPending ? 0.6 : 1,
-					transition: 'opacity 150ms',
 				}}
 			>
 				{/* MAIN GRID */}

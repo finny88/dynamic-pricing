@@ -3,6 +3,7 @@ import { ActionIcon, Badge, Card, Divider, Group, Menu, Stack, Text } from '@man
 import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react'
 import { housingClassLabels, type Project } from '@entities/project'
 import { LocationText } from '@shared/ui/LocationText'
+import classes from './ProjectCard.module.css'
 
 const formatDate = (iso: string) =>
 	new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
@@ -22,7 +23,7 @@ export const ProjectCard = ({ project, onEdit, onDelete }: Props) => {
 			padding={'lg'}
 			radius={'md'}
 			withBorder
-			style={{ cursor: 'pointer' }}
+			className={classes.card}
 			onClick={() => navigate(`/projects/${project.id}`)}
 		>
 			<Stack gap={'sm'}>

@@ -8,6 +8,7 @@ import type { Unit } from '@entities/unit'
 import { parseFile, parseFilePreview } from '../lib/parseFile'
 import type { FilePreview, RowValidationError } from '../lib/parseFile'
 import { FilePreviewTable } from './FilePreviewTable'
+import classes from './ExcelUpload.module.css'
 
 const ACCEPT = '.xls,.xlsx,.csv'
 
@@ -189,7 +190,7 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 						ref={inputRef}
 						type={'file'}
 						accept={ACCEPT}
-						style={{ display: 'none' }}
+						className={classes.hiddenInput}
 						onChange={(e) => {
 							const selected = e.target.files?.[0]
 							if (selected) { void handleFileChange(selected) }

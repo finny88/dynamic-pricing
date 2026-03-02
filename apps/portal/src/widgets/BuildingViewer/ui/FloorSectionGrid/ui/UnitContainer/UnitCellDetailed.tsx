@@ -22,8 +22,6 @@ export const UnitCellDetailed: FC<UnitCellDetailedProps> = ({ unit, colors, disa
 			style={{
 				backgroundColor: colors.background,
 				borderColor: colors.background,
-				opacity: disabled ? 0.3 : 1,
-				cursor: disabled ? 'not-allowed' : 'pointer',
 			}}
 			onMouseEnter={(e) => {
 				if (!disabled && colors.hoverBackground) {
@@ -60,10 +58,10 @@ export const UnitCellDetailed: FC<UnitCellDetailedProps> = ({ unit, colors, disa
 					</Text>
 				</Group>
 				<Group gap={4} align={'center'} wrap={'nowrap'}>
-					<Text size={'xs'} c={'white'} style={{ opacity: 0.9 }}>
+					<Text size={'xs'} c={'white'} className={classes.dimmedText}>
 						{`${unit.totalAreaSqm} м²`}
 					</Text>
-					<Text size={'xs'} c={'white'} style={{ opacity: 0.9 }}>
+					<Text size={'xs'} c={'white'} className={classes.dimmedText}>
 						{`– ${formatPrice(unit.actualPricePerSqmRub)} ₽/м²`}
 					</Text>
 				</Group>

@@ -105,3 +105,9 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+.parseButton {
+	width: fit-content;
+	flex-shrink: 0;
+	margin-top: 12px;
+}

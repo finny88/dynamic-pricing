@@ -10,6 +10,7 @@ import { UnitsTable } from './UnitsTable'
 import { Filters } from './FloorSectionGrid/ui/Filters'
 import { computeAvailableFloors, computeAvailableSections, computeGridData } from './FloorSectionGrid/lib/unit'
 import { StatusLegend } from './FloorSectionGrid/ui'
+import classes from './BuildingViewer.module.css'
 
 type BuildingViewerTabs = 'grid' | 'grid-plus' | 'rooms'
 
@@ -62,7 +63,7 @@ export const BuildingViewer = ({ units }: Props) => {
 		[tabsKeys.ROOMS]: {
 			label: 'Помещения',
 			icon: <IconList size={16} />,
-			legend: <Button variant={'outline'} style={{ alignSelf: 'flex-start' }} onClick={() => setColumnModalOpen(true)}>Поля для отображения</Button>,
+			legend: <Button variant={'outline'} className={classes.legendButton} onClick={() => setColumnModalOpen(true)}>Поля для отображения</Button>,
 			content: <UnitsTable
 				units={units}
 				activeFilters={activeFilters}

@@ -13,6 +13,7 @@ import {
 import { Accordion, Box, Button, Group, Modal, Pagination, ScrollArea, SimpleGrid, Stack, Table, Text } from '@mantine/core'
 import { IconArrowDown, IconArrowUp, IconArrowsSort, IconCheck } from '@tabler/icons-react'
 import { type Unit, rawUnitSchema } from '@entities/unit'
+import classes from './UnitsTable.module.css'
 import { getUnitColors } from './FloorSectionGrid/lib/colors'
 import { formatPrice } from './FloorSectionGrid/lib/formats'
 import type { FilterOptions } from './FloorSectionGrid/model/filters'
@@ -21,9 +22,9 @@ import { isUnitDisabled } from './FloorSectionGrid/lib/unit'
 const columnHelper = createColumnHelper<Unit>()
 
 const SortIcon = ({ sorted }: { sorted: false | 'asc' | 'desc' }) => {
-	if (sorted === 'asc') { return <IconArrowUp size={14} style={{ flexShrink: 0 }} /> }
-	if (sorted === 'desc') { return <IconArrowDown size={14} style={{ flexShrink: 0 }} /> }
-	return <IconArrowsSort size={14} style={{ flexShrink: 0, opacity: 0.4 }} />
+	if (sorted === 'asc') { return <IconArrowUp size={14} className={classes.sortIcon} /> }
+	if (sorted === 'desc') { return <IconArrowDown size={14} className={classes.sortIcon} /> }
+	return <IconArrowsSort size={14} className={classes.sortIconInactive} />
 }
 
 const COLUMNS = [
@@ -37,7 +38,7 @@ const COLUMNS = [
 		header: 'Статус',
 		cell: ({ row, getValue }) => (
 			<Group gap={'xs'} wrap={'nowrap'}>
-				<Box style={{ width: 16, height: 16, flexShrink: 0, backgroundColor: getUnitColors(row.original).background }} />
+				<Box className={classes.statusColorBox} style={{ backgroundColor: getUnitColors(row.original).background }} />
 				<span>{getValue()}</span>
 			</Group>
 		),
@@ -184,7 +185,7 @@ export const UnitsTable = ({ units, activeFilters, modalOpen, onModalClose }: Pr
 									<Table.Th
 										key={header.id}
 										onClick={header.column.getToggleSortingHandler()}
-										style={{ cursor: 'pointer', userSelect: 'none' }}
+										className={classes.sortableHeader}
 									>
 										<Group gap={4} wrap={'nowrap'}>
 											{flexRender(header.column.columnDef.header, header.getContext())}
