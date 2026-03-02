@@ -2,7 +2,7 @@ import { CloseButton, Table, Text } from '@mantine/core'
 import { clsx } from 'clsx'
 import { RAW_UNIT_KEYS } from '@entities/unit'
 import { REQUIRED_KEYS } from '../lib/requiredKeys'
-import styles from './FilePreviewTable.module.css'
+import styles from './ExpectedFormatTable.module.css'
 
 const boldCloseIcon = (
 	<svg viewBox={'0 0 15 15'} width={12} height={12} fill={'none'} stroke={'var(--mantine-color-red-8)'} strokeWidth={4} strokeLinecap={'round'}>

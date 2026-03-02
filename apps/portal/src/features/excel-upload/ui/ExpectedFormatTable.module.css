@@ -1,0 +1,58 @@
+.wrapper {
+	margin-top: var(--mantine-spacing-sm);
+}
+
+.scroll {
+	overflow-x: auto;
+}
+
+.table {
+	min-width: 100%;
+	font-size: var(--mantine-font-size-sm);
+}
+
+.lineNumberCell {
+	width: 1%;
+	white-space: nowrap;
+	text-align: center;
+	color: var(--mantine-color-dimmed);
+	font-size: var(--mantine-font-size-xs);
+	background-color: var(--mantine-color-gray-0);
+	user-select: none;
+}
+
+.expectedTh {
+	white-space: nowrap;
+	font-weight: 600;
+	background-color: var(--mantine-color-gray-1);
+}
+
+.expectedThRequired {
+	white-space: nowrap;
+	font-weight: 600;
+	background-color: var(--mantine-color-yellow-1);
+}
+
+.dropTarget {
+	background-color: var(--mantine-color-yellow-2) !important;
+}
+
+.mappingCell {
+	background-color: var(--mantine-color-gray-0);
+	max-width: 200px;
+	overflow: hidden;
+	position: relative;
+}
+
+.mappingCloseButton {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+}
+
+.td {
+	white-space: nowrap;
+	max-width: 200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
