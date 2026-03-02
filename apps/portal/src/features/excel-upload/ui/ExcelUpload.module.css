@@ -1,3 +1,14 @@
 .hiddenInput {
   display: none;
 }
+
+.fileInputRoot {
+  flex: 1;
+}
+
+.fileInputLabel {
+  display: block;
+  width: fit-content;
+  margin-inline: auto;
+  margin-bottom: 4px;
+}

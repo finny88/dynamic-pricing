@@ -68,6 +68,7 @@ Key rules to respect when generating code:
 - No `console.*` calls (`no-console`)
 - No nested ternaries (`no-nested-ternary`)
 - Prefer CSS module classes over inline `style={{}}` — only use inline styles for values that are truly dynamic at runtime (e.g. computed colors, grid positions from props). Static values always belong in a `.module.css` file alongside the component.
+- Prefer `classNames` over `styles` prop for Mantine components — use `classNames={{ slot: classes.myClass }}` with a CSS module instead of `styles={{ slot: { ... } }}`. Only use `styles` when the values are dynamic at runtime (e.g. colors from props).
 - Tabs for indentation, single quotes, no semicolons
 - Files must not exceed 300 lines (`max-lines`)
 - Nesting must not exceed 4 levels (`max-depth`)

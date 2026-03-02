@@ -23,15 +23,7 @@ export const UnitCell: FC<UnitCellProps> = ({ unit, colors, status, disabled }) 
 			label={<UnitTooltipContent unit={unit} backgroundColor={colors.background} />}
 			withArrow
 			position={'top'}
-			styles={{
-				tooltip: {
-					zIndex: 10000,
-					opacity: 1,
-					backgroundColor: 'white',
-					boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05)',
-					border: 'none',
-				}
-			}}
+			classNames={{ tooltip: classes.tooltip }}
 		>
 			<UnstyledButton
 				aria-label={`${ARIA_LABELS.UNIT} ${unit.unitNumber} - ${status}${disabled ? ' (filtered)' : ''}`}

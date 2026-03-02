@@ -200,7 +200,7 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 					<Group align={'flex-end'} wrap={'nowrap'} gap={'xs'}>
 						<TextInput
 							label={<Title order={3}>Загрузить файл</Title>}
-							styles={{ label: { display: 'block', width: 'fit-content', marginInline: 'auto', marginBottom: 4 }, root: { flex: 1 } }}
+							classNames={{ label: classes.fileInputLabel, root: classes.fileInputRoot }}
 							value={file?.name ?? ''}
 							readOnly
 							disabled={loading}

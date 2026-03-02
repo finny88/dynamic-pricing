@@ -31,3 +31,11 @@
   transform: none;
   box-shadow: none;
 }
+
+.tooltip {
+  z-index: 10000;
+  opacity: 1;
+  background-color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  border: none;
+}
