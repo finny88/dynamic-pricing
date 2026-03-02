@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 import { UnstyledButton, Text, Stack, Group } from '@mantine/core'
+import { clsx } from 'clsx'
 import classes from './UnitCellDetailed.module.css'
 import { formatPrice } from '../../lib/formats'
 import type { Unit } from '@entities/unit'
@@ -18,7 +19,7 @@ interface UnitCellDetailedProps {
 export const UnitCellDetailed: FC<UnitCellDetailedProps> = ({ unit, colors, disabled }) => {
 	return (
 		<UnstyledButton
-			className={`${classes.unitButton} ${disabled ? classes.disabled : ''}`}
+			className={clsx(classes.unitButton, disabled && classes.disabled)}
 			style={{
 				backgroundColor: colors.background,
 				borderColor: colors.background,

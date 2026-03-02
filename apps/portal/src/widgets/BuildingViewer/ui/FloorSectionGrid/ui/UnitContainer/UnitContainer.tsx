@@ -4,6 +4,7 @@ import { Box } from '@mantine/core'
 import { UnitCell } from './UnitCell'
 import { UnitCellDetailed } from './UnitCellDetailed'
 import classes from './UnitContainer.module.css'
+import { clsx } from 'clsx'
 import type { Unit } from '@entities/unit'
 import type { FilterOptions } from '../../model/filters'
 import type { GridVariant } from '../../model/variants'
@@ -30,7 +31,7 @@ const UnitContainerComponent: FC<UnitContainerProps> = ({
 
 	return (
 		<Box
-			className={`${classes.unitContainer} ${sizeClass}`}
+			className={clsx(classes.unitContainer, sizeClass)}
 			style={{
 				gridRow: floorIndex + 2, // +2 to account for top X axis and 1-based grid
 				gridColumn: sectionIndex + 2 // +2 to account for Y axis

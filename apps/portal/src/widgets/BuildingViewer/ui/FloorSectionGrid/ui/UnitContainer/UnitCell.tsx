@@ -1,6 +1,7 @@
 import type { FC } from 'react'
 import { UnstyledButton, Tooltip } from '@mantine/core'
 import { UnitTooltipContent } from './UnitTooltipContent'
+import { clsx } from 'clsx'
 import classes from './UnitCell.module.css'
 import { ARIA_LABELS } from '../../lib/mappers'
 import type { Unit } from '@entities/unit'
@@ -27,7 +28,7 @@ export const UnitCell: FC<UnitCellProps> = ({ unit, colors, status, disabled }) 
 		>
 			<UnstyledButton
 				aria-label={`${ARIA_LABELS.UNIT} ${unit.unitNumber} - ${status}${disabled ? ' (filtered)' : ''}`}
-				className={`${classes.unitButton} ${disabled ? classes.disabled : ''}`}
+				className={clsx(classes.unitButton, disabled && classes.disabled)}
 				style={{
 					backgroundColor: colors.background,
 				}}

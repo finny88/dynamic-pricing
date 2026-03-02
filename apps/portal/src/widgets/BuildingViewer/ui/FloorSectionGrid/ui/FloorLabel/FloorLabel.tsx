@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 import { Box, Text } from '@mantine/core'
+import { clsx } from 'clsx'
 import classes from './FloorLabel.module.css'
 import type { GridVariant } from '../../model/variants'
 
@@ -14,7 +15,7 @@ export const FloorLabel: FC<FloorLabelProps> = ({ floor, floorIndex, variant = '
 
 	return (
 		<Box
-			className={`${classes.yAxisLabel} ${sizeClass}`}
+			className={clsx(classes.yAxisLabel, sizeClass)}
 			style={{
 				gridColumn: 1,
 				gridRow: floorIndex + 2 // +2 to account for top X axis and 1-based grid

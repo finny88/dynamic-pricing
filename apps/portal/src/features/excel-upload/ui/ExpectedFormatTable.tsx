@@ -1,6 +1,7 @@
 import { CloseButton, Table, Text } from '@mantine/core'
 import { RAW_UNIT_KEYS } from '@entities/unit'
 import { REQUIRED_KEYS } from '../lib/requiredKeys'
+import { clsx } from 'clsx'
 import styles from './FilePreviewTable.module.css'
 
 const boldCloseIcon = (
@@ -28,7 +29,7 @@ export const ExpectedFormatTable = ({ rows, header, mapping, dragOverKey, onRemo
 	const hasMappings = Object.keys(mapping).length > 0
 
 	const colClass = (key: string, base: string) =>
-		dragOverKey === key ? `${base} ${styles.dropTarget}` : base
+		clsx(base, dragOverKey === key && styles.dropTarget)
 
 	return (
 		<div className={styles.wrapper}>

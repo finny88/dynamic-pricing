@@ -2,6 +2,7 @@ import type { FC } from 'react'
 import { useMemo } from 'react'
 import { Box, Stack } from '@mantine/core'
 import { FloorLabel, SectionLabel, UnitContainer, ResultsCount } from './ui'
+import { clsx } from 'clsx'
 import classes from './FloorSectionGrid.module.css'
 import type { GridVariant } from './model/variants'
 import type { Unit } from '@entities/unit'
@@ -34,7 +35,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 
 	const { cellMinWidth } = VARIANT_CONFIG[variant]
 	const gridTemplateColumns = `auto repeat(${sections.length}, minmax(${cellMinWidth}px, auto))`
-	const gridClassName = `${classes.grid} ${variant === 'detailed' ? classes.gridDetailed : classes.gridCompact}`
+	const gridClassName = clsx(classes.grid, variant === 'detailed' ? classes.gridDetailed : classes.gridCompact)
 
 	return (
 		<Stack gap={'lg'}>

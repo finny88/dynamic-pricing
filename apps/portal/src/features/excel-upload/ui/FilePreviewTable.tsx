@@ -9,6 +9,7 @@ import { REQUIRED_KEYS } from '../lib/requiredKeys'
 import { ExpectedFormatTable } from './ExpectedFormatTable'
 import { createColumnGhost, type ColumnGhost } from '../lib/createColumnDragImage'
 import { isObjectOfTypeWithProperty } from '@shared/lib/typeGuards'
+import { clsx } from 'clsx'
 import styles from './FilePreviewTable.module.css'
 
 const columnHelper = createColumnHelper<unknown[]>()
@@ -128,7 +129,12 @@ export const FilePreviewTable = ({ preview, loading, onParse }: Props) => {
 	})
 
 	const colClass = (colIndex: number, base: string) =>
-		`${base} ${styles.draggableColumn}${draggingCol === colIndex ? ` ${styles.draggingColumn}` : ''}${hoveredCol === colIndex ? ` ${styles.hoveredColumn}` : ''}`
+		clsx(
+			base,
+			styles.draggableColumn,
+			draggingCol === colIndex && styles.draggingColumn,
+			hoveredCol === colIndex && styles.hoveredColumn,
+		)
 
 	const columnMouseProps = (colIndex: number) => ({
 		onMouseEnter: () => setHoveredCol(colIndex),
