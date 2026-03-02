@@ -86,7 +86,7 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 		const sheet = sheetJsWb.Sheets[sheetJsWb.SheetNames[0]]
 		const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, raw: false, defval: null })
 
-		const headers = ((rows[0] ?? []) as string[]).map(String)
+		const headers = (rows[0] ?? []).map(cell => String(cell))
 		const errorCells = new Set(invalid.map((err) => `${err.row}:${err.column}`))
 		const errorFill: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFCCCC' } }
 
@@ -94,7 +94,7 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 		const ws = wb.addWorksheet(sheetJsWb.SheetNames[0] ?? 'Sheet1')
 
 		rows.forEach((row, rowIndex) => {
-			const excelRow = ws.addRow(row as (string | null)[])
+			const excelRow = ws.addRow(row.map(cell => typeof cell === 'string' ? cell : null))
 			if (rowIndex === 0) {
 				excelRow.font = { bold: true }
 			} else {

@@ -19,6 +19,9 @@ const tabsKeys = {
 	ROOMS: 'rooms'
 } as const
 
+const isBuildingViewerTab = (value: string | null): value is BuildingViewerTabs =>
+	value === tabsKeys.GRID || value === tabsKeys.GRID_PLUS || value === tabsKeys.ROOMS
+
 interface Props {
 	units: Unit[]
 }
@@ -83,9 +86,9 @@ export const BuildingViewer = ({ units }: Props) => {
 					<Tabs
 						value={selectedTab}
 						onChange={(value) => {
-							const tab = value as BuildingViewerTabs
-							setSelectedTab(tab)
-							startTransition(() => setActiveTab(tab))
+							if (!isBuildingViewerTab(value)) { return }
+							setSelectedTab(value)
+							startTransition(() => setActiveTab(value))
 						}}
 						ref={tabsRef}
 					>

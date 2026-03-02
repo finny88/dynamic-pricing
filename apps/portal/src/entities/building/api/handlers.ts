@@ -1,4 +1,4 @@
-import { http, HttpResponse, type PathParams } from 'msw'
+import { http, HttpResponse } from 'msw'
 import { addItem, deleteItem, getAllByIndex, getById, updateItem, STORES } from '@shared/lib/db'
 import type { Building } from '../model/building'
 import type { CreateBuildingDto } from './buildingsApi'
@@ -17,8 +17,8 @@ export const buildingHandlers = [
 		return HttpResponse.json({ building })
 	}),
 
-	http.post<PathParams, CreateBuildingDto>('/api/projects/:projectId/buildings', async ({ params, request }) => {
-		const projectId = params['projectId'] as string
+	http.post<{ projectId: string }, CreateBuildingDto>('/api/projects/:projectId/buildings', async ({ params, request }) => {
+		const projectId = params.projectId
 		const body = await request.json()
 		const building: Building = { ...body, projectId, updatedAt: new Date().toISOString() }
 		await addItem<Building>(STORES.BUILDINGS, building)

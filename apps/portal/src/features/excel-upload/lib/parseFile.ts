@@ -51,7 +51,7 @@ export const parseFilePreview = async (file: File): Promise<FilePreview> => {
 	const rawRows = XLSX.utils.sheet_to_json<unknown[]>(firstSheet, { header: 1, defval: null, raw: false })
 
 	const [headerRow, ...dataRows] = rawRows
-	const header = (headerRow as unknown[] ?? []).map((cell) => String(cell ?? ''))
+	const header = (headerRow ?? []).map((cell) => String(cell ?? ''))
 	const rows = dataRows.slice(0, 5)
 
 	return { header, rows }
@@ -84,9 +84,11 @@ export const parseFile = async (
 		)
 
 		if (result.success) {
-			const rawUnit = mapToRawUnitUnchecked(result.data as Record<string, unknown>, columnMapping)
-			if (isRawUnit(rawUnit)) {
-				data.push(mapRawUnitToUnit(rawUnit))
+			if (isIndexable(result.data)) {
+				const rawUnit = mapToRawUnitUnchecked(result.data, columnMapping)
+				if (isRawUnit(rawUnit)) {
+					data.push(mapRawUnitToUnit(rawUnit))
+				}
 			}
 		} else {
 			errors.push(...result.errors)

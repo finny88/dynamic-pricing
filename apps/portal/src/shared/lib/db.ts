@@ -14,8 +14,8 @@ const openDB = (): Promise<IDBDatabase> => {
 	dbPromise = new Promise((resolve, reject) => {
 		const request = indexedDB.open(DB_NAME, DB_VERSION)
 
-		request.onupgradeneeded = (event) => {
-			const db = (event.target as IDBOpenDBRequest).result
+		request.onupgradeneeded = () => {
+			const db = request.result
 			if (db.objectStoreNames.contains(STORES.PROJECTS)) {
 				db.deleteObjectStore(STORES.PROJECTS)
 			}
@@ -32,12 +32,12 @@ const openDB = (): Promise<IDBDatabase> => {
 			)
 		}
 
-		request.onsuccess = (event) => {
-			resolve((event.target as IDBOpenDBRequest).result)
+		request.onsuccess = () => {
+			resolve(request.result)
 		}
 
-		request.onerror = (event) => {
-			reject((event.target as IDBOpenDBRequest).error)
+		request.onerror = () => {
+			reject(request.error)
 		}
 	})
 
@@ -86,12 +86,12 @@ export const deleteItem = async (storeName: string, id: string): Promise<void> =
 export const getById = async <T>(storeName: string, id: string): Promise<T | null> => {
 	const db = await openDB()
 	return new Promise((resolve, reject) => {
-		const request = db
+		const request: IDBRequest<T | null> = db
 			.transaction(storeName, 'readonly')
 			.objectStore(storeName)
 			.get(id)
 
-		request.onsuccess = () => resolve(request.result as T | null)
+		request.onsuccess = () => resolve(request.result)
 		request.onerror = () => reject(request.error)
 	})
 }
@@ -99,12 +99,12 @@ export const getById = async <T>(storeName: string, id: string): Promise<T | nul
 export const getAll = async <T>(storeName: string): Promise<T[]> => {
 	const db = await openDB()
 	return new Promise((resolve, reject) => {
-		const request = db
+		const request: IDBRequest<T[]> = db
 			.transaction(storeName, 'readonly')
 			.objectStore(storeName)
 			.getAll()
 
-		request.onsuccess = () => resolve(request.result as T[])
+		request.onsuccess = () => resolve(request.result)
 		request.onerror = () => reject(request.error)
 	})
 }
@@ -112,13 +112,13 @@ export const getAll = async <T>(storeName: string): Promise<T[]> => {
 export const getAllByIndex = async <T>(storeName: string, indexName: string, value: string): Promise<T[]> => {
 	const db = await openDB()
 	return new Promise((resolve, reject) => {
-		const request = db
+		const request: IDBRequest<T[]> = db
 			.transaction(storeName, 'readonly')
 			.objectStore(storeName)
 			.index(indexName)
 			.getAll(value)
 
-		request.onsuccess = () => resolve(request.result as T[])
+		request.onsuccess = () => resolve(request.result)
 		request.onerror = () => reject(request.error)
 	})
 }

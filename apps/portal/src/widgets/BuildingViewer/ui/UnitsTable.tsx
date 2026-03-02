@@ -84,7 +84,7 @@ const COLUMNS = [
 ]
 
 const schemaKeys = new Set(Object.keys(rawUnitSchema.shape))
-const DEFAULT_VISIBLE_IDS = new Set(COLUMNS.filter(col => schemaKeys.has(col.header as string)).map(col => col.id as string))
+const DEFAULT_VISIBLE_IDS = new Set(COLUMNS.filter(col => typeof col.header === 'string' && schemaKeys.has(col.header)).map(col => col.id ?? ''))
 
 const PAGE_SIZE = 10
 
@@ -108,7 +108,7 @@ const ColumnToggleButton = ({ column }: { column: Column<Unit> }) => {
 			size={'sm'}
 			onClick={column.getToggleVisibilityHandler()}
 		>
-			{column.columnDef.header as string}
+			{typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id}
 		</Button>
 	)
 }
@@ -120,7 +120,7 @@ export const UnitsTable = ({ units, activeFilters, modalOpen, onModalClose }: Pr
 		units.filter(unit => !isUnitDisabled(unit, activeFilters)),
 	[units, activeFilters])
 
-	const initialVisibility: VisibilityState = Object.fromEntries(filteredColumns.map((col) => [col.id, DEFAULT_VISIBLE_IDS.has(col.id as string)]))
+	const initialVisibility: VisibilityState = Object.fromEntries(filteredColumns.map((col) => [col.id, DEFAULT_VISIBLE_IDS.has(col.id ?? '')]))
 	const [columnVisibility, setColumnVisibility] = useState(initialVisibility)
 	const [sorting, setSorting] = useState<SortingState>([])
 

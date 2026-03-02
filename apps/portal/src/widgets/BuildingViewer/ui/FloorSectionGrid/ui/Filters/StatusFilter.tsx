@@ -6,6 +6,9 @@ import { FilterPopover } from './FilterPopover'
 import type { UnitStatus } from '../../model/unitStatus'
 import { DEFAULT_COLOR_SCHEMES } from '../../lib/colors'
 
+const isUnitStatus = (value: string): value is UnitStatus =>
+	value === 'available' || value === 'reserved' || value === 'sold' || value === 'unknown'
+
 const chipStyles = (status: keyof typeof DEFAULT_COLOR_SCHEMES): ChipProps['styles'] => ({
 	label: {
 		backgroundColor: DEFAULT_COLOR_SCHEMES[status].background,
@@ -26,7 +29,7 @@ export const StatusFilter: FC<StatusFilterProps> = ({ applied, onApply }) => {
 	const handleOpen = () => setDraft(applied ?? [])
 
 	const handleApply = () => {
-		onApply(draft.length > 0 ? draft as UnitStatus[] : undefined)
+		onApply(draft.length > 0 ? draft.filter(isUnitStatus) : undefined)
 	}
 
 	return (
