@@ -4,6 +4,6 @@
     "src/{app,entities,features,pages,shared,widgets}/*/index.ts"
   ],
   "project": ["src/**/*.{ts,tsx}"],
-  "ignoreDependencies": ["postcss", "@mantine/hooks"],
+  "ignoreDependencies": ["postcss"],
   "ignoreBinaries": ["vite", "tsc", "eslint", "knip"]
 }

@@ -1,4 +1,3 @@
-export { Filters } from './Filters'
 export { StatusLegend } from './StatusLegend'
 export { FloorLabel } from './FloorLabel/FloorLabel'
 export { SectionLabel } from './SectionLabel'
