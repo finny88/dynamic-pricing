@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx'
-import type * as z from 'zod'
+import type { ZodType, infer as ZodInfer } from 'zod'
 import { mapRawUnitToUnit, rawUnitSchema } from '@entities/unit'
 import type { RawUnit, Unit } from '@entities/unit'
 
@@ -13,11 +13,11 @@ export interface RowValidationError {
 const isIndexable = (value: unknown): value is Record<string | number, unknown> =>
 	value !== null && typeof value === 'object'
 
-const validateRow = <T extends z.ZodType>(
+const validateRow = <T extends ZodType>(
 	schema: T,
 	raw: Record<string, unknown>,
 	rowIndex: number,
-): { success: true; data: z.infer<T> } | { success: false; errors: RowValidationError[] } => {
+): { success: true; data: ZodInfer<T> } | { success: false; errors: RowValidationError[] } => {
 	const result = schema.safeParse(raw)
 
 	if (result.success) {
@@ -65,7 +65,7 @@ const isRawUnit = (value: unknown): value is RawUnit => rawUnitSchema.safeParse(
 export const parseFile = async (
 	file: File,
 	columnMapping: Record<string, string>,
-	schema: z.ZodType,
+	schema: ZodType,
 ): Promise<{ data: Unit[]; errors: RowValidationError[] }> => {
 	const buffer = await file.arrayBuffer()
 	const workbook = XLSX.read(buffer)

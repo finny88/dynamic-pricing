@@ -7,7 +7,7 @@ const ExcelNumberLikeString = z
 
 		if (Number.isNaN(Number(str))) {
 			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
+				code: 'custom',
 				message: 'Must be a numeric value',
 			})
 			return z.NEVER

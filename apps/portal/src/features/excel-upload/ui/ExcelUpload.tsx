@@ -1,6 +1,6 @@
 import { Box, Container, LoadingOverlay } from '@mantine/core'
 import { useState } from 'react'
-import type * as z from 'zod'
+import type { ZodType } from 'zod'
 import type { Unit } from '@entities/unit'
 import { parseFile, parseFilePreview } from '../lib/parseFile'
 import type { FilePreview, RowValidationError } from '../lib/parseFile'
@@ -25,7 +25,7 @@ export const ExcelUpload = ({ onSuccess }: Props) => {
 		setPreview(filePreview)
 	}
 
-	const handleParse = async (mapping: Record<string, string>, schema: z.ZodType) => {
+	const handleParse = async (mapping: Record<string, string>, schema: ZodType) => {
 		if (!file) {
 			return
 		}

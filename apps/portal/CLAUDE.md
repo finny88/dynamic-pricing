@@ -64,7 +64,7 @@ Key rules to respect when generating code:
 - Avoid `as` type assertions — prefer type guards (`instanceof`, `typeof`, custom `is` predicates), typed variable declarations (`const req: IDBRequest<T> = ...`), or structural transformations (`.filter(isX)`, `.map(cell => ...)`) instead. `as const` is always fine. Justified exceptions: third-party APIs with unavoidably loose types (e.g. `cloneNode` returning `Node`, Mantine generic `onChange`)
 - `interface` not `type` for object shapes (`@typescript-eslint/consistent-type-definitions`)
 - `import type` for type-only imports (`@typescript-eslint/consistent-type-imports`)
-- When importing types from libraries that clash with native globals, use an alias: `import type { MouseEvent as ReactMouseEvent } from 'react'`. Never use `React.MouseEvent` inline — always import types explicitly.
+- Always import types explicitly — never access them through a namespace inline. Use `import type { MouseEvent as ReactMouseEvent } from 'react'` instead of `React.MouseEvent`, and `import type { ZodType, infer as ZodInfer } from 'zod'` instead of `z.ZodType` / `z.infer`. Use aliases when the name clashes with a native global or reserved word.
 - Arrow function expressions only — no `function` declarations (`func-style`)
 - No `console.*` calls (`no-console`)
 - No nested ternaries (`no-nested-ternary`)
