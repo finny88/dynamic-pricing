@@ -81,13 +81,8 @@ export const computeAvailableSections = (units: Unit[]): number[] => {
 	return Array.from(new Set(units.map(item => Number(item.section)))).sort((a, b) => a - b)
 }
 
-const matchesSearchFilter = (unit: Unit, searchQuery: string): boolean => {
-	const query = searchQuery.toLowerCase()
-	return (
-		String(unit.unitNumber).includes(query) ||
-		String(unit.floor).includes(query) ||
-		String(unit.section).toLowerCase().includes(query)
-	)
+const matchesUnitNumberFilter = (unit: Unit, searchQuery: string): boolean => {
+	return String(unit.unitNumber).includes(searchQuery)
 }
 
 const isExcludedByArrayFilter = <T>(value: T, filter: T[] | undefined): boolean =>
@@ -117,7 +112,7 @@ const isExcludedByPriceFilters = (unit: Unit, activeFilters: FilterOptions): boo
  * Helper function to check if a unit should be disabled based on active filters
  */
 export const isUnitDisabled = (unit: Unit, activeFilters: FilterOptions): boolean => {
-	if (activeFilters.searchQuery && !matchesSearchFilter(unit, activeFilters.searchQuery)) { return true }
+	if (activeFilters.searchQuery && !matchesUnitNumberFilter(unit, activeFilters.searchQuery)) { return true }
 	if (isExcludedByArrayFilter(unit.floor, activeFilters.floors)) { return true }
 	if (isExcludedByArrayFilter(Number(unit.section), activeFilters.sections)) { return true }
 	if (isExcludedByArrayFilter(getUnitStatus(unit), activeFilters.statuses)) { return true }

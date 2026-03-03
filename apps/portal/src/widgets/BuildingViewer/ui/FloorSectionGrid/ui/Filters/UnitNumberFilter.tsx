@@ -4,12 +4,12 @@ import type { FC } from 'react'
 import { useState } from 'react'
 import { FilterPopover } from './FilterPopover'
 
-interface SearchFilterProps {
+interface UnitNumberFilterProps {
 	applied: string | undefined
 	onApply: (value: string | undefined) => void
 }
 
-export const SearchFilter: FC<SearchFilterProps> = ({ applied, onApply }) => {
+export const UnitNumberFilter: FC<UnitNumberFilterProps> = ({ applied, onApply }) => {
 	const [draft, setDraft] = useState('')
 
 	const handleOpen = () => setDraft(applied ?? '')

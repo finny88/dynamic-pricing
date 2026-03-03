@@ -7,9 +7,9 @@ import { FilterGroupContext } from './FilterGroupContext'
 import { FloorsFilter } from './FloorsFilter'
 import { PriceFilter } from './PriceFilter'
 import { RoomsFilter } from './RoomsFilter'
-import { SearchFilter } from './SearchFilter'
 import { SectionsFilter } from './SectionsFilter'
 import { StatusFilter } from './StatusFilter'
+import { UnitNumberFilter } from './UnitNumberFilter'
 
 interface FiltersProps {
 	availableFloors: number[]
@@ -52,7 +52,7 @@ export const Filters: FC<FiltersProps> = ({
 	return (
 		<FilterGroupContext.Provider value={{ openedId, setOpenedId }}>
 			<Group gap={'sm'} wrap={'wrap'}>
-				<SearchFilter
+				<UnitNumberFilter
 					applied={activeFilters.searchQuery}
 					onApply={(v) => commitFilter({ searchQuery: v })}
 				/>
