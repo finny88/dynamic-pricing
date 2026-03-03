@@ -3,11 +3,12 @@ import { Chip, Group } from '@mantine/core'
 import type { FC } from 'react'
 import { useState } from 'react'
 import { DEFAULT_COLOR_SCHEMES } from '../../lib/colors'
+import { UNIT_STATUS_LABELS } from '../../model/unitStatus'
 import type { UnitStatus } from '../../model/unitStatus'
 import { FilterPopover } from './FilterPopover'
 
 const isUnitStatus = (value: string): value is UnitStatus =>
-	value === 'available' || value === 'reserved' || value === 'sold' || value === 'unknown'
+	value === 'available' || value === 'reserved' || value === 'onhold' || value === 'sold' || value === 'unknown'
 
 const chipStyles = (status: keyof typeof DEFAULT_COLOR_SCHEMES): ChipProps['styles'] => ({
 	label: {
@@ -44,10 +45,11 @@ export const StatusFilter: FC<StatusFilterProps> = ({ applied, onApply }) => {
 			{() => (
 				<Chip.Group multiple value={draft} onChange={setDraft}>
 					<Group gap={'xs'} wrap={'wrap'}>
-						<Chip value={'available'} size={'sm'} styles={chipStyles('available')}>Доступно</Chip>
-						<Chip value={'reserved'} size={'sm'} styles={chipStyles('reserved')}>Забронировано</Chip>
-						<Chip value={'sold'} size={'sm'} styles={chipStyles('sold')}>Продано</Chip>
-						<Chip value={'unknown'} size={'sm'} styles={chipStyles('unknown')}>Неизвестно</Chip>
+						<Chip value={'available'} size={'sm'} styles={chipStyles('available')}>{UNIT_STATUS_LABELS.available}</Chip>
+						<Chip value={'reserved'} size={'sm'} styles={chipStyles('reserved')}>{UNIT_STATUS_LABELS.reserved}</Chip>
+						<Chip value={'onhold'} size={'sm'} styles={chipStyles('onhold')}>{UNIT_STATUS_LABELS.onhold}</Chip>
+						<Chip value={'sold'} size={'sm'} styles={chipStyles('sold')}>{UNIT_STATUS_LABELS.sold}</Chip>
+						<Chip value={'unknown'} size={'sm'} styles={chipStyles('unknown')}>{UNIT_STATUS_LABELS.unknown}</Chip>
 					</Group>
 				</Chip.Group>
 			)}

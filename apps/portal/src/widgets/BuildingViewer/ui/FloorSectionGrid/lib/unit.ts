@@ -21,7 +21,8 @@ const applyRangeFilter = ({ units, field, min, max }: ApplyRangeFilterParams,): 
 
 const unitStatusKeywords: [UnitStatus, string[]][] = [
 	['sold', ['продан', 'sold']],
-	['reserved', ['брон', 'reserved', 'резерв']],
+	['onhold', ['резерв', 'hold']],
+	['reserved', ['брон', 'reserved']],
 	['available', ['свободн', 'available', 'доступн', 'продается']],
 ]
 

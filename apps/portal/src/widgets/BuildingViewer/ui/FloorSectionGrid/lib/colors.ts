@@ -13,6 +13,10 @@ export const DEFAULT_COLOR_SCHEMES = {
 		background: 'var(--mantine-color-yellow-5)',
 		text: 'var(--mantine-color-white)',
 	},
+	onhold: {
+		background: 'var(--mantine-color-indigo-6)',
+		text: 'var(--mantine-color-white)',
+	},
 	sold: {
 		background: 'var(--mantine-color-gray-5)',
 		text: 'var(--mantine-color-white)',

@@ -1,27 +1,23 @@
-import { Box, Text, Group } from '@mantine/core'
-import { clsx } from 'clsx'
+import { Box, Text, Group, Tooltip } from '@mantine/core'
 import type { FC } from 'react'
+import { DEFAULT_COLOR_SCHEMES } from '../../lib/colors'
+import { UNIT_STATUS_LABELS, UNIT_STATUS_TOOLTIPS } from '../../model/unitStatus'
+import type { UnitStatus } from '../../model/unitStatus'
 import classes from './StatusLegend.module.css'
 
 export const StatusLegend: FC = () => {
 	return (
 		<Group gap={'md'} justify={'flex-start'}>
-			<Group gap={'xs'}>
-				<Box className={clsx(classes.legendBox, classes.legendBoxAvailable)} />
-				<Text size={'sm'}>Свободно</Text>
-			</Group>
-			<Group gap={'xs'}>
-				<Box className={clsx(classes.legendBox, classes.legendBoxReserved)} />
-				<Text size={'sm'}>Бронь</Text>
-			</Group>
-			<Group gap={'xs'}>
-				<Box className={clsx(classes.legendBox, classes.legendBoxSold)} />
-				<Text size={'sm'}>Продано</Text>
-			</Group>
-			<Group gap={'xs'}>
-				<Box className={clsx(classes.legendBox, classes.legendBoxUnknown)} />
-				<Text size={'sm'}>Неизвестно</Text>
-			</Group>
+			{(Object.keys(UNIT_STATUS_LABELS) as UnitStatus[]).map(status => (
+				<Group key={status} gap={'xs'}>
+					<Tooltip label={UNIT_STATUS_TOOLTIPS[status]} position={'bottom'} multiline maw={240} withArrow>
+						<Box className={classes.legendBox} style={{ backgroundColor: DEFAULT_COLOR_SCHEMES[status].background }}>
+							<Text size={'xs'} fw={700} style={{ color: 'white', lineHeight: 1 }}>i</Text>
+						</Box>
+					</Tooltip>
+					<Text size={'sm'}>{UNIT_STATUS_LABELS[status]}</Text>
+				</Group>
+			))}
 		</Group>
 	)
 }
