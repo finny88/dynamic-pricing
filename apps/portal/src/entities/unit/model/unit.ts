@@ -8,7 +8,7 @@ export interface Unit {
 	roomsCount: number
 	section: number
 	totalAreaSqm: number
-	unitNumber: string
+	unitNumber: number
 
 	// other fields
 	address: string

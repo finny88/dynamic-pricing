@@ -50,12 +50,7 @@ export const computeGridData = (units: Unit[]) => {
 
 	// sort units by unitNumber ASC
 	Object.values(computedMatrix).forEach(unitList => {
-		unitList.sort((a, b) =>
-			a.unitNumber.localeCompare(
-				b.unitNumber, undefined, {
-					numeric: true
-				}
-			))
+		unitList.sort((a, b) => a.unitNumber - b.unitNumber)
 	})
 
 	return {
@@ -89,7 +84,7 @@ export const computeAvailableSections = (units: Unit[]): number[] => {
 const matchesSearchFilter = (unit: Unit, searchQuery: string): boolean => {
 	const query = searchQuery.toLowerCase()
 	return (
-		(unit.unitNumber || '').toLowerCase().includes(query) ||
+		String(unit.unitNumber).includes(query) ||
 		String(unit.floor).includes(query) ||
 		String(unit.section).toLowerCase().includes(query)
 	)

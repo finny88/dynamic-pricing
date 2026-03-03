@@ -13,7 +13,7 @@ export const mapRawUnitToUnit = (raw: RawUnit): Unit => ({
 	salesStartDate: str(raw['Старт продаж']),
 	salesEndDate: str(raw['Окончание продаж']),
 	commissioningDate: str(raw['Ввод в эксплуатацию']),
-	unitNumber: str(raw['Номер квартиры']),
+	unitNumber: num(raw['Номер квартиры']),
 	floor: num(raw['Этаж']),
 	roomsCount: num(raw['Количество комнат']),
 	totalAreaSqm: num(raw['Общая площадь']),
