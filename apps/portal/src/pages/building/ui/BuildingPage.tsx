@@ -47,7 +47,7 @@ export const BuildingPage = () => {
 		return (
 			<Container size={'xl'} pt={{ base: 'sm', sm: 'md', md: 'lg' }} px={{ base: 'md', sm: 'lg', md: 'xl' }}>
 				<Stack align={'center'} pt={'xl'} gap={8}>
-					<Title order={3} c={'dimmed'}>Корпус не найден</Title>
+					<Title order={3} c={'dimmed'}>Дом не найден</Title>
 					<Button variant={'subtle'} leftSection={<IconArrowLeft size={16} />} onClick={() => navigate(`/projects/${projectId}`)}>
 						Вернуться к проекту
 					</Button>

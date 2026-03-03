@@ -13,7 +13,7 @@ interface Props {
 export const BuildingFormFields = ({ register, errors, isLoading, submitLabel, onCancel }: Props) => (
 	<Stack gap={'md'}>
 		<TextInput
-			label={'Название корпуса'}
+			label={'Название дома'}
 			placeholder={'Введите название'}
 			required
 			error={errors.name?.message}

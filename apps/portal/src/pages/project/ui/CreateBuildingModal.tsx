@@ -43,7 +43,7 @@ export const CreateBuildingModal = ({ ref, projectId }: { ref: Ref<CreateBuildin
 			onExitTransitionEnd={() => reset()}
 			title={
 				<Stack gap={2}>
-					<Title order={4}>Новый корпус</Title>
+					<Title order={4}>Новый дом</Title>
 					<Text size={'sm'} c={'dimmed'}>Заполните базовую информацию</Text>
 				</Stack>
 			}

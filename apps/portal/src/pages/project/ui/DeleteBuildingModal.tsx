@@ -23,7 +23,7 @@ export const DeleteBuildingModal = ({ building, onClose }: Props) => {
 			opened={opened}
 			onClose={close}
 			onExitTransitionEnd={onClose}
-			title={'Удалить корпус'}
+			title={'Удалить дом'}
 			size={'sm'}
 		>
 			<Stack>

@@ -90,7 +90,7 @@ export const ProjectPage = () => {
 
 			<SimpleGrid cols={{ base: 2, sm: 4 }} spacing={'md'}>
 				<Stack gap={4}>
-					<Text size={'xs'} c={'dimmed'}>Корпусов</Text>
+					<Text size={'xs'} c={'dimmed'}>Домов</Text>
 					<Text fw={600} size={'lg'}>{project.buildingsCount}</Text>
 				</Stack>
 				<Stack gap={4}>
@@ -111,8 +111,8 @@ export const ProjectPage = () => {
 
 			{/* Buildings Section */}
 			<Group justify={'space-between'} mb={'md'}>
-				<Title order={4}>Корпуса</Title>
-				<Button size={'sm'} leftSection={<IconPlus size={16} />} onClick={() => createBuildingModalRef.current?.open()}>Добавить корпус</Button>
+				<Title order={4}>Дома</Title>
+				<Button size={'sm'} leftSection={<IconPlus size={16} />} onClick={() => createBuildingModalRef.current?.open()}>Добавить дом</Button>
 			</Group>
 
 			{project.buildingsCount === 0 ? (
@@ -125,8 +125,8 @@ export const ProjectPage = () => {
 							</Box>
 						</Group>
 					}
-					message={'Корпусов пока нет'}
-					buttonLabel={'Добавить корпус'}
+					message={'Домов пока нет'}
+					buttonLabel={'Добавить дом'}
 					buttonLeftSection={<IconPlus size={16} />}
 					onButtonClick={() => createBuildingModalRef.current?.open()}
 				/>

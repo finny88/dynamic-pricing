@@ -50,7 +50,7 @@ const COLUMNS = [
 	columnHelper.accessor('project', { id: 'project', header: 'Проект' }),
 	columnHelper.accessor('address', { id: 'address', header: 'Адрес' }),
 	columnHelper.accessor('classType', { id: 'classType', header: 'Класс' }),
-	columnHelper.accessor('building', { id: 'building', header: 'Корпус' }),
+	columnHelper.accessor('building', { id: 'building', header: 'Дом' }),
 	columnHelper.accessor('salesStartDate', { id: 'salesStartDate', header: 'Старт продаж' }),
 	columnHelper.accessor('salesEndDate', { id: 'salesEndDate', header: 'Окончание продаж' }),
 	columnHelper.accessor('commissioningDate', { id: 'commissioningDate', header: 'Ввод в эксплуатацию' }),

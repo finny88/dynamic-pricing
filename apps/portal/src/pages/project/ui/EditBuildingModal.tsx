@@ -41,7 +41,7 @@ export const EditBuildingModal = ({ building, onClose }: Props) => {
 			onExitTransitionEnd={onClose}
 			title={
 				<Stack gap={2}>
-					<Title order={4}>Редактировать корпус</Title>
+					<Title order={4}>Редактировать дом</Title>
 					<Text size={'sm'} c={'dimmed'}>{building.name}</Text>
 				</Stack>
 			}

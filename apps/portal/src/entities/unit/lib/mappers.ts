@@ -8,7 +8,7 @@ export const mapRawUnitToUnit = (raw: RawUnit): Unit => ({
 	project: str(raw['Проект']),
 	address: str(raw['Адрес']),
 	classType: str(raw['Класс']),
-	building: str(raw['Корпус']),
+	building: str(raw['Дом']),
 	section: num(raw['Подъезд']),
 	salesStartDate: str(raw['Старт продаж']),
 	salesEndDate: str(raw['Окончание продаж']),
