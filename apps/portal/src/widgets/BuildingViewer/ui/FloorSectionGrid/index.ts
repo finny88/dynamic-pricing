@@ -1,1 +1,5 @@
 export { FloorSectionGrid } from './FloorSectionGrid'
+export { StatusLegend } from './ui'
+export { Filters } from './ui/Filters'
+export type { FilterOptions } from './model/filters'
+export { computeAvailableFloors, computeAvailableRoomsCounts, computeAvailableSections } from './lib/unit'
