@@ -1,9 +1,10 @@
 const DB_NAME = 'dynamic-price'
-const DB_VERSION = 4
+const DB_VERSION = 5
 
 export const STORES = {
 	PROJECTS: 'projects',
 	BUILDINGS: 'buildings',
+	UNIT_LAYOUTS: 'unit-layouts',
 } as const
 
 let dbPromise: Promise<IDBDatabase> | null = null
@@ -14,22 +15,39 @@ const openDB = (): Promise<IDBDatabase> => {
 	dbPromise = new Promise((resolve, reject) => {
 		const request = indexedDB.open(DB_NAME, DB_VERSION)
 
-		request.onupgradeneeded = () => {
+		request.onupgradeneeded = (event) => {
 			const db = request.result
-			if (db.objectStoreNames.contains(STORES.PROJECTS)) {
-				db.deleteObjectStore(STORES.PROJECTS)
-			}
-			db.createObjectStore(STORES.PROJECTS, { keyPath: 'id' })
+			const oldVersion = event.oldVersion
 
-			if (db.objectStoreNames.contains(STORES.BUILDINGS)) {
-				db.deleteObjectStore(STORES.BUILDINGS)
+			// v1–v4: initial schema
+			if (oldVersion < 4) {
+				if (db.objectStoreNames.contains(STORES.PROJECTS)) {
+					db.deleteObjectStore(STORES.PROJECTS)
+				}
+				db.createObjectStore(STORES.PROJECTS, { keyPath: 'id' })
+
+				if (db.objectStoreNames.contains(STORES.BUILDINGS)) {
+					db.deleteObjectStore(STORES.BUILDINGS)
+				}
+				const buildingsStore = db.createObjectStore(STORES.BUILDINGS, { keyPath: 'id' })
+				buildingsStore.createIndex(
+					'projectId',
+					'projectId',
+					{ unique: false },
+				)
 			}
-			const buildingsStore = db.createObjectStore(STORES.BUILDINGS, { keyPath: 'id' })
-			buildingsStore.createIndex(
-				'projectId',
-				'projectId',
-				{ unique: false },
-			)
+
+			// v5: unit-layouts store
+			if (oldVersion < 5) {
+				if (!db.objectStoreNames.contains(STORES.UNIT_LAYOUTS)) {
+					const unitLayoutsStore = db.createObjectStore(STORES.UNIT_LAYOUTS, { keyPath: 'id' })
+					unitLayoutsStore.createIndex(
+						'buildingId',
+						'buildingId',
+						{ unique: false },
+					)
+				}
+			}
 		}
 
 		request.onsuccess = () => {
@@ -39,6 +57,7 @@ const openDB = (): Promise<IDBDatabase> => {
 		request.onerror = () => {
 			reject(request.error)
 		}
+
 	})
 
 	return dbPromise

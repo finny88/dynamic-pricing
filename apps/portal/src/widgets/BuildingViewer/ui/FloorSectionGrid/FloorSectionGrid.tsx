@@ -15,27 +15,45 @@ const VARIANT_CONFIG: Record<GridVariant, { cellMinWidth: number }> = {
 	detailed: { cellMinWidth: 180 },
 }
 
-interface FloorSectionGridProps {
+interface FloorSectionGridViewProps {
 	units: Unit[]
 	variant?: GridVariant
 	activeFilters: FilterOptions
 	isPending: boolean
+	selectionMode?: false
+	selectedUnitNumbers?: never
+	onSelectionChange?: never
 }
 
-export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
-	units,
-	variant = 'compact',
-	activeFilters,
-	isPending,
-}) => {
+interface FloorSectionGridSelectionProps {
+	units: Unit[]
+	selectionMode: true
+	selectedUnitNumbers: number[]
+	onSelectionChange: (unitNumbers: number[]) => void
+	variant?: never
+	activeFilters?: never
+	isPending?: never
+}
+
+type FloorSectionGridProps = FloorSectionGridViewProps | FloorSectionGridSelectionProps
+
+export const FloorSectionGrid: FC<FloorSectionGridProps> = (props) => {
+	const { units } = props
 
 	const { sections, floors, matrix } = useMemo(() => {
 		return computeGridData(units)
 	}, [units])
 
-	const { cellMinWidth } = VARIANT_CONFIG[variant]
+	const isSelection = props.selectionMode === true
+
+	const cellMinWidth = isSelection ? 34 : VARIANT_CONFIG[props.variant ?? 'compact'].cellMinWidth
 	const gridTemplateColumns = `auto repeat(${sections.length}, minmax(${cellMinWidth}px, auto))`
-	const gridClassName = clsx(classes.grid, variant === 'detailed' ? classes.gridDetailed : classes.gridCompact)
+	const gridClassName = clsx(
+		classes.grid,
+		!isSelection && (props.variant === 'detailed' ? classes.gridDetailed : classes.gridCompact),
+		isSelection && classes.gridCompact,
+		isSelection && classes.gridSelection,
+	)
 
 	return (
 		<Stack gap={'lg'}>
@@ -43,7 +61,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 			<Box
 				className={classes.gridContainer}
 				style={{
-					opacity: isPending ? 0.6 : 1,
+					opacity: (!isSelection && props.isPending) ? 0.6 : 1,
 				}}
 			>
 				{/* MAIN GRID */}
@@ -51,9 +69,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 					role={'grid'}
 					aria-label={ARIA_LABELS.GRID}
 					className={gridClassName}
-					style={{
-						gridTemplateColumns,
-					}}
+					style={{ gridTemplateColumns }}
 				>
 					{/* Y axis - Floor labels */}
 					{floors.map((floor, floorIndex) => (
@@ -61,7 +77,7 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 							key={floor}
 							floor={floor.toString()}
 							floorIndex={floorIndex}
-							variant={variant}
+							variant={isSelection ? 'compact' : (props.variant ?? 'compact')}
 						/>
 					))}
 
@@ -81,14 +97,35 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 						sections.map((section, sectionIndex) => {
 							const items = matrix[`${floor}_${section}`] ?? []
 
+							if (isSelection) {
+								const { selectedUnitNumbers, onSelectionChange } = props
+								const onUnitToggle = (unitNumber: number) => {
+									const next = selectedUnitNumbers.includes(unitNumber)
+										? selectedUnitNumbers.filter(n => n !== unitNumber)
+										: [...selectedUnitNumbers, unitNumber]
+									onSelectionChange(next)
+								}
+								return (
+									<UnitContainer
+										key={`${floor}-${section}`}
+										items={items}
+										floorIndex={floorIndex}
+										sectionIndex={sectionIndex}
+										selectionMode={true}
+										selectedUnitNumbers={selectedUnitNumbers}
+										onUnitToggle={onUnitToggle}
+									/>
+								)
+							}
+
 							return (
 								<UnitContainer
 									key={`${floor}-${section}`}
 									items={items}
 									floorIndex={floorIndex}
 									sectionIndex={sectionIndex}
-									activeFilters={activeFilters}
-									variant={variant}
+									activeFilters={props.activeFilters}
+									variant={props.variant}
 								/>
 							)
 						}))}
@@ -106,8 +143,10 @@ export const FloorSectionGrid: FC<FloorSectionGridProps> = ({
 				</Box>
 			</Box>
 
-			{/* Results count */}
-			<ResultsCount units={units} activeFilters={activeFilters} />
+			{/* Results count (view mode only) */}
+			{props.selectionMode !== true && (
+				<ResultsCount units={units} activeFilters={props.activeFilters} />
+			)}
 		</Stack>
 	)
 }

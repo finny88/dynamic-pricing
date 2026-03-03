@@ -10,11 +10,12 @@ import {
 	Title,
 	Tooltip,
 } from '@mantine/core'
-import { IconArrowLeft, IconEye, IconEyeOff, IconFileUpload } from '@tabler/icons-react'
+import { IconArrowLeft, IconEye, IconEyeOff, IconFileUpload, IconLayoutBoard } from '@tabler/icons-react'
 import { Activity, useState, useTransition } from 'react'
 import { useParams, useNavigate, useLocation, type Location } from 'react-router-dom'
 import { useGetBuildingByIdQuery, BuildingPageHeader, type BuildingPageInitialState } from '@entities/building'
 import { useGetProjectQuery } from '@entities/project'
+import { useGetLayoutsByBuildingQuery } from '@entities/unit-layout'
 import { BuildingViewer } from '@widgets/BuildingViewer'
 
 const formatDate = (iso: string) =>
@@ -29,6 +30,8 @@ export const BuildingPage = () => {
 
 	const { data: building = null, isLoading, error } = useGetBuildingByIdQuery({ projectId: projectId ?? '', buildingId: buildingId ?? '' }, { skip: !projectId || !buildingId })
 	const { data: project } = useGetProjectQuery(projectId ?? '', { skip: !projectId })
+	const { data: layouts = [] } = useGetLayoutsByBuildingQuery({ projectId: projectId ?? '', buildingId: buildingId ?? '' },
+		{ skip: !projectId || !buildingId },)
 
 	if (isLoading) {
 		return (
@@ -55,6 +58,11 @@ export const BuildingPage = () => {
 			</Container>
 		)
 	}
+
+	const assignedCount = new Set(layouts.flatMap(l => l.unitNumbers)).size
+	const filledPercent = building.units.length === 0
+		? 0
+		: Math.round(assignedCount / building.units.length * 100)
 
 	return (
 		<>
@@ -88,6 +96,19 @@ export const BuildingPage = () => {
 								onClick={() => startTransition(() => setShowViewer(v => !v))}
 							>
 								Посмотреть объект
+							</Button>
+						</Tooltip>
+						<Tooltip label={'Загрузите данные из файла'} disabled={building.units.length > 0}>
+							<Button
+								variant={'default'}
+								leftSection={<IconLayoutBoard size={16} />}
+								disabled={building.units.length === 0}
+								onClick={() => navigate(`/projects/${projectId}/buildings/${buildingId}/layouts`)}
+							>
+								<Stack gap={0} align={'flex-start'}>
+									<Text size={'sm'} lh={1.2}>Планировки помещений</Text>
+									<Text size={'xs'} c={'dimmed'} lh={1.2}>Заполнено {filledPercent}%</Text>
+								</Stack>
 							</Button>
 						</Tooltip>
 					</Group>

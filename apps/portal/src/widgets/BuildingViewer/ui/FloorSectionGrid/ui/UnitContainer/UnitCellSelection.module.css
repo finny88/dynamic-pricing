@@ -1,0 +1,37 @@
+.unitButton {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--mantine-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: white;
+  user-select: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, width 0.15s ease, height 0.15s ease;
+  background-color: var(--mantine-color-green-3);
+}
+
+.unitButton:hover {
+  transform: scale(1.08);
+  box-shadow: var(--mantine-shadow-sm);
+}
+
+.unitButton.selected {
+  transform: scale(1.1);
+  background-color: var(--mantine-color-green-7);
+  outline: 2px solid var(--mantine-color-green-9);
+  outline-offset: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+.tooltip {
+  z-index: 10000;
+  opacity: 1;
+  background-color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  border: none;
+}

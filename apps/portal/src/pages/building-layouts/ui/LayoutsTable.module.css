@@ -1,0 +1,7 @@
+.headerRow {
+	border-bottom-width: 2px;
+}
+
+.table {
+	table-layout: fixed;
+}

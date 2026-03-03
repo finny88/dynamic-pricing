@@ -9,23 +9,59 @@ import type { FilterOptions } from '../../model/filters'
 import type { GridVariant } from '../../model/variants'
 import { UnitCell } from './UnitCell'
 import { UnitCellDetailed } from './UnitCellDetailed'
+import { UnitCellSelection } from './UnitCellSelection'
 import classes from './UnitContainer.module.css'
 
-interface UnitContainerProps {
+interface UnitContainerBaseProps {
 	items: Unit[]
 	floorIndex: number
 	sectionIndex: number
-	activeFilters: FilterOptions
-	variant?: GridVariant
 }
 
-const UnitContainerComponent: FC<UnitContainerProps> = ({
-	items,
-	floorIndex,
-	sectionIndex,
-	activeFilters,
-	variant = 'compact',
-}) => {
+interface UnitContainerViewProps extends UnitContainerBaseProps {
+	selectionMode?: false
+	activeFilters: FilterOptions
+	variant?: GridVariant
+	selectedUnitNumbers?: never
+	onUnitToggle?: never
+}
+
+interface UnitContainerSelectionProps extends UnitContainerBaseProps {
+	selectionMode: true
+	selectedUnitNumbers: number[]
+	onUnitToggle: (unitNumber: number) => void
+	activeFilters?: never
+	variant?: never
+}
+
+type UnitContainerProps = UnitContainerViewProps | UnitContainerSelectionProps
+
+const UnitContainerComponent: FC<UnitContainerProps> = (props) => {
+	const { items, floorIndex, sectionIndex } = props
+
+	if (props.selectionMode) {
+		const { selectedUnitNumbers, onUnitToggle } = props
+		return (
+			<Box
+				className={clsx(classes.unitContainer, classes.unitContainerCompact)}
+				style={{
+					gridRow: floorIndex + 2,
+					gridColumn: sectionIndex + 2,
+				}}
+			>
+				{items.map(item => (
+					<UnitCellSelection
+						key={item.unitNumber}
+						unit={item}
+						selected={selectedUnitNumbers.includes(item.unitNumber)}
+						onToggle={onUnitToggle}
+					/>
+				))}
+			</Box>
+		)
+	}
+
+	const { activeFilters, variant = 'compact' } = props
 	const sizeClass = variant === 'detailed' ? classes.unitContainerDetailed : classes.unitContainerCompact
 	const CellComponent = variant === 'detailed' ? UnitCellDetailed : UnitCell
 

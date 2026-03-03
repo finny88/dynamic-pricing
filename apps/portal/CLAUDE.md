@@ -75,3 +75,52 @@ Key rules to respect when generating code:
 - Tabs for indentation, single quotes, no semicolons
 - Files must not exceed 300 lines (`max-lines`)
 - Nesting must not exceed 4 levels (`max-depth`)
+
+## Modal Pattern
+
+All page-level modals follow a consistent pattern. State and mutations live **inside the modal**, not in the parent page.
+
+### Create modal — ref-based
+The modal manages its own open/close state and exposes an `open()` handle via `useImperativeHandle`.
+Parent holds a ref and calls `ref.current?.open()`. State is reset in `onExitTransitionEnd`.
+
+```tsx
+// CreateFooModal.tsx
+export interface CreateFooModalHandle { open: () => void }
+
+export const CreateFooModal = ({ ref, ...props }: { ref: Ref<CreateFooModalHandle> }) => {
+  const [createFoo] = useCreateFooMutation()
+  const [opened, { open, close }] = useDisclosure(false)
+  useImperativeHandle(ref, () => ({ open }))
+  // ...
+  return <Modal opened={opened} onClose={close} onExitTransitionEnd={reset} ...>
+}
+
+// ParentPage.tsx
+const createRef = useRef<CreateFooModalHandle>(null)
+<Button onClick={() => createRef.current?.open()}>Add</Button>
+<CreateFooModal ref={createRef} />
+```
+
+### Edit / Delete / other entity modals — conditional render
+The modal is **conditionally rendered** by the parent. It starts open (`useDisclosure(true)`) and calls `onClose` after the exit animation (`onExitTransitionEnd`), which clears the entity from parent state and unmounts the component.
+Parent never holds an `opened` boolean — only the nullable entity to act on.
+
+```tsx
+// EditFooModal.tsx
+export const EditFooModal = ({ foo, onClose }: { foo: Foo; onClose: () => void }) => {
+  const [updateFoo] = useUpdateFooMutation()
+  const [opened, { close }] = useDisclosure(true)
+  // ...
+  return <Modal opened={opened} onClose={close} onExitTransitionEnd={onClose} ...>
+}
+
+// ParentPage.tsx
+const [editingFoo, setEditingFoo] = useState<Foo | null>(null)
+{editingFoo && <EditFooModal foo={editingFoo} onClose={() => setEditingFoo(null)} />}
+```
+
+### Key rules
+- Parent pages **never** call `useDisclosure` for modals or hold mutation hooks for modal actions
+- Mutations (`useCreateXMutation`, `useUpdateXMutation`, etc.) live inside the modal component
+- `onClose` on edit/delete modals is triggered by `onExitTransitionEnd`, not `onClose` of `<Modal>`, so the entity state is cleared only after the animation completes (avoids visual pop)

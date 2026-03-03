@@ -1,0 +1,18 @@
+.thumbnailImage {
+	cursor: zoom-in;
+}
+
+.nameCell {
+	word-break: break-word;
+}
+
+.unitsText {
+	white-space: normal;
+	word-break: break-word;
+}
+
+.imageTooltip {
+	background: white;
+	padding: 8px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
