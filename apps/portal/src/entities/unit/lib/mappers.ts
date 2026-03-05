@@ -1,8 +1,21 @@
 import type { RawUnit } from '../model/rawUnit'
 import type { Unit } from '../model/unit'
+import type { UnitStatus } from '../model/unitStatus'
 
 const str = (value: string | null | undefined): string => value ?? ''
 const num = (value: string | null | undefined): number => parseFloat(value ?? '') || 0
+
+const unitStatusKeywords: [UnitStatus, string[]][] = [
+	['sold', ['продан', 'sold']],
+	['onhold', ['резерв', 'hold']],
+	['reserved', ['брон', 'reserved']],
+	['available', ['свободн', 'available', 'доступн', 'продается']],
+]
+
+const parseUnitStatus = (raw: string): UnitStatus => {
+	const status = raw.toLowerCase()
+	return unitStatusKeywords.find(([, keywords]) => keywords.some(k => status.includes(k)))?.[0] ?? 'unknown'
+}
 
 export const mapRawUnitToUnit = (raw: RawUnit): Unit => ({
 	project: str(raw['Проект']),
@@ -34,7 +47,7 @@ export const mapRawUnitToUnit = (raw: RawUnit): Unit => ({
 	kitchenAreaSqm: num(raw['Площадь кухни, кв. м']),
 	elevatorProximity: str(raw['Близость к лифту']),
 	viewType: str(raw['Вид']),
-	actualStatus: str(raw['Статус']),
+	actualStatus: parseUnitStatus(raw['Статус'] ?? ''),
 	actualPricePerSqmRub: num(raw['Цена за 1 кв.м.']),
 	actualTotalPriceRub: num(raw['Общая цена']),
 	plannedConstructionCostRub: num(raw['Плановая стоимость строительства, руб']),

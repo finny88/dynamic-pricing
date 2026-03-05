@@ -1,5 +1,4 @@
 import type { Unit } from '@entities/unit'
-import { getUnitStatus } from './unit'
 
 /**
  * Default color schemes for different unit statuses using Mantine colors
@@ -28,6 +27,5 @@ export const DEFAULT_COLOR_SCHEMES = {
 } as const
 
 export const getUnitColors = (unit: Unit) => {
-	const status = getUnitStatus(unit)
-	return DEFAULT_COLOR_SCHEMES[status]
+	return DEFAULT_COLOR_SCHEMES[unit.actualStatus]
 }

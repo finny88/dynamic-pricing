@@ -4,7 +4,7 @@ import type { FC } from 'react'
 import { memo } from 'react'
 import type { Unit } from '@entities/unit'
 import { getUnitColors } from '../../lib/colors'
-import { getUnitStatus, isUnitDisabled } from '../../lib/unit'
+import { isUnitDisabled } from '../../lib/unit'
 import type { FilterOptions } from '../../model/filters'
 import type { GridVariant } from '../../model/variants'
 import { UnitCell } from './UnitCell'
@@ -75,7 +75,7 @@ const UnitContainerComponent: FC<UnitContainerProps> = (props) => {
 		>
 			{items.map(item => {
 				const colors = getUnitColors(item)
-				const status = getUnitStatus(item)
+				const status = item.actualStatus
 				const disabled = isUnitDisabled(item, activeFilters)
 
 				return (

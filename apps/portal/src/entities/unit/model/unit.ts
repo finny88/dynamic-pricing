@@ -1,7 +1,9 @@
+import type { UnitStatus } from './unitStatus'
+
 export interface Unit {
 	// rawUnitSchema fields
 	actualPricePerSqmRub: number
-	actualStatus: string
+	actualStatus: UnitStatus
 	actualTotalPriceRub: number
 	floor: number
 	livingAreaSqm: number

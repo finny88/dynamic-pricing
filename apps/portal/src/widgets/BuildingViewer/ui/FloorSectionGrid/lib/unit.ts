@@ -1,6 +1,5 @@
 import type { Unit } from '@entities/unit'
 import type { FilterOptions } from '../model/filters'
-import type { UnitStatus } from '../model/unitStatus'
 
 interface ApplyRangeFilterParams {
 	units: Unit[]
@@ -17,18 +16,6 @@ const applyRangeFilter = ({ units, field, min, max }: ApplyRangeFilterParams,): 
 		if (max !== undefined && value > max) { return false }
 		return true
 	})
-}
-
-const unitStatusKeywords: [UnitStatus, string[]][] = [
-	['sold', ['продан', 'sold']],
-	['onhold', ['резерв', 'hold']],
-	['reserved', ['брон', 'reserved']],
-	['available', ['свободн', 'available', 'доступн', 'продается']],
-]
-
-export const getUnitStatus = (unit: Unit): UnitStatus => {
-	const status = unit.actualStatus?.toLowerCase() || ''
-	return unitStatusKeywords.find(([, keywords]) => keywords.some(k => status.includes(k)))?.[0] ?? 'unknown'
 }
 
 /**
@@ -115,7 +102,7 @@ export const isUnitDisabled = (unit: Unit, activeFilters: FilterOptions): boolea
 	if (activeFilters.searchQuery && !matchesUnitNumberFilter(unit, activeFilters.searchQuery)) { return true }
 	if (isExcludedByArrayFilter(unit.floor, activeFilters.floors)) { return true }
 	if (isExcludedByArrayFilter(Number(unit.section), activeFilters.sections)) { return true }
-	if (isExcludedByArrayFilter(getUnitStatus(unit), activeFilters.statuses)) { return true }
+	if (isExcludedByArrayFilter(unit.actualStatus, activeFilters.statuses)) { return true }
 	if (isExcludedByArrayFilter(unit.roomsCount, activeFilters.roomsCount)) { return true }
 	if (isExcludedByPriceFilters(unit, activeFilters)) { return true }
 

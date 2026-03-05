@@ -1,4 +1,4 @@
-import type { UnitStatus } from './unitStatus'
+import type { UnitStatus } from '@entities/unit'
 
 /**
  * Filter options for the grid

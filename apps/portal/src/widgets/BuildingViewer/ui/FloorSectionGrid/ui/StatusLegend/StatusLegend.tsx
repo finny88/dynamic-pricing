@@ -1,8 +1,8 @@
 import { Box, Text, Group, Tooltip } from '@mantine/core'
 import type { FC } from 'react'
+import type { UnitStatus } from '@entities/unit'
+import { UNIT_STATUS_LABELS, UNIT_STATUS_TOOLTIPS } from '@entities/unit'
 import { DEFAULT_COLOR_SCHEMES } from '../../lib/colors'
-import { UNIT_STATUS_LABELS, UNIT_STATUS_TOOLTIPS } from '../../model/unitStatus'
-import type { UnitStatus } from '../../model/unitStatus'
 import classes from './StatusLegend.module.css'
 
 export const StatusLegend: FC = () => {
