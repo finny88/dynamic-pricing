@@ -3,6 +3,9 @@ import { createRoot } from 'react-dom/client'
 import App from './App'
 
 const enableMocking = async () => {
+	if (import.meta.env.VITE_ENABLE_MOCKS !== 'true') {
+		return
+	}
 	const { worker, workerOptions } = await import('./mocks/browser')
 	return worker.start(workerOptions)
 }
